@@ -1,0 +1,33 @@
+/* Starter style for Aqidah Salafiyah - dark modern theme */
+/* Gold text, green outline, three-column responsive cards, no header element */
+:root{
+  --bg:#0b0f12;
+  --card:#0f1417;
+  --gold:#d4af37;
+  --green:#2aa95d;
+  --muted:#9aa5a6;
+  --maxw:1100px;
+  --radius:12px;
+  font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--muted)}
+.container{max-width:var(--maxw);margin:40px auto;padding:24px}
+.site-title{text-align:center;color:var(--gold);margin:0 0 24px;font-size:28px;letter-spacing:0.6px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start}
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:20px;border-radius:var(--radius);
+  border:2px solid transparent;outline:2px solid rgba(0,0,0,0.08);position:relative;min-height:140px;}
+.card-link{display:block;color:inherit;text-decoration:none}
+.card h2{color:var(--gold);margin:0 0 10px;font-size:20px}
+.card p{color:var(--muted);margin:0}
+
+/* green outline on hover/focus for accessibility */
+.card:focus-within, .card:hover{box-shadow:0 8px 30px rgba(0,0,0,0.6);outline:3px solid rgba(42,169,93,0.18);border-color:var(--green)}
+
+/* footer */
+.site-footer{text-align:center;color:var(--muted);margin-top:28px;font-size:14px}
+
+/* Responsive: collapse to 1 column under 800px, 2 columns under 1100px */
+@media (max-width:1100px){.cards{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:700px){.cards{grid-template-columns:1fr;padding:0} .container{padding:16px}}
