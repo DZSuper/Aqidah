@@ -8,60 +8,6 @@ body {
   color: #fff;
 }
 
-/* === CONTAINER === */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 40px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-}
-
-/* Responsif: tambahan padding di HP */
-@media (max-width: 600px) {
-  .container {
-    padding: 20px;
-  }
-}
-
-/* === CARD === */
-.card {
-  background: #111;
-  border: 2px solid #00ff66;
-  border-radius: 12px;
-  padding: 20px;
-  text-align: center;
-  color: #ffd700; /* teks emas */
-  transition: all 0.25s ease; /* efek lembut */
-  cursor: pointer; /* interaktif */
-}
-
-/* Efek hover untuk desktop */
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 0 15px rgba(0, 255, 100, 0.3);
-}
-
-/* Efek tap ringan di HP */
-.card:active {
-  box-shadow: 0 0 10px rgba(255, 255, 0, 0.4);
-}
-
-/* Responsif: jarak antar kartu di layar kecil */
-@media (max-width: 600px) {
-  .card {
-    margin-bottom: 15px;
-  }
-}
-
-/* Ukuran teks judul di layar kecil */
-@media (max-width: 600px) {
-  .card h3 {
-    font-size: 1.1rem;
-  }
-}
-
 /* === LINK UMUM === */
 a {
   color: #00ff99;
@@ -100,4 +46,14 @@ p {
   font-size: 2rem;
   margin-bottom: 30px;
   font-weight: 600;
+}
+
+/* === RESPONSIF TAMBAHAN === */
+@media (max-width: 600px) {
+  body {
+    padding: 20px;
+  }
+  .title {
+    font-size: 1.6rem;
+  }
 }
