@@ -10,22 +10,26 @@ document.addEventListener('DOMContentLoaded', function() {
   // FUNGSI UTAMA: Ganti Penjelasan
   // ===================================
   function gantiPenjelasan(kelompok) {
+    // Sembunyikan semua penjelasan terlebih dahulu
+    penjelasanItems.forEach(item => {
+      item.classList.remove('active');
+    });
+    
     // Hapus class active dari semua button
-    kelompokButtons.forEach(btn => btn.classList.remove('active'));
+    kelompokButtons.forEach(btn => {
+      btn.classList.remove('active');
+    });
     
-    // Tambah class active ke button yang dipilih
-    const activeButton = document.querySelector(`.kelompok-btn[data-kelompok="${kelompok}"]`);
-    if (activeButton) {
-      activeButton.classList.add('active');
-    }
-    
-    // Hapus class active dari semua penjelasan
-    penjelasanItems.forEach(item => item.classList.remove('active'));
-    
-    // Tambah class active ke penjelasan yang sesuai
+    // Tampilkan penjelasan yang sesuai
     const activePenjelasan = document.querySelector(`.penjelasan-item[data-kelompok="${kelompok}"]`);
     if (activePenjelasan) {
       activePenjelasan.classList.add('active');
+    }
+    
+    // Aktifkan button yang sesuai
+    const activeButton = document.querySelector(`.kelompok-btn[data-kelompok="${kelompok}"]`);
+    if (activeButton) {
+      activeButton.classList.add('active');
     }
     
     // Update dropdown value (untuk sinkronisasi)
@@ -49,7 +53,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // EVENT LISTENER: Button (Desktop & Tablet)
   // ===================================
   kelompokButtons.forEach(button => {
-    button.addEventListener('click', function() {
+    button.addEventListener('click', function(e) {
+      e.preventDefault(); // Mencegah perilaku default
       const kelompok = this.getAttribute('data-kelompok');
       gantiPenjelasan(kelompok);
     });
@@ -72,7 +77,8 @@ document.addEventListener('DOMContentLoaded', function() {
     button.addEventListener('keydown', function(e) {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        this.click();
+        const kelompok = this.getAttribute('data-kelompok');
+        gantiPenjelasan(kelompok);
       }
     });
   });
