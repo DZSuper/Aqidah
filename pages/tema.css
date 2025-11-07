@@ -1,0 +1,103 @@
+/* === FONT & DASAR === */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #0c0c0c;
+  color: #fff;
+}
+
+/* === CONTAINER === */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* Responsif: tambahan padding di HP */
+@media (max-width: 600px) {
+  .container {
+    padding: 20px;
+  }
+}
+
+/* === CARD === */
+.card {
+  background: #111;
+  border: 2px solid #00ff66;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  color: #ffd700; /* teks emas */
+  transition: all 0.25s ease; /* efek lembut */
+  cursor: pointer; /* interaktif */
+}
+
+/* Efek hover untuk desktop */
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 15px rgba(0, 255, 100, 0.3);
+}
+
+/* Efek tap ringan di HP */
+.card:active {
+  box-shadow: 0 0 10px rgba(255, 255, 0, 0.4);
+}
+
+/* Responsif: jarak antar kartu di layar kecil */
+@media (max-width: 600px) {
+  .card {
+    margin-bottom: 15px;
+  }
+}
+
+/* Ukuran teks judul di layar kecil */
+@media (max-width: 600px) {
+  .card h3 {
+    font-size: 1.1rem;
+  }
+}
+
+/* === LINK UMUM === */
+a {
+  color: #00ff99;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+a:hover {
+  color: #00ffaa;
+  text-decoration: underline;
+}
+
+/* === LINK KHUSUS UNTUK “KEMBALI KE BERANDA” === */
+a.back-link {
+  display: inline-block;
+  margin-bottom: 15px;
+  color: #00ff99;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+a.back-link:hover {
+  text-decoration: underline;
+  color: #00ffaa;
+}
+
+/* === TEKS UMUM === */
+p {
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+/* === JUDUL HALAMAN === */
+.title {
+  text-align: center;
+  color: #ffd700; /* warna emas */
+  font-size: 2rem;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
