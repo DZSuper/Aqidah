@@ -7,9 +7,14 @@
   <link rel="stylesheet" href="tema.css" />
 </head>
 <body>
-  <a href="../index.html" class="back-btn">← Kembali ke Beranda</a>
+    <!-- Header dengan tombol kembali dan default -->
+  <div class="header-buttons">
+    <a href="../index.html" class="back-btn">← Kembali ke Beranda</a>
+    <button class="default-btn" id="defaultBtn">DEFAULT</button>
+  </div>
+
   <h1 class="tema-title">Sifat Allah</h1>
-  
+
   <div class="content-wrapper">
     <!-- Bagian Kelompok (Kiri untuk Desktop/Tablet) -->
     <aside class="kelompok-section">
@@ -36,7 +41,10 @@
     
     <!-- Bagian Penjelasan (Kanan untuk Desktop/Tablet) -->
     <main class="penjelasan-section">
-      <h2 class="section-title">Penjelasan</h2>
+      <div class="section-title">
+        <span>Penjelasan</span>
+        <button class="edit-btn" id="editBtn">EDIT</button>
+      </div>
       
       <div class="penjelasan-content" id="penjelasanContent">
         <!-- Ahlus Sunnah (Default) -->
