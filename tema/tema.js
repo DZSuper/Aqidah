@@ -1,23 +1,30 @@
-// Interaktivitas untuk halaman tema dengan fitur edit dan localStorage
+// Interaktivitas untuk halaman tema dengan 3 halaman (Default, Editing, Catatan)
 document.addEventListener('DOMContentLoaded', function() {
   
-  // Ambil elemen-elemen yang diperlukan
-  const kelompokButtons = document.querySelectorAll('.kelompok-btn');
-  const kelompokDropdown = document.getElementById('kelompokSelect');
-  const penjelasanItems = document.querySelectorAll('.penjelasan-item');
-  const editBtn = document.getElementById('editBtn');
+  // ===================================
+  // AMBIL ELEMEN-ELEMEN
+  // ===================================
+  const pageButtons = document.querySelectorAll('.page-btn');
+  const pageContainers = document.querySelectorAll('.page-container');
   const defaultBtn = document.getElementById('defaultBtn');
+  const editBtn = document.getElementById('editBtn');
+  const catatanContent = document.getElementById('catatanContent');
   
   // Dapatkan nama halaman untuk key localStorage yang unik
   const pageName = document.title.split('|')[0].trim();
-  const storageKey = `aqidah_${pageName.toLowerCase().replace(/\s+/g, '_')}`;
+  const storageKeyEditing = `aqidah_editing_${pageName.toLowerCase().replace(/\s+/g, '_')}`;
+  const storageKeyCatatan = `aqidah_catatan_${pageName.toLowerCase().replace(/\s+/g, '_')}`;
   
+  // State management
+  let currentPage = 1;
   let isEditing = false;
-  let currentKelompok = 'ahlussunnah';
+  let currentKelompok = {1: 'ahlussunnah', 2: 'ahlussunnah'}; // Tracking untuk page 1 & 2
   
-  // Simpan konten original untuk reset
+  // ===================================
+  // SIMPAN KONTEN ORIGINAL
+  // ===================================
   const originalContent = {};
-  penjelasanItems.forEach(item => {
+  document.querySelectorAll('#page2 .penjelasan-item').forEach(item => {
     const kelompok = item.getAttribute('data-kelompok');
     originalContent[kelompok] = item.innerHTML;
   });
@@ -26,32 +33,43 @@ document.addEventListener('DOMContentLoaded', function() {
   // FUNGSI: Load dari localStorage
   // ===================================
   function loadFromStorage() {
-    const saved = localStorage.getItem(storageKey);
-    if (saved) {
+    // Load editing content (Halaman 2)
+    const savedEditing = localStorage.getItem(storageKeyEditing);
+    if (savedEditing) {
       try {
-        const data = JSON.parse(saved);
-        penjelasanItems.forEach(item => {
+        const data = JSON.parse(savedEditing);
+        document.querySelectorAll('#page2 .penjelasan-item').forEach(item => {
           const kelompok = item.getAttribute('data-kelompok');
           if (data[kelompok]) {
             item.innerHTML = data[kelompok];
           }
         });
       } catch (e) {
-        console.error('Error loading from storage:', e);
+        console.error('Error loading editing content:', e);
       }
+    }
+    
+    // Load catatan content (Halaman 3)
+    const savedCatatan = localStorage.getItem(storageKeyCatatan);
+    if (savedCatatan) {
+      catatanContent.innerHTML = savedCatatan;
     }
   }
   
   // ===================================
   // FUNGSI: Simpan ke localStorage
   // ===================================
-  function saveToStorage() {
+  function saveEditingToStorage() {
     const data = {};
-    penjelasanItems.forEach(item => {
+    document.querySelectorAll('#page2 .penjelasan-item').forEach(item => {
       const kelompok = item.getAttribute('data-kelompok');
       data[kelompok] = item.innerHTML;
     });
-    localStorage.setItem(storageKey, JSON.stringify(data));
+    localStorage.setItem(storageKeyEditing, JSON.stringify(data));
+  }
+  
+  function saveCatatanToStorage() {
+    localStorage.setItem(storageKeyCatatan, catatanContent.innerHTML);
   }
   
   // ===================================
@@ -59,12 +77,12 @@ document.addEventListener('DOMContentLoaded', function() {
   // ===================================
   function resetToDefault() {
     if (confirm('Apakah Anda yakin ingin mengembalikan semua penjelasan ke kondisi awal? Semua perubahan yang Anda buat akan hilang.')) {
-      penjelasanItems.forEach(item => {
+      document.querySelectorAll('#page2 .penjelasan-item').forEach(item => {
         const kelompok = item.getAttribute('data-kelompok');
         item.innerHTML = originalContent[kelompok];
         item.contentEditable = false;
       });
-      localStorage.removeItem(storageKey);
+      localStorage.removeItem(storageKeyEditing);
       isEditing = false;
       editBtn.textContent = 'EDIT';
       editBtn.classList.remove('editing');
@@ -84,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
       editBtn.classList.add('editing');
       
       // Aktifkan contenteditable pada item yang sedang aktif
-      const activeItem = document.querySelector('.penjelasan-item.active');
+      const activeItem = document.querySelector('#page2 .penjelasan-item.active');
       if (activeItem) {
         activeItem.contentEditable = true;
         activeItem.focus();
@@ -95,58 +113,99 @@ document.addEventListener('DOMContentLoaded', function() {
       editBtn.classList.remove('editing');
       
       // Nonaktifkan contenteditable
-      penjelasanItems.forEach(item => {
+      document.querySelectorAll('#page2 .penjelasan-item').forEach(item => {
         item.contentEditable = false;
       });
       
       // Simpan ke localStorage
-      saveToStorage();
+      saveEditingToStorage();
       alert('Perubahan telah disimpan!');
     }
   }
   
   // ===================================
-  // FUNGSI UTAMA: Ganti Penjelasan
+  // FUNGSI: Ganti Halaman
   // ===================================
-  function gantiPenjelasan(kelompok) {
-    currentKelompok = kelompok;
+  function gantiHalaman(pageNum) {
+    currentPage = pageNum;
+    
+    // Update page containers
+    pageContainers.forEach(container => {
+      container.classList.remove('active');
+    });
+    document.getElementById(`page${pageNum}`).classList.add('active');
+    
+    // Update page buttons
+    pageButtons.forEach(btn => {
+      btn.classList.remove('active');
+    });
+    document.querySelector(`.page-btn[data-page="${pageNum}"]`).classList.add('active');
+    
+    // Show/hide default button (hanya tampil di halaman 2)
+    if (pageNum === 2) {
+      defaultBtn.style.display = 'inline-block';
+    } else {
+      defaultBtn.style.display = 'none';
+    }
+    
+    // Reset edit mode jika pindah dari halaman 2
+    if (pageNum !== 2 && isEditing) {
+      isEditing = false;
+      editBtn.textContent = 'EDIT';
+      editBtn.classList.remove('editing');
+      document.querySelectorAll('#page2 .penjelasan-item').forEach(item => {
+        item.contentEditable = false;
+      });
+    }
+  }
+  
+  // ===================================
+  // FUNGSI: Ganti Penjelasan
+  // ===================================
+  function gantiPenjelasan(kelompok, pageNum) {
+    currentKelompok[pageNum] = kelompok;
+    
+    const container = document.getElementById(`page${pageNum}`);
+    const items = container.querySelectorAll('.penjelasan-item');
+    const buttons = container.querySelectorAll('.kelompok-btn');
+    const dropdown = container.querySelector('.kelompok-dropdown');
     
     // Sembunyikan semua penjelasan terlebih dahulu
-    penjelasanItems.forEach(item => {
+    items.forEach(item => {
       item.classList.remove('active');
       item.contentEditable = false;
     });
     
     // Hapus class active dari semua button
-    kelompokButtons.forEach(btn => {
+    buttons.forEach(btn => {
       btn.classList.remove('active');
     });
     
     // Tampilkan penjelasan yang sesuai
-    const activePenjelasan = document.querySelector(`.penjelasan-item[data-kelompok="${kelompok}"]`);
-    if (activePenjelasan) {
-      activePenjelasan.classList.add('active');
+    const activeItem = container.querySelector(`.penjelasan-item[data-kelompok="${kelompok}"]`);
+    if (activeItem) {
+      activeItem.classList.add('active');
       
-      // Jika sedang dalam mode edit, aktifkan contenteditable
-      if (isEditing) {
-        activePenjelasan.contentEditable = true;
+      // Jika di halaman 2 dan sedang dalam mode edit, aktifkan contenteditable
+      if (pageNum === 2 && isEditing) {
+        activeItem.contentEditable = true;
       }
     }
     
     // Aktifkan button yang sesuai
-    const activeButton = document.querySelector(`.kelompok-btn[data-kelompok="${kelompok}"]`);
+    const activeButton = container.querySelector(`.kelompok-btn[data-kelompok="${kelompok}"]`);
     if (activeButton) {
       activeButton.classList.add('active');
     }
     
     // Update dropdown value (untuk sinkronisasi)
-    if (kelompokDropdown) {
-      kelompokDropdown.value = kelompok;
+    if (dropdown) {
+      dropdown.value = kelompok;
     }
     
     // Smooth scroll ke bagian penjelasan (khusus mobile)
     if (window.innerWidth <= 768) {
-      const penjelasanSection = document.querySelector('.penjelasan-section');
+      const penjelasanSection = container.querySelector('.penjelasan-section');
       if (penjelasanSection) {
         penjelasanSection.scrollIntoView({ 
           behavior: 'smooth', 
@@ -157,25 +216,37 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   // ===================================
-  // EVENT LISTENER: Button (Desktop & Tablet)
+  // EVENT LISTENER: Page Buttons
   // ===================================
-  kelompokButtons.forEach(button => {
-    button.addEventListener('click', function(e) {
-      e.preventDefault();
-      const kelompok = this.getAttribute('data-kelompok');
-      gantiPenjelasan(kelompok);
+  pageButtons.forEach(btn => {
+    btn.addEventListener('click', function() {
+      const pageNum = parseInt(this.getAttribute('data-page'));
+      gantiHalaman(pageNum);
     });
   });
   
   // ===================================
-  // EVENT LISTENER: Dropdown (Mobile)
+  // EVENT LISTENER: Kelompok Buttons
   // ===================================
-  if (kelompokDropdown) {
-    kelompokDropdown.addEventListener('change', function() {
-      const kelompok = this.value;
-      gantiPenjelasan(kelompok);
+  document.querySelectorAll('.kelompok-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const kelompok = this.getAttribute('data-kelompok');
+      const pageNum = parseInt(this.getAttribute('data-page'));
+      gantiPenjelasan(kelompok, pageNum);
     });
-  }
+  });
+  
+  // ===================================
+  // EVENT LISTENER: Dropdowns (Mobile)
+  // ===================================
+  document.querySelectorAll('.kelompok-dropdown').forEach(dropdown => {
+    dropdown.addEventListener('change', function() {
+      const kelompok = this.value;
+      const pageNum = parseInt(this.id.replace('kelompokSelect', ''));
+      gantiPenjelasan(kelompok, pageNum);
+    });
+  });
   
   // ===================================
   // EVENT LISTENER: Tombol Edit
@@ -194,36 +265,52 @@ document.addEventListener('DOMContentLoaded', function() {
   // ===================================
   // KEYBOARD NAVIGATION (Accessibility)
   // ===================================
-  kelompokButtons.forEach(button => {
+  document.querySelectorAll('.kelompok-btn').forEach(button => {
     button.addEventListener('keydown', function(e) {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         const kelompok = this.getAttribute('data-kelompok');
-        gantiPenjelasan(kelompok);
+        const pageNum = parseInt(this.getAttribute('data-page'));
+        gantiPenjelasan(kelompok, pageNum);
       }
     });
   });
   
   // ===================================
-  // AUTO-SAVE saat edit (optional)
+  // AUTO-SAVE untuk Halaman 2 (saat edit)
   // ===================================
   let autoSaveTimeout;
-  penjelasanItems.forEach(item => {
+  document.querySelectorAll('#page2 .penjelasan-item').forEach(item => {
     item.addEventListener('input', function() {
       if (isEditing) {
         // Debounce auto-save
         clearTimeout(autoSaveTimeout);
         autoSaveTimeout = setTimeout(() => {
-          saveToStorage();
-          console.log('Auto-saved!');
+          saveEditingToStorage();
+          console.log('Auto-saved editing content!');
         }, 2000); // Simpan otomatis setelah 2 detik tidak ada perubahan
       }
     });
   });
   
   // ===================================
-  // INISIALISASI: Load dari storage
+  // AUTO-SAVE untuk Halaman 3 (Catatan)
+  // ===================================
+  let catatanSaveTimeout;
+  if (catatanContent) {
+    catatanContent.addEventListener('input', function() {
+      clearTimeout(catatanSaveTimeout);
+      catatanSaveTimeout = setTimeout(() => {
+        saveCatatanToStorage();
+        console.log('Auto-saved catatan!');
+      }, 2000); // Simpan otomatis setelah 2 detik tidak ada perubahan
+    });
+  }
+  
+  // ===================================
+  // INISIALISASI: Load dari storage & Set halaman awal
   // ===================================
   loadFromStorage();
+  gantiHalaman(1); // Mulai dari halaman 1 (Default)
   
 });
