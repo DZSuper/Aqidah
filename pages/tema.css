@@ -23,6 +23,16 @@ body {
   line-height: 1.7;
 }
 
+/* === HEADER CONTAINER (untuk tombol kembali & default) === */
+.header-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 /* === TOMBOL KEMBALI === */
 .back-btn {
   display: inline-block;
@@ -31,7 +41,6 @@ body {
   border: 1px solid var(--green);
   border-radius: 8px;
   padding: 8px 16px;
-  margin-bottom: 20px;
   transition: all 0.3s ease;
   font-size: 0.95rem;
 }
@@ -40,6 +49,31 @@ body {
   background-color: var(--green);
   color: var(--bg-dark);
   transform: translateX(-3px);
+}
+
+/* === TOMBOL DEFAULT === */
+.default-btn {
+  display: inline-block;
+  color: #ff4444;
+  text-decoration: none;
+  border: 1px solid #ff4444;
+  border-radius: 8px;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  background-color: transparent;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+}
+
+.default-btn:hover {
+  background-color: #ff4444;
+  color: var(--bg-dark);
+  transform: scale(1.05);
+}
+
+.default-btn:active {
+  transform: scale(0.95);
 }
 
 /* === JUDUL TEMA === */
@@ -66,6 +100,34 @@ body {
   margin-bottom: 15px;
   border-bottom: 2px solid var(--border-color);
   padding-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* === TOMBOL EDIT === */
+.edit-btn {
+  background-color: transparent;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-btn:hover {
+  background-color: var(--gold);
+  color: var(--bg-dark);
+  transform: scale(1.05);
+}
+
+.edit-btn.editing {
+  background-color: var(--green);
+  border-color: var(--green);
+  color: var(--bg-dark);
 }
 
 /* ============================
@@ -134,6 +196,9 @@ body {
   cursor: pointer;
   outline: none;
   transition: all 0.3s ease;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 .kelompok-dropdown:hover {
@@ -176,6 +241,15 @@ body {
 
 .penjelasan-item.active {
   display: block;
+}
+
+/* Mode Edit */
+.penjelasan-item[contenteditable="true"] {
+  outline: 2px dashed var(--green);
+  outline-offset: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: rgba(0, 255, 136, 0.05);
 }
 
 @keyframes fadeIn {
@@ -269,5 +343,10 @@ body {
   
   .section-title {
     font-size: 1.2rem;
+  }
+  
+  .edit-btn {
+    font-size: 0.8rem;
+    padding: 5px 10px;
   }
 }
