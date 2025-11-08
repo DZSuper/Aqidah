@@ -1,59 +1,273 @@
 /* === FONT & DASAR === */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
-body {
+:root {
+  --bg-dark: #0b0c0e;
+  --gold: #ffd700;
+  --green: #00ff88;
+  --text-light: #f2f2f2;
+  --border-color: rgba(0, 255, 136, 0.3);
+}
+
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
   font-family: 'Poppins', sans-serif;
-  background-color: #0c0c0c;
-  color: #fff;
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  padding: 20px;
+  line-height: 1.7;
 }
 
-/* === LINK UMUM === */
-a {
-  color: #00ff99;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-a:hover {
-  color: #00ffaa;
-  text-decoration: underline;
-}
-
-/* === LINK KHUSUS UNTUK “KEMBALI KE BERANDA” === */
-a.back-link {
+/* === TOMBOL KEMBALI === */
+.back-btn {
   display: inline-block;
-  margin-bottom: 15px;
-  color: #00ff99;
+  color: var(--green);
   text-decoration: none;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-a.back-link:hover {
-  text-decoration: underline;
-  color: #00ffaa;
-}
-
-/* === TEKS UMUM === */
-p {
-  margin-bottom: 10px;
-  line-height: 1.6;
+  border: 1px solid var(--green);
+  border-radius: 8px;
+  padding: 8px 16px;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
 }
 
-/* === JUDUL HALAMAN === */
-.title {
+.back-btn:hover {
+  background-color: var(--green);
+  color: var(--bg-dark);
+  transform: translateX(-3px);
+}
+
+/* === JUDUL TEMA === */
+.tema-title {
   text-align: center;
-  color: #ffd700; /* warna emas */
-  font-size: 2rem;
+  color: var(--gold);
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
   margin-bottom: 30px;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+/* === CONTENT WRAPPER (SPLIT SCREEN) === */
+.content-wrapper {
+  display: flex;
+  gap: 25px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* === SECTION TITLE === */
+.section-title {
+  color: var(--green);
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 8px;
+}
+
+/* ============================
+   BAGIAN KELOMPOK (KIRI)
+============================ */
+.kelompok-section {
+  flex: 0 0 280px;
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+}
+
+/* Button Kelompok (Desktop & Tablet) */
+.kelompok-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.kelompok-btn {
+  background-color: transparent;
+  color: var(--gold);
+  border: 2px solid var(--gold);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  font-weight: 500;
+}
+
+.kelompok-btn:hover {
+  background-color: rgba(255, 215, 0, 0.1);
+  transform: translateX(5px);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.kelompok-btn.active {
+  background-color: var(--gold);
+  color: var(--bg-dark);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
   font-weight: 600;
 }
 
-/* === RESPONSIF TAMBAHAN === */
-@media (max-width: 600px) {
+.kelompok-btn:active {
+  transform: scale(0.98);
+}
+
+/* Dropdown (Mobile) - Disembunyikan di Desktop & Tablet */
+.kelompok-dropdown {
+  display: none;
+  width: 100%;
+  padding: 12px;
+  background-color: var(--bg-dark);
+  color: var(--gold);
+  border: 2px solid var(--gold);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.kelompok-dropdown:hover {
+  border-color: var(--green);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+}
+
+.kelompok-dropdown:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+}
+
+/* Style untuk options di dropdown */
+.kelompok-dropdown option {
+  background-color: var(--bg-dark);
+  color: var(--gold);
+  padding: 10px;
+}
+
+/* ============================
+   BAGIAN PENJELASAN (KANAN)
+============================ */
+.penjelasan-section {
+  flex: 1;
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 25px;
+  min-height: 400px;
+}
+
+.penjelasan-content {
+  position: relative;
+}
+
+.penjelasan-item {
+  display: none;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.penjelasan-item.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.penjelasan-item h3 {
+  color: var(--green);
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  border-left: 4px solid var(--green);
+  padding-left: 12px;
+}
+
+.penjelasan-item p {
+  margin-bottom: 12px;
+  text-align: justify;
+}
+
+.penjelasan-item strong {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+/* ============================
+   RESPONSIVE: TABLET
+============================ */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .content-wrapper {
+    gap: 20px;
+  }
+  
+  .kelompok-section {
+    flex: 0 0 240px;
+  }
+  
+  .kelompok-btn {
+    font-size: 0.9rem;
+    padding: 10px 14px;
+  }
+}
+
+/* ============================
+   RESPONSIVE: MOBILE (HP)
+============================ */
+@media (max-width: 768px) {
   body {
+    padding: 15px;
+  }
+  
+  .tema-title {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+  }
+  
+  /* Layout berubah jadi STACKED (susun vertikal) */
+  .content-wrapper {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .kelompok-section {
+    position: static;
+    flex: none;
+    width: 100%;
+  }
+  
+  /* Sembunyikan Button, Tampilkan Dropdown */
+  .kelompok-buttons {
+    display: none;
+  }
+  
+  .kelompok-dropdown {
+    display: block;
+  }
+  
+  .penjelasan-section {
     padding: 20px;
   }
-  .title {
-    font-size: 1.6rem;
+  
+  .penjelasan-item h3 {
+    font-size: 1.3rem;
+  }
+  
+  .section-title {
+    font-size: 1.2rem;
   }
 }
