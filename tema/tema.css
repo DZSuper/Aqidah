@@ -11,6 +11,7 @@
   --blue: #4dabf7;
   --yellow: #ffd43b;
   --gray: #b8b8b8;
+  --tooltip-bg: #87ceeb;
 }
 
 * {
@@ -260,7 +261,7 @@ body {
   font-weight: 600;
 }
 
-/* Dropdown (Mobile) */
+/* Dropdown (Mobile) - HILANGKAN PANAH */
 .kelompok-dropdown {
   display: none;
   width: 100%;
@@ -273,6 +274,20 @@ body {
   font-family: 'Poppins', sans-serif;
   cursor: pointer;
   outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: none; /* Hilangkan panah default */
+}
+
+.kelompok-dropdown:hover {
+  border-color: var(--green);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+}
+
+.kelompok-dropdown:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
 }
 
 /* ============================
@@ -315,9 +330,10 @@ body {
   padding-left: 12px;
 }
 
+/* FIX: Text sejajar kiri seperti halaman 1 */
 .penjelasan-item p {
   margin-bottom: 12px;
-  text-align: justify;
+  text-align: left; /* Diubah dari justify ke left */
 }
 
 .penjelasan-item strong {
@@ -331,10 +347,9 @@ body {
 .catatan-wrapper {
   max-width: 1400px;
   margin: 0 auto;
-  padding-bottom: 80px; /* Beri ruang untuk toolbar di bawah */
+  padding-bottom: 80px;
 }
 
-/* Header Catatan dengan Tombol Mode */
 .catatan-header {
   display: flex;
   justify-content: center;
@@ -366,7 +381,6 @@ body {
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
 }
 
-/* Container Catatan */
 .catatan-container {
   background-color: rgba(255, 255, 255, 0.03);
   border: 2px solid var(--gold);
@@ -409,7 +423,7 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(11, 12, 14, 0.95);
+  background-color: rgba(11, 12, 14, 0.98);
   backdrop-filter: blur(10px);
   border-top: 2px solid var(--gold);
   padding: 12px 20px;
@@ -430,6 +444,7 @@ body {
   padding: 5px 0;
   scrollbar-width: thin;
   scrollbar-color: var(--gold) transparent;
+  scroll-behavior: smooth;
 }
 
 .toolbar-scroll::-webkit-scrollbar {
@@ -445,7 +460,13 @@ body {
   border-radius: 3px;
 }
 
-/* Group Toolbar */
+/* Horizontal scroll saat hover toolbar (desktop only) */
+@media (hover: hover) and (pointer: fine) {
+  .format-toolbar:hover {
+    overflow-x: auto;
+  }
+}
+
 .toolbar-group {
   display: flex;
   gap: 5px;
@@ -457,6 +478,63 @@ body {
 .toolbar-group:last-child {
   border-right: none;
   padding-right: 0;
+}
+
+/* ============================
+   TOMBOL FORMAT & TOOLTIP
+============================ */
+.format-btn, .color-btn {
+  position: relative;
+}
+
+/* Tooltip Keren */
+.format-btn::before,
+.color-btn::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) scale(0.9);
+  background-color: var(--tooltip-bg);
+  color: var(--gold);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s ease;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Panah Tooltip */
+.format-btn::after,
+.color-btn::after {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%) scale(0.9);
+  border: 6px solid transparent;
+  border-top-color: var(--tooltip-bg);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s ease;
+  z-index: 1000;
+}
+
+.format-btn:hover::before,
+.color-btn:hover::before {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+.format-btn:hover::after,
+.color-btn:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
 }
 
 /* Tombol Format */
@@ -488,17 +566,14 @@ body {
   border-color: var(--gold);
 }
 
-/* Tombol Bold */
 .format-btn.bold {
   font-weight: 700;
 }
 
-/* Tombol Italic */
 .format-btn.italic {
   font-style: italic;
 }
 
-/* Tombol Underline */
 .format-btn.underline {
   text-decoration: underline;
 }
@@ -514,7 +589,7 @@ body {
 }
 
 .color-btn:hover {
-  transform: scale(1.15);
+  transform: scale(1.15) translateY(-2px);
   border-color: var(--gold);
 }
 
@@ -529,7 +604,6 @@ body {
 .color-btn.yellow { background-color: var(--yellow); }
 .color-btn.green { background-color: var(--green); }
 
-/* Size Buttons */
 .size-btn {
   min-width: 45px;
 }
@@ -557,7 +631,7 @@ body {
 @media (max-width: 768px) {
   body {
     padding: 15px;
-    padding-bottom: 100px; /* Beri ruang untuk toolbar */
+    padding-bottom: 100px;
   }
   
   .tema-title {
@@ -593,7 +667,7 @@ body {
   }
 
   .save-indicator {
-    bottom: 80px; /* Di atas toolbar */
+    bottom: 80px;
     right: 20px;
     left: 20px;
     text-align: center;
@@ -669,5 +743,12 @@ body {
   .color-btn {
     width: 30px;
     height: 30px;
+  }
+
+  /* Tooltip lebih kecil di mobile */
+  .format-btn::before,
+  .color-btn::before {
+    font-size: 0.7rem;
+    padding: 4px 8px;
   }
 }
