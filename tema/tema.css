@@ -7,6 +7,10 @@
   --green: #00ff88;
   --text-light: #f2f2f2;
   --border-color: rgba(0, 255, 136, 0.3);
+  --red: #ff6b6b;
+  --blue: #4dabf7;
+  --yellow: #ffd43b;
+  --gray: #b8b8b8;
 }
 
 * {
@@ -88,10 +92,6 @@ body {
   font-weight: 700;
 }
 
-.page-btn:active {
-  transform: scale(0.95);
-}
-
 /* === TOMBOL DEFAULT === */
 .default-btn {
   display: inline-block;
@@ -111,10 +111,6 @@ body {
   background-color: #ff4444;
   color: var(--bg-dark);
   transform: scale(1.05);
-}
-
-.default-btn:active {
-  transform: scale(0.95);
 }
 
 /* === INDIKATOR TERSIMPAN === */
@@ -264,11 +260,7 @@ body {
   font-weight: 600;
 }
 
-.kelompok-btn:active {
-  transform: scale(0.98);
-}
-
-/* Dropdown (Mobile) - Disembunyikan di Desktop & Tablet */
+/* Dropdown (Mobile) */
 .kelompok-dropdown {
   display: none;
   width: 100%;
@@ -281,27 +273,6 @@ body {
   font-family: 'Poppins', sans-serif;
   cursor: pointer;
   outline: none;
-  transition: all 0.3s ease;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-.kelompok-dropdown:hover {
-  border-color: var(--green);
-  box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
-}
-
-.kelompok-dropdown:focus {
-  border-color: var(--green);
-  box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
-}
-
-/* Style untuk options di dropdown */
-.kelompok-dropdown option {
-  background-color: var(--bg-dark);
-  color: var(--gold);
-  padding: 10px;
 }
 
 /* ============================
@@ -328,7 +299,6 @@ body {
   display: block;
 }
 
-/* Mode Edit */
 .penjelasan-item[contenteditable="true"] {
   outline: 2px dashed var(--green);
   outline-offset: 8px;
@@ -361,16 +331,15 @@ body {
 .catatan-wrapper {
   max-width: 1400px;
   margin: 0 auto;
+  padding-bottom: 80px; /* Beri ruang untuk toolbar di bawah */
 }
 
-/* Header Catatan dengan Tombol Mode dan Toolbar */
+/* Header Catatan dengan Tombol Mode */
 .catatan-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-bottom: 20px;
-  flex-wrap: wrap;
-  gap: 15px;
 }
 
 .catatan-mode-btn {
@@ -378,8 +347,8 @@ body {
   color: var(--gold);
   border: 2px solid var(--gold);
   border-radius: 8px;
-  padding: 8px 20px;
-  font-size: 0.9rem;
+  padding: 10px 30px;
+  font-size: 1rem;
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
   cursor: pointer;
@@ -395,64 +364,6 @@ body {
   background-color: var(--gold);
   color: var(--bg-dark);
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-}
-
-/* Toolbar Gaya Penulisan */
-.catatan-toolbar {
-  display: none;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.catatan-toolbar.show {
-  display: flex;
-}
-
-.style-btn {
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 6px;
-  padding: 8px 16px;
-  font-size: 1rem;
-  font-family: 'Poppins', sans-serif;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  min-width: 60px;
-  text-align: center;
-}
-
-.style-btn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-.style-btn.judul {
-  color: var(--green);
-  border-color: var(--green);
-}
-
-.style-btn.bab {
-  color: #00d4ff;
-  border-color: #00d4ff;
-}
-
-.style-btn.subbab {
-  color: var(--gold);
-  border-color: var(--gold);
-}
-
-.style-btn.biasa {
-  color: var(--text-light);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.style-btn.penting {
-  background-color: rgba(255, 215, 0, 0.1);
-  color: var(--gold);
-  border-color: var(--gold);
-  font-style: italic;
 }
 
 /* Container Catatan */
@@ -482,7 +393,6 @@ body {
   font-style: italic;
 }
 
-/* Mode Edit pada Catatan */
 .catatan-content[contenteditable="true"] {
   cursor: text;
 }
@@ -491,69 +401,137 @@ body {
   cursor: default;
 }
 
-/* ==== GAYA PENULISAN CATATAN ==== */
+/* ============================
+   TOOLBAR FORMATTING (BAWAH)
+============================ */
+.format-toolbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(11, 12, 14, 0.95);
+  backdrop-filter: blur(10px);
+  border-top: 2px solid var(--gold);
+  padding: 12px 20px;
+  display: none;
+  z-index: 999;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+}
 
-/* 1. Judul Utama (A. B. C. dst) - BATASI BORDER HANYA 1 BARIS */
-.catatan-judul {
-  color: var(--green);
-  font-size: 1.8rem;
+.format-toolbar.show {
+  display: block;
+}
+
+.toolbar-scroll {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 5px 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold) transparent;
+}
+
+.toolbar-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.toolbar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.toolbar-scroll::-webkit-scrollbar-thumb {
+  background: var(--gold);
+  border-radius: 3px;
+}
+
+/* Group Toolbar */
+.toolbar-group {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  padding-right: 15px;
+  border-right: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.toolbar-group:last-child {
+  border-right: none;
+  padding-right: 0;
+}
+
+/* Tombol Format */
+.format-btn {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--text-light);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.95rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  min-width: 40px;
+  text-align: center;
+}
+
+.format-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.format-btn.active {
+  background-color: var(--gold);
+  color: var(--bg-dark);
+  border-color: var(--gold);
+}
+
+/* Tombol Bold */
+.format-btn.bold {
   font-weight: 700;
-  margin: 20px 0 15px 0;
-  padding-left: 15px;
-  border-left: 5px solid var(--green);
-  line-height: 1.4;
-  display: inline-block;
-  min-width: 100%;
 }
 
-/* 2. BAB (1. 2. 3. dst) - BATASI BORDER HANYA 1 BARIS */
-.catatan-bab {
-  color: #00d4ff;
-  font-size: 1.4rem;
-  font-weight: 600;
-  margin: 18px 0 12px 0;
-  padding-left: 12px;
-  border-left: 4px solid #00d4ff;
-  line-height: 1.4;
-  display: inline-block;
-  min-width: 100%;
+/* Tombol Italic */
+.format-btn.italic {
+  font-style: italic;
 }
 
-/* 3. Sub-bab (1.) 2.) 3.) dst) */
-.catatan-subbab {
-  color: var(--gold);
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin: 12px 0 8px 0;
-  line-height: 1.5;
-  display: block;
+/* Tombol Underline */
+.format-btn.underline {
+  text-decoration: underline;
 }
 
-/* 4. Catatan Biasa */
-.catatan-biasa {
-  color: var(--text-light);
-  font-size: 1rem;
-  line-height: 1.8;
-  margin: 8px 0;
-  display: block;
-  min-height: 1.8em;
+/* Color Picker Buttons */
+.color-btn {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-/* 5. Catatan Penting */
-.catatan-penting {
-  position: relative;
-  background-color: rgba(255, 215, 0, 0.08);
-  border-left: 4px solid var(--gold);
-  border-right: 4px solid var(--gold);
-  padding: 12px 15px;
-  margin: 15px 0;
-  border-radius: 4px;
-  color: var(--text-light);
-  font-size: 1rem;
-  line-height: 1.8;
-  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.15);
-  display: block;
-  min-height: 2.4em;
+.color-btn:hover {
+  transform: scale(1.15);
+  border-color: var(--gold);
+}
+
+.color-btn.active {
+  border: 3px solid var(--gold);
+  box-shadow: 0 0 10px var(--gold);
+}
+
+.color-btn.gray { background-color: var(--gray); }
+.color-btn.red { background-color: var(--red); }
+.color-btn.blue { background-color: var(--blue); }
+.color-btn.yellow { background-color: var(--yellow); }
+.color-btn.green { background-color: var(--green); }
+
+/* Size Buttons */
+.size-btn {
+  min-width: 45px;
 }
 
 /* ============================
@@ -567,22 +545,9 @@ body {
   .kelompok-section {
     flex: 0 0 240px;
   }
-  
-  .kelompok-btn {
-    font-size: 0.9rem;
-    padding: 10px 14px;
-  }
 
   .catatan-container {
     padding: 25px;
-  }
-
-  .catatan-judul {
-    font-size: 1.6rem;
-  }
-
-  .catatan-bab {
-    font-size: 1.3rem;
   }
 }
 
@@ -592,6 +557,7 @@ body {
 @media (max-width: 768px) {
   body {
     padding: 15px;
+    padding-bottom: 100px; /* Beri ruang untuk toolbar */
   }
   
   .tema-title {
@@ -599,7 +565,6 @@ body {
     margin-bottom: 20px;
   }
   
-  /* Header buttons layout untuk mobile */
   .header-buttons {
     flex-direction: column;
     align-items: stretch;
@@ -627,9 +592,8 @@ body {
     text-align: center;
   }
 
-  /* Save indicator untuk mobile */
   .save-indicator {
-    bottom: 20px;
+    bottom: 80px; /* Di atas toolbar */
     right: 20px;
     left: 20px;
     text-align: center;
@@ -637,7 +601,6 @@ body {
     padding: 10px 15px;
   }
   
-  /* Layout berubah jadi STACKED (susun vertikal) */
   .content-wrapper {
     flex-direction: column;
     gap: 20px;
@@ -649,7 +612,6 @@ body {
     width: 100%;
   }
   
-  /* Sembunyikan Button, Tampilkan Dropdown */
   .kelompok-buttons {
     display: none;
   }
@@ -675,25 +637,8 @@ body {
     padding: 5px 10px;
   }
 
-  /* Catatan untuk Mobile */
-  .catatan-header {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .catatan-mode-btn {
-    width: 100%;
-    text-align: center;
-  }
-
-  .catatan-toolbar {
-    justify-content: center;
-  }
-
-  .style-btn {
-    font-size: 0.9rem;
-    padding: 6px 12px;
-    min-width: 50px;
+  .catatan-wrapper {
+    padding-bottom: 100px;
   }
 
   .catatan-container {
@@ -705,21 +650,24 @@ body {
     font-size: 0.95rem;
   }
 
-  .catatan-judul {
-    font-size: 1.4rem;
-  }
-
-  .catatan-bab {
-    font-size: 1.2rem;
-  }
-
-  .catatan-subbab {
-    font-size: 1.05rem;
-  }
-
   .page-btn {
     width: 40px;
     height: 40px;
     font-size: 1.1rem;
+  }
+
+  .format-toolbar {
+    padding: 10px 15px;
+  }
+
+  .format-btn {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+    min-width: 35px;
+  }
+
+  .color-btn {
+    width: 30px;
+    height: 30px;
   }
 }

@@ -1,4 +1,4 @@
-// Interaktivitas untuk halaman tema dengan sistem numbering otomatis global
+// Interaktivitas untuk halaman tema dengan toolbar formatting sederhana
 document.addEventListener('DOMContentLoaded', function() {
   
   // ===================================
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const editBtn = document.getElementById('editBtn');
   const catatanContent = document.getElementById('catatanContent');
   const catatanModeBtn = document.getElementById('catatanModeBtn');
-  const catatanToolbar = document.getElementById('catatanToolbar');
+  const formatToolbar = document.getElementById('formatToolbar');
   
   // Dapatkan nama halaman untuk key localStorage yang unik
   const pageName = document.title.split('|')[0].trim();
@@ -142,270 +142,59 @@ document.addEventListener('DOMContentLoaded', function() {
       catatanModeBtn.textContent = 'MODE: EDIT';
       catatanModeBtn.classList.add('active');
       catatanContent.contentEditable = true;
-      catatanToolbar.classList.add('show');
+      formatToolbar.classList.add('show');
       catatanContent.focus();
     } else {
       catatanModeBtn.textContent = 'MODE: BACA';
       catatanModeBtn.classList.remove('active');
       catatanContent.contentEditable = false;
-      catatanToolbar.classList.remove('show');
+      formatToolbar.classList.remove('show');
       saveCatatanToStorage();
       showSaveIndicator(); // Tampilkan hanya saat kembali ke mode baca
     }
   }
   
   // ===================================
-  // FUNGSI: Hitung Nomor Global Otomatis
+  // FUNGSI: Apply Format
   // ===================================
-  function getNextNumber(styleType) {
-    if (styleType === 'judul') {
-      // Hitung semua judul yang ada
-      const allJudul = catatanContent.querySelectorAll('.catatan-judul');
-      const count = allJudul.length;
-      return String.fromCharCode(65 + count) + '. ';
-    } 
-    else if (styleType === 'bab') {
-      // Hitung semua BAB yang ada secara global
-      const allBab = catatanContent.querySelectorAll('.catatan-bab');
-      const count = allBab.length;
-      return (count + 1) + '. ';
-    } 
-    else if (styleType === 'subbab') {
-      // Hitung semua sub-bab yang ada secara global
-      const allSubbab = catatanContent.querySelectorAll('.catatan-subbab');
-      const count = allSubbab.length;
-      return (count + 1) + '.) ';
-    }
-    
-    return '';
-  }
-  
-  // ===================================
-  // FUNGSI: Cek Apakah dalam Judul/BAB/Sub-bab
-  // ===================================
-  function getCurrentElement() {
-    const selection = window.getSelection();
-    if (!selection.rangeCount) return null;
-    
-    let node = selection.getRangeAt(0).startContainer;
-    
-    // Traverse up untuk cari parent dengan class catatan-*
-    while (node && node !== catatanContent) {
-      if (node.classList) {
-        if (node.classList.contains('catatan-judul') ||
-            node.classList.contains('catatan-bab') ||
-            node.classList.contains('catatan-subbab') ||
-            node.classList.contains('catatan-biasa') ||
-            node.classList.contains('catatan-penting')) {
-          return node;
-        }
-      }
-      node = node.parentNode;
-    }
-    
-    return null;
-  }
-  
-  // ===================================
-  // FUNGSI: Apply Style ke Catatan
-  // ===================================
-  function applyNoteStyle(styleType) {
+  function applyFormat(command, value = null) {
     if (!isCatatanEditMode) return;
     
-    const selection = window.getSelection();
-    if (!selection.rangeCount) return;
-    
-    const range = selection.getRangeAt(0);
-    const currentElement = getCurrentElement();
-    
-    // Jika ada elemen saat ini
-    if (currentElement) {
-      const currentType = currentElement.className.replace('catatan-', '');
-      
-      // Jika ingin mengubah judul/bab/subbab ke tipe lain
-      if ((currentType === 'judul' || currentType === 'bab' || currentType === 'subbab') &&
-          (styleType === 'judul' || styleType === 'bab' || styleType === 'subbab')) {
-        // Ubah class element yang ada
-        currentElement.className = `catatan-${styleType}`;
-        
-        // Update nomor
-        const number = getNextNumber(styleType);
-        const textWithoutNumber = currentElement.textContent.replace(/^[A-Z]\.\s|^\d+\.\s|^\d+\.\)\s/, '');
-        currentElement.textContent = number + textWithoutNumber;
-        
-        // Pindahkan kursor ke akhir
-        range.selectNodeContents(currentElement);
-        range.collapse(false);
-        selection.removeAllRanges();
-        selection.addRange(range);
-        
-        return;
-      }
-      
-      // Jika ingin membuat biasa/penting dan sedang di judul/bab/sub-bab
-      if ((styleType === 'biasa' || styleType === 'penting') &&
-          (currentType === 'judul' || currentType === 'bab' || currentType === 'subbab')) {
-        // Buat baris baru setelah elemen struktural
-        const newElement = document.createElement('div');
-        newElement.className = `catatan-${styleType}`;
-        newElement.innerHTML = '<br>'; // Kosongkan tapi tetap bisa fokus
-        
-        currentElement.parentNode.insertBefore(newElement, currentElement.nextSibling);
-        
-        // Pindahkan kursor ke elemen baru
-        range.setStart(newElement, 0);
-        range.collapse(true);
-        selection.removeAllRanges();
-        selection.addRange(range);
-        
-        return;
-      }
-    }
-    
-    // Buat elemen baru
-    const newElement = document.createElement('div');
-    newElement.className = `catatan-${styleType}`;
-    
-    // Tambahkan nomor otomatis untuk judul/bab/sub-bab
-    if (styleType === 'judul' || styleType === 'bab' || styleType === 'subbab') {
-      const number = getNextNumber(styleType);
-      newElement.textContent = number;
-    } else {
-      // Kosongkan untuk biasa dan penting
-      newElement.innerHTML = '<br>';
-    }
-    
-    // Insert element
-    range.insertNode(newElement);
-    
-    // Pindahkan kursor ke akhir elemen baru
-    range.setStart(newElement, newElement.childNodes.length);
-    range.collapse(true);
-    selection.removeAllRanges();
-    selection.addRange(range);
-    
+    document.execCommand(command, false, value);
     catatanContent.focus();
+    updateToolbarState();
   }
   
   // ===================================
-  // EVENT LISTENER: Enter Key Handler
+  // FUNGSI: Update Toolbar State
   // ===================================
-  if (catatanContent) {
-    catatanContent.addEventListener('keydown', function(e) {
-      if (!isCatatanEditMode) return;
-      
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        
-        const currentElement = getCurrentElement();
-        
-        if (currentElement) {
-          const currentType = currentElement.className.replace('catatan-', '');
-          
-          // Jika di judul, buat judul baru
-          if (currentType === 'judul') {
-            const newElement = document.createElement('div');
-            newElement.className = 'catatan-judul';
-            const number = getNextNumber('judul');
-            newElement.textContent = number;
-            
-            currentElement.parentNode.insertBefore(newElement, currentElement.nextSibling);
-            
-            // Pindahkan kursor
-            const selection = window.getSelection();
-            const range = document.createRange();
-            range.setStart(newElement, newElement.childNodes.length);
-            range.collapse(true);
-            selection.removeAllRanges();
-            selection.addRange(range);
-            
-            return;
-          }
-          
-          // Jika di bab, buat bab baru
-          if (currentType === 'bab') {
-            const newElement = document.createElement('div');
-            newElement.className = 'catatan-bab';
-            const number = getNextNumber('bab');
-            newElement.textContent = number;
-            
-            currentElement.parentNode.insertBefore(newElement, currentElement.nextSibling);
-            
-            // Pindahkan kursor
-            const selection = window.getSelection();
-            const range = document.createRange();
-            range.setStart(newElement, newElement.childNodes.length);
-            range.collapse(true);
-            selection.removeAllRanges();
-            selection.addRange(range);
-            
-            return;
-          }
-          
-          // Jika di sub-bab, buat sub-bab baru
-          if (currentType === 'subbab') {
-            const newElement = document.createElement('div');
-            newElement.className = 'catatan-subbab';
-            const number = getNextNumber('subbab');
-            newElement.textContent = number;
-            
-            currentElement.parentNode.insertBefore(newElement, currentElement.nextSibling);
-            
-            // Pindahkan kursor
-            const selection = window.getSelection();
-            const range = document.createRange();
-            range.setStart(newElement, newElement.childNodes.length);
-            range.collapse(true);
-            selection.removeAllRanges();
-            selection.addRange(range);
-            
-            return;
-          }
-          
-          // Jika di penting, tetap di penting (biarkan default)
-          if (currentType === 'penting') {
-            return; // Biarkan browser handle (buat baris baru dalam penting)
-          }
-          
-          // Jika di biasa, buat biasa baru
-          if (currentType === 'biasa') {
-            const newElement = document.createElement('div');
-            newElement.className = 'catatan-biasa';
-            newElement.innerHTML = '<br>';
-            
-            currentElement.parentNode.insertBefore(newElement, currentElement.nextSibling);
-            
-            // Pindahkan kursor
-            const selection = window.getSelection();
-            const range = document.createRange();
-            range.setStart(newElement, 0);
-            range.collapse(true);
-            selection.removeAllRanges();
-            selection.addRange(range);
-            
-            return;
-          }
-        }
-      }
-      
-      // Keyboard shortcuts
-      if (e.ctrlKey && e.key === '1') {
-        e.preventDefault();
-        applyNoteStyle('judul');
-      } else if (e.ctrlKey && e.key === '2') {
-        e.preventDefault();
-        applyNoteStyle('bab');
-      } else if (e.ctrlKey && e.key === '3') {
-        e.preventDefault();
-        applyNoteStyle('subbab');
-      } else if (e.ctrlKey && e.key === '4') {
-        e.preventDefault();
-        applyNoteStyle('biasa');
-      } else if (e.ctrlKey && e.key === '5') {
-        e.preventDefault();
-        applyNoteStyle('penting');
-      }
+  function updateToolbarState() {
+    // Update bold, italic, underline buttons
+    document.getElementById('boldBtn').classList.toggle('active', document.queryCommandState('bold'));
+    document.getElementById('italicBtn').classList.toggle('active', document.queryCommandState('italic'));
+    document.getElementById('underlineBtn').classList.toggle('active', document.queryCommandState('underline'));
+    
+    // Update color buttons
+    const currentColor = document.queryCommandValue('foreColor');
+    document.querySelectorAll('.color-btn').forEach(btn => {
+      btn.classList.remove('active');
     });
+    
+    // Deteksi warna saat ini dan aktifkan tombol yang sesuai
+    if (currentColor) {
+      const rgb = currentColor.toLowerCase();
+      if (rgb.includes('184, 184, 184') || rgb.includes('b8b8b8')) {
+        document.querySelector('.color-btn.gray')?.classList.add('active');
+      } else if (rgb.includes('255, 107, 107') || rgb.includes('ff6b6b')) {
+        document.querySelector('.color-btn.red')?.classList.add('active');
+      } else if (rgb.includes('77, 171, 247') || rgb.includes('4dabf7')) {
+        document.querySelector('.color-btn.blue')?.classList.add('active');
+      } else if (rgb.includes('255, 212, 59') || rgb.includes('ffd43b')) {
+        document.querySelector('.color-btn.yellow')?.classList.add('active');
+      } else if (rgb.includes('0, 255, 136') || rgb.includes('00ff88')) {
+        document.querySelector('.color-btn.green')?.classList.add('active');
+      }
+    }
   }
   
   // ===================================
@@ -529,23 +318,69 @@ document.addEventListener('DOMContentLoaded', function() {
     catatanModeBtn.addEventListener('click', toggleCatatanMode);
   }
   
-  // Style Buttons
-  const styleButtons = {
-    'judulBtn': 'judul',
-    'babBtn': 'bab',
-    'subbabBtn': 'subbab',
-    'biasaBtn': 'biasa',
-    'pentingBtn': 'penting'
+  // ===================================
+  // FORMAT TOOLBAR BUTTONS
+  // ===================================
+  
+  // Bold
+  const boldBtn = document.getElementById('boldBtn');
+  if (boldBtn) {
+    boldBtn.addEventListener('click', () => applyFormat('bold'));
+  }
+  
+  // Italic
+  const italicBtn = document.getElementById('italicBtn');
+  if (italicBtn) {
+    italicBtn.addEventListener('click', () => applyFormat('italic'));
+  }
+  
+  // Underline
+  const underlineBtn = document.getElementById('underlineBtn');
+  if (underlineBtn) {
+    underlineBtn.addEventListener('click', () => applyFormat('underline'));
+  }
+  
+  // Color Buttons
+  const colorButtons = {
+    'colorGray': '#b8b8b8',
+    'colorRed': '#ff6b6b',
+    'colorBlue': '#4dabf7',
+    'colorYellow': '#ffd43b',
+    'colorGreen': '#00ff88'
   };
   
-  Object.keys(styleButtons).forEach(btnId => {
+  Object.keys(colorButtons).forEach(btnId => {
     const btn = document.getElementById(btnId);
     if (btn) {
       btn.addEventListener('click', function() {
-        applyNoteStyle(styleButtons[btnId]);
+        applyFormat('foreColor', colorButtons[btnId]);
       });
     }
   });
+  
+  // Size Buttons
+  const sizeButtons = {
+    'size1': '1', // Kecil
+    'size2': '3', // Normal kecil
+    'size3': '4', // Normal
+    'size4': '5', // Besar
+    'size5': '7'  // Sangat besar
+  };
+  
+  Object.keys(sizeButtons).forEach(btnId => {
+    const btn = document.getElementById(btnId);
+    if (btn) {
+      btn.addEventListener('click', function() {
+        applyFormat('fontSize', sizeButtons[btnId]);
+      });
+    }
+  });
+  
+  // Update toolbar state saat selection berubah
+  if (catatanContent) {
+    catatanContent.addEventListener('mouseup', updateToolbarState);
+    catatanContent.addEventListener('keyup', updateToolbarState);
+  }
   
   // AUTO-SAVE untuk Halaman 2
   let autoSaveTimeout;
@@ -568,7 +403,6 @@ document.addEventListener('DOMContentLoaded', function() {
         clearTimeout(catatanSaveTimeout);
         catatanSaveTimeout = setTimeout(() => {
           saveCatatanToStorage();
-          // TIDAK ADA showSaveIndicator() di sini
         }, 2000);
       }
     });
