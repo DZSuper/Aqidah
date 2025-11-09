@@ -1,5 +1,5 @@
 /* === FONT & DASAR === */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
   --bg-dark: #0b0c0e;
@@ -7,6 +7,10 @@
   --green: #00ff88;
   --text-light: #f2f2f2;
   --border-color: rgba(0, 255, 136, 0.3);
+  --red: #ff6b6b;
+  --blue: #4dabf7;
+  --yellow: #ffd43b;
+  --gray: #b8b8b8;
 }
 
 * {
@@ -23,7 +27,7 @@ body {
   line-height: 1.7;
 }
 
-/* === HEADER CONTAINER (untuk tombol kembali & default) === */
+/* === HEADER CONTAINER === */
 .header-buttons {
   display: flex;
   justify-content: space-between;
@@ -31,6 +35,7 @@ body {
   margin-bottom: 20px;
   flex-wrap: wrap;
   gap: 10px;
+  position: relative;
 }
 
 /* === TOMBOL KEMBALI === */
@@ -49,6 +54,42 @@ body {
   background-color: var(--green);
   color: var(--bg-dark);
   transform: translateX(-3px);
+}
+
+/* === TOMBOL HALAMAN (1, 2, 3) === */
+.page-selector {
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.page-btn {
+  width: 45px;
+  height: 45px;
+  background-color: transparent;
+  color: var(--gold);
+  border: 2px solid var(--gold);
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.page-btn:hover {
+  background-color: rgba(255, 215, 0, 0.1);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+  transform: scale(1.05);
+}
+
+.page-btn.active {
+  background-color: var(--gold);
+  color: var(--bg-dark);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+  font-weight: 700;
 }
 
 /* === TOMBOL DEFAULT === */
@@ -72,8 +113,28 @@ body {
   transform: scale(1.05);
 }
 
-.default-btn:active {
-  transform: scale(0.95);
+/* === INDIKATOR TERSIMPAN === */
+.save-indicator {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: var(--green);
+  color: var(--bg-dark);
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(0, 255, 136, 0.4);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.save-indicator.show {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* === JUDUL TEMA === */
@@ -83,6 +144,27 @@ body {
   font-size: clamp(1.8rem, 4vw, 2.5rem);
   margin-bottom: 30px;
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+/* === PAGE CONTAINER === */
+.page-container {
+  display: none;
+}
+
+.page-container.active {
+  display: block;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* === CONTENT WRAPPER (SPLIT SCREEN) === */
@@ -178,11 +260,7 @@ body {
   font-weight: 600;
 }
 
-.kelompok-btn:active {
-  transform: scale(0.98);
-}
-
-/* Dropdown (Mobile) - Disembunyikan di Desktop & Tablet */
+/* Dropdown (Mobile) */
 .kelompok-dropdown {
   display: none;
   width: 100%;
@@ -195,27 +273,6 @@ body {
   font-family: 'Poppins', sans-serif;
   cursor: pointer;
   outline: none;
-  transition: all 0.3s ease;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-.kelompok-dropdown:hover {
-  border-color: var(--green);
-  box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
-}
-
-.kelompok-dropdown:focus {
-  border-color: var(--green);
-  box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
-}
-
-/* Style untuk options di dropdown */
-.kelompok-dropdown option {
-  background-color: var(--bg-dark);
-  color: var(--gold);
-  padding: 10px;
 }
 
 /* ============================
@@ -236,31 +293,18 @@ body {
 
 .penjelasan-item {
   display: none;
-  animation: fadeIn 0.4s ease-in-out;
 }
 
 .penjelasan-item.active {
   display: block;
 }
 
-/* Mode Edit */
 .penjelasan-item[contenteditable="true"] {
   outline: 2px dashed var(--green);
   outline-offset: 8px;
   padding: 10px;
   border-radius: 8px;
   background-color: rgba(0, 255, 136, 0.05);
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .penjelasan-item h3 {
@@ -282,6 +326,7 @@ body {
 }
 
 /* ============================
+   HALAMAN CATATAN (HALAMAN 3)
    RESPONSIVE: TABLET
 ============================ */
 @media (max-width: 1024px) and (min-width: 769px) {
@@ -292,10 +337,9 @@ body {
   .kelompok-section {
     flex: 0 0 240px;
   }
-  
-  .kelompok-btn {
-    font-size: 0.9rem;
-    padding: 10px 14px;
+
+  .catatan-container {
+    padding: 25px;
   }
 }
 
@@ -305,6 +349,7 @@ body {
 @media (max-width: 768px) {
   body {
     padding: 15px;
+    padding-bottom: 100px; /* Beri ruang untuk toolbar */
   }
   
   .tema-title {
@@ -312,7 +357,42 @@ body {
     margin-bottom: 20px;
   }
   
-  /* Layout berubah jadi STACKED (susun vertikal) */
+  .header-buttons {
+    flex-direction: column;
+    align-items: stretch;
+    position: relative;
+  }
+
+  .back-btn {
+    order: 1;
+    width: 100%;
+    text-align: center;
+  }
+
+  .page-selector {
+    position: static;
+    transform: none;
+    justify-content: center;
+    order: 2;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .default-btn {
+    order: 3;
+    width: 100%;
+    text-align: center;
+  }
+
+  .save-indicator {
+    bottom: 80px; /* Di atas toolbar */
+    right: 20px;
+    left: 20px;
+    text-align: center;
+    font-size: 0.85rem;
+    padding: 10px 15px;
+  }
+  
   .content-wrapper {
     flex-direction: column;
     gap: 20px;
@@ -348,5 +428,39 @@ body {
   .edit-btn {
     font-size: 0.8rem;
     padding: 5px 10px;
+  }
+
+  .catatan-wrapper {
+    padding-bottom: 100px;
+  }
+
+  .catatan-container {
+    padding: 20px;
+    min-height: 400px;
+  }
+
+  .catatan-content {
+    font-size: 0.95rem;
+  }
+
+  .page-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+
+  .format-toolbar {
+    padding: 10px 15px;
+  }
+
+  .format-btn {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+    min-width: 35px;
+  }
+
+  .color-btn {
+    width: 30px;
+    height: 30px;
   }
 }
