@@ -410,20 +410,22 @@ body {
 
 .style-btn {
   background-color: rgba(255, 255, 255, 0.05);
-  color: var(--text-light);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
-  padding: 6px 12px;
-  font-size: 0.85rem;
+  padding: 8px 16px;
+  font-size: 1rem;
   font-family: 'Poppins', sans-serif;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  min-width: 60px;
+  text-align: center;
 }
 
 .style-btn:hover {
   background-color: rgba(255, 255, 255, 0.1);
-  border-color: var(--gold);
   transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .style-btn.judul {
@@ -441,11 +443,16 @@ body {
   border-color: var(--gold);
 }
 
+.style-btn.biasa {
+  color: var(--text-light);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
 .style-btn.penting {
   background-color: rgba(255, 215, 0, 0.1);
   color: var(--gold);
   border-color: var(--gold);
-  font-weight: 600;
+  font-style: italic;
 }
 
 /* Container Catatan */
@@ -486,7 +493,7 @@ body {
 
 /* ==== GAYA PENULISAN CATATAN ==== */
 
-/* 1. Judul Utama */
+/* 1. Judul Utama (A. B. C. dst) - BATASI BORDER HANYA 1 BARIS */
 .catatan-judul {
   color: var(--green);
   font-size: 1.8rem;
@@ -495,9 +502,11 @@ body {
   padding-left: 15px;
   border-left: 5px solid var(--green);
   line-height: 1.4;
+  display: inline-block;
+  min-width: 100%;
 }
 
-/* 2. BAB */
+/* 2. BAB (1. 2. 3. dst) - BATASI BORDER HANYA 1 BARIS */
 .catatan-bab {
   color: #00d4ff;
   font-size: 1.4rem;
@@ -506,15 +515,18 @@ body {
   padding-left: 12px;
   border-left: 4px solid #00d4ff;
   line-height: 1.4;
+  display: inline-block;
+  min-width: 100%;
 }
 
-/* 3. Sub-bab */
+/* 3. Sub-bab (1.) 2.) 3.) dst) */
 .catatan-subbab {
   color: var(--gold);
   font-size: 1.1rem;
   font-weight: 600;
   margin: 12px 0 8px 0;
   line-height: 1.5;
+  display: block;
 }
 
 /* 4. Catatan Biasa */
@@ -523,6 +535,8 @@ body {
   font-size: 1rem;
   line-height: 1.8;
   margin: 8px 0;
+  display: block;
+  min-height: 1.8em;
 }
 
 /* 5. Catatan Penting */
@@ -538,32 +552,8 @@ body {
   font-size: 1rem;
   line-height: 1.8;
   box-shadow: 0 2px 8px rgba(255, 215, 0, 0.15);
-}
-
-.catatan-penting::before {
-  content: '⚠';
-  position: absolute;
-  left: -2px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--gold);
-  font-size: 1.2rem;
-  background-color: var(--bg-dark);
-  padding: 2px 4px;
-  border-radius: 3px;
-}
-
-.catatan-penting::after {
-  content: '⚠';
-  position: absolute;
-  right: -2px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--gold);
-  font-size: 1.2rem;
-  background-color: var(--bg-dark);
-  padding: 2px 4px;
-  border-radius: 3px;
+  display: block;
+  min-height: 2.4em;
 }
 
 /* ============================
@@ -698,6 +688,12 @@ body {
 
   .catatan-toolbar {
     justify-content: center;
+  }
+
+  .style-btn {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+    min-width: 50px;
   }
 
   .catatan-container {

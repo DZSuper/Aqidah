@@ -1,4 +1,4 @@
-// Interaktivitas untuk halaman tema dengan 3 halaman (Default, Editing, Catatan)
+// Interaktivitas untuk halaman tema dengan sistem numbering otomatis global
 document.addEventListener('DOMContentLoaded', function() {
   
   // ===================================
@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function() {
   saveIndicator.textContent = '✓ Tersimpan';
   document.body.appendChild(saveIndicator);
   
-  // Fungsi untuk menampilkan indikator tersimpan
   function showSaveIndicator() {
     saveIndicator.classList.add('show');
     setTimeout(() => {
@@ -49,10 +48,9 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   
   // ===================================
-  // FUNGSI: Load dari localStorage
+  // FUNGSI: Load & Save localStorage
   // ===================================
   function loadFromStorage() {
-    // Load editing content (Halaman 2)
     const savedEditing = localStorage.getItem(storageKeyEditing);
     if (savedEditing) {
       try {
@@ -68,16 +66,12 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
     
-    // Load catatan content (Halaman 3)
     const savedCatatan = localStorage.getItem(storageKeyCatatan);
     if (savedCatatan && catatanContent) {
       catatanContent.innerHTML = savedCatatan;
     }
   }
   
-  // ===================================
-  // FUNGSI: Simpan ke localStorage
-  // ===================================
   function saveEditingToStorage() {
     const data = {};
     document.querySelectorAll('#page2 .penjelasan-item').forEach(item => {
@@ -91,7 +85,6 @@ document.addEventListener('DOMContentLoaded', function() {
   function saveCatatanToStorage() {
     if (catatanContent) {
       localStorage.setItem(storageKeyCatatan, catatanContent.innerHTML);
-      showSaveIndicator();
     }
   }
   
@@ -122,7 +115,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (isEditing) {
       editBtn.textContent = 'SAVE';
       editBtn.classList.add('editing');
-      
       const activeItem = document.querySelector('#page2 .penjelasan-item.active');
       if (activeItem) {
         activeItem.contentEditable = true;
@@ -131,11 +123,9 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
       editBtn.textContent = 'EDIT';
       editBtn.classList.remove('editing');
-      
       document.querySelectorAll('#page2 .penjelasan-item').forEach(item => {
         item.contentEditable = false;
       });
-      
       saveEditingToStorage();
     }
   }
@@ -149,20 +139,71 @@ document.addEventListener('DOMContentLoaded', function() {
     isCatatanEditMode = !isCatatanEditMode;
     
     if (isCatatanEditMode) {
-      // Mode Edit
       catatanModeBtn.textContent = 'MODE: EDIT';
       catatanModeBtn.classList.add('active');
       catatanContent.contentEditable = true;
       catatanToolbar.classList.add('show');
       catatanContent.focus();
     } else {
-      // Mode Baca
       catatanModeBtn.textContent = 'MODE: BACA';
       catatanModeBtn.classList.remove('active');
       catatanContent.contentEditable = false;
       catatanToolbar.classList.remove('show');
       saveCatatanToStorage();
+      showSaveIndicator(); // Tampilkan hanya saat kembali ke mode baca
     }
+  }
+  
+  // ===================================
+  // FUNGSI: Hitung Nomor Global Otomatis
+  // ===================================
+  function getNextNumber(styleType) {
+    if (styleType === 'judul') {
+      // Hitung semua judul yang ada
+      const allJudul = catatanContent.querySelectorAll('.catatan-judul');
+      const count = allJudul.length;
+      return String.fromCharCode(65 + count) + '. ';
+    } 
+    else if (styleType === 'bab') {
+      // Hitung semua BAB yang ada secara global
+      const allBab = catatanContent.querySelectorAll('.catatan-bab');
+      const count = allBab.length;
+      return (count + 1) + '. ';
+    } 
+    else if (styleType === 'subbab') {
+      // Hitung semua sub-bab yang ada secara global
+      const allSubbab = catatanContent.querySelectorAll('.catatan-subbab');
+      const count = allSubbab.length;
+      return (count + 1) + '.) ';
+    }
+    
+    return '';
+  }
+  
+  // ===================================
+  // FUNGSI: Cek Apakah dalam Judul/BAB/Sub-bab
+  // ===================================
+  function getCurrentElement() {
+    const selection = window.getSelection();
+    if (!selection.rangeCount) return null;
+    
+    let node = selection.getRangeAt(0).startContainer;
+    
+    // Traverse up untuk cari parent dengan class catatan-*
+    while (node && node !== catatanContent) {
+      if (node.classList) {
+        if (node.classList.contains('catatan-judul') ||
+            node.classList.contains('catatan-bab') ||
+            node.classList.contains('catatan-subbab') ||
+            node.classList.contains('catatan-biasa') ||
+            node.classList.contains('catatan-penting')) {
+          return node;
+        }
+      }
+      node = node.parentNode;
+    }
+    
+    return null;
   }
   
   // ===================================
@@ -175,42 +216,196 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!selection.rangeCount) return;
     
     const range = selection.getRangeAt(0);
+    const currentElement = getCurrentElement();
     
-    // Jika tidak ada teks yang dipilih, buat elemen baru
-    if (range.collapsed) {
-      const newElement = document.createElement('div');
-      newElement.className = `catatan-${styleType}`;
+    // Jika ada elemen saat ini
+    if (currentElement) {
+      const currentType = currentElement.className.replace('catatan-', '');
       
-      // Teks placeholder berdasarkan jenis
-      const placeholders = {
-        'judul': 'Judul Catatan',
-        'bab': 'BAB I - Nama Bab',
-        'subbab': 'Sub-bab',
-        'biasa': 'Tulis catatan biasa di sini...',
-        'penting': '⚠ Catatan penting'
-      };
+      // Jika ingin mengubah judul/bab/subbab ke tipe lain
+      if ((currentType === 'judul' || currentType === 'bab' || currentType === 'subbab') &&
+          (styleType === 'judul' || styleType === 'bab' || styleType === 'subbab')) {
+        // Ubah class element yang ada
+        currentElement.className = `catatan-${styleType}`;
+        
+        // Update nomor
+        const number = getNextNumber(styleType);
+        const textWithoutNumber = currentElement.textContent.replace(/^[A-Z]\.\s|^\d+\.\s|^\d+\.\)\s/, '');
+        currentElement.textContent = number + textWithoutNumber;
+        
+        // Pindahkan kursor ke akhir
+        range.selectNodeContents(currentElement);
+        range.collapse(false);
+        selection.removeAllRanges();
+        selection.addRange(range);
+        
+        return;
+      }
       
-      newElement.textContent = placeholders[styleType] || 'Teks';
-      
-      // Insert element
-      range.insertNode(newElement);
-      
-      // Pindahkan kursor ke dalam elemen baru
-      range.selectNodeContents(newElement);
-      selection.removeAllRanges();
-      selection.addRange(range);
-    } else {
-      // Jika ada teks yang dipilih, wrap dengan style
-      const selectedText = range.toString();
-      const wrapper = document.createElement('div');
-      wrapper.className = `catatan-${styleType}`;
-      wrapper.textContent = selectedText;
-      
-      range.deleteContents();
-      range.insertNode(wrapper);
+      // Jika ingin membuat biasa/penting dan sedang di judul/bab/sub-bab
+      if ((styleType === 'biasa' || styleType === 'penting') &&
+          (currentType === 'judul' || currentType === 'bab' || currentType === 'subbab')) {
+        // Buat baris baru setelah elemen struktural
+        const newElement = document.createElement('div');
+        newElement.className = `catatan-${styleType}`;
+        newElement.innerHTML = '<br>'; // Kosongkan tapi tetap bisa fokus
+        
+        currentElement.parentNode.insertBefore(newElement, currentElement.nextSibling);
+        
+        // Pindahkan kursor ke elemen baru
+        range.setStart(newElement, 0);
+        range.collapse(true);
+        selection.removeAllRanges();
+        selection.addRange(range);
+        
+        return;
+      }
     }
     
+    // Buat elemen baru
+    const newElement = document.createElement('div');
+    newElement.className = `catatan-${styleType}`;
+    
+    // Tambahkan nomor otomatis untuk judul/bab/sub-bab
+    if (styleType === 'judul' || styleType === 'bab' || styleType === 'subbab') {
+      const number = getNextNumber(styleType);
+      newElement.textContent = number;
+    } else {
+      // Kosongkan untuk biasa dan penting
+      newElement.innerHTML = '<br>';
+    }
+    
+    // Insert element
+    range.insertNode(newElement);
+    
+    // Pindahkan kursor ke akhir elemen baru
+    range.setStart(newElement, newElement.childNodes.length);
+    range.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    
     catatanContent.focus();
+  }
+  
+  // ===================================
+  // EVENT LISTENER: Enter Key Handler
+  // ===================================
+  if (catatanContent) {
+    catatanContent.addEventListener('keydown', function(e) {
+      if (!isCatatanEditMode) return;
+      
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        
+        const currentElement = getCurrentElement();
+        
+        if (currentElement) {
+          const currentType = currentElement.className.replace('catatan-', '');
+          
+          // Jika di judul, buat judul baru
+          if (currentType === 'judul') {
+            const newElement = document.createElement('div');
+            newElement.className = 'catatan-judul';
+            const number = getNextNumber('judul');
+            newElement.textContent = number;
+            
+            currentElement.parentNode.insertBefore(newElement, currentElement.nextSibling);
+            
+            // Pindahkan kursor
+            const selection = window.getSelection();
+            const range = document.createRange();
+            range.setStart(newElement, newElement.childNodes.length);
+            range.collapse(true);
+            selection.removeAllRanges();
+            selection.addRange(range);
+            
+            return;
+          }
+          
+          // Jika di bab, buat bab baru
+          if (currentType === 'bab') {
+            const newElement = document.createElement('div');
+            newElement.className = 'catatan-bab';
+            const number = getNextNumber('bab');
+            newElement.textContent = number;
+            
+            currentElement.parentNode.insertBefore(newElement, currentElement.nextSibling);
+            
+            // Pindahkan kursor
+            const selection = window.getSelection();
+            const range = document.createRange();
+            range.setStart(newElement, newElement.childNodes.length);
+            range.collapse(true);
+            selection.removeAllRanges();
+            selection.addRange(range);
+            
+            return;
+          }
+          
+          // Jika di sub-bab, buat sub-bab baru
+          if (currentType === 'subbab') {
+            const newElement = document.createElement('div');
+            newElement.className = 'catatan-subbab';
+            const number = getNextNumber('subbab');
+            newElement.textContent = number;
+            
+            currentElement.parentNode.insertBefore(newElement, currentElement.nextSibling);
+            
+            // Pindahkan kursor
+            const selection = window.getSelection();
+            const range = document.createRange();
+            range.setStart(newElement, newElement.childNodes.length);
+            range.collapse(true);
+            selection.removeAllRanges();
+            selection.addRange(range);
+            
+            return;
+          }
+          
+          // Jika di penting, tetap di penting (biarkan default)
+          if (currentType === 'penting') {
+            return; // Biarkan browser handle (buat baris baru dalam penting)
+          }
+          
+          // Jika di biasa, buat biasa baru
+          if (currentType === 'biasa') {
+            const newElement = document.createElement('div');
+            newElement.className = 'catatan-biasa';
+            newElement.innerHTML = '<br>';
+            
+            currentElement.parentNode.insertBefore(newElement, currentElement.nextSibling);
+            
+            // Pindahkan kursor
+            const selection = window.getSelection();
+            const range = document.createRange();
+            range.setStart(newElement, 0);
+            range.collapse(true);
+            selection.removeAllRanges();
+            selection.addRange(range);
+            
+            return;
+          }
+        }
+      }
+      
+      // Keyboard shortcuts
+      if (e.ctrlKey && e.key === '1') {
+        e.preventDefault();
+        applyNoteStyle('judul');
+      } else if (e.ctrlKey && e.key === '2') {
+        e.preventDefault();
+        applyNoteStyle('bab');
+      } else if (e.ctrlKey && e.key === '3') {
+        e.preventDefault();
+        applyNoteStyle('subbab');
+      } else if (e.ctrlKey && e.key === '4') {
+        e.preventDefault();
+        applyNoteStyle('biasa');
+      } else if (e.ctrlKey && e.key === '5') {
+        e.preventDefault();
+        applyNoteStyle('penting');
+      }
+    });
   }
   
   // ===================================
@@ -229,14 +424,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     document.querySelector(`.page-btn[data-page="${pageNum}"]`).classList.add('active');
     
-    // Show/hide default button (hanya tampil di halaman 2)
     if (pageNum === 2) {
       defaultBtn.style.display = 'inline-block';
     } else {
       defaultBtn.style.display = 'none';
     }
     
-    // Reset edit mode jika pindah dari halaman 2
     if (pageNum !== 2 && isEditing) {
       isEditing = false;
       editBtn.textContent = 'EDIT';
@@ -246,10 +439,9 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
     
-    // Reset mode catatan ke "Baca" saat masuk ke halaman 3
     if (pageNum === 3 && isCatatanEditMode) {
-      isCatatanEditMode = true; // Set true dulu agar toggle berhasil
-      toggleCatatanMode(); // Akan toggle ke mode baca
+      isCatatanEditMode = true;
+      toggleCatatanMode();
     }
   }
   
@@ -276,7 +468,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const activeItem = container.querySelector(`.penjelasan-item[data-kelompok="${kelompok}"]`);
     if (activeItem) {
       activeItem.classList.add('active');
-      
       if (pageNum === 2 && isEditing) {
         activeItem.contentEditable = true;
       }
@@ -294,16 +485,13 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.innerWidth <= 768) {
       const penjelasanSection = container.querySelector('.penjelasan-section');
       if (penjelasanSection) {
-        penjelasanSection.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'start' 
-        });
+        penjelasanSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
   }
   
   // ===================================
-  // EVENT LISTENER: Page Buttons
+  // EVENT LISTENERS
   // ===================================
   pageButtons.forEach(btn => {
     btn.addEventListener('click', function() {
@@ -312,9 +500,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // ===================================
-  // EVENT LISTENER: Kelompok Buttons
-  // ===================================
   document.querySelectorAll('.kelompok-btn').forEach(btn => {
     btn.addEventListener('click', function(e) {
       e.preventDefault();
@@ -324,9 +509,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // ===================================
-  // EVENT LISTENER: Dropdowns (Mobile)
-  // ===================================
   document.querySelectorAll('.kelompok-dropdown').forEach(dropdown => {
     dropdown.addEventListener('change', function() {
       const kelompok = this.value;
@@ -335,30 +517,19 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // ===================================
-  // EVENT LISTENER: Tombol Edit (Halaman 2)
-  // ===================================
   if (editBtn) {
     editBtn.addEventListener('click', toggleEditMode);
   }
   
-  // ===================================
-  // EVENT LISTENER: Tombol Default
-  // ===================================
   if (defaultBtn) {
     defaultBtn.addEventListener('click', resetToDefault);
   }
   
-  // ===================================
-  // EVENT LISTENER: Mode Catatan (Halaman 3)
-  // ===================================
   if (catatanModeBtn) {
     catatanModeBtn.addEventListener('click', toggleCatatanMode);
   }
   
-  // ===================================
-  // EVENT LISTENER: Style Buttons (Halaman 3)
-  // ===================================
+  // Style Buttons
   const styleButtons = {
     'judulBtn': 'judul',
     'babBtn': 'bab',
@@ -376,23 +547,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
   
-  // ===================================
-  // KEYBOARD NAVIGATION (Accessibility)
-  // ===================================
-  document.querySelectorAll('.kelompok-btn').forEach(button => {
-    button.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        const kelompok = this.getAttribute('data-kelompok');
-        const pageNum = parseInt(this.getAttribute('data-page'));
-        gantiPenjelasan(kelompok, pageNum);
-      }
-    });
-  });
-  
-  // ===================================
-  // AUTO-SAVE untuk Halaman 2 (saat edit)
-  // ===================================
+  // AUTO-SAVE untuk Halaman 2
   let autoSaveTimeout;
   document.querySelectorAll('#page2 .penjelasan-item').forEach(item => {
     item.addEventListener('input', function() {
@@ -405,9 +560,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // ===================================
-  // AUTO-SAVE untuk Halaman 3 (Catatan)
-  // ===================================
+  // AUTO-SAVE untuk Halaman 3 (TANPA INDIKATOR)
   let catatanSaveTimeout;
   if (catatanContent) {
     catatanContent.addEventListener('input', function() {
@@ -415,50 +568,14 @@ document.addEventListener('DOMContentLoaded', function() {
         clearTimeout(catatanSaveTimeout);
         catatanSaveTimeout = setTimeout(() => {
           saveCatatanToStorage();
+          // TIDAK ADA showSaveIndicator() di sini
         }, 2000);
       }
     });
   }
   
-  // ===================================
-  // KEYBOARD SHORTCUTS untuk Catatan
-  // ===================================
-  if (catatanContent) {
-    catatanContent.addEventListener('keydown', function(e) {
-      if (!isCatatanEditMode) return;
-      
-      // Ctrl + 1 = Judul
-      if (e.ctrlKey && e.key === '1') {
-        e.preventDefault();
-        applyNoteStyle('judul');
-      }
-      // Ctrl + 2 = BAB
-      else if (e.ctrlKey && e.key === '2') {
-        e.preventDefault();
-        applyNoteStyle('bab');
-      }
-      // Ctrl + 3 = Sub-bab
-      else if (e.ctrlKey && e.key === '3') {
-        e.preventDefault();
-        applyNoteStyle('subbab');
-      }
-      // Ctrl + 4 = Biasa
-      else if (e.ctrlKey && e.key === '4') {
-        e.preventDefault();
-        applyNoteStyle('biasa');
-      }
-      // Ctrl + 5 = Penting
-      else if (e.ctrlKey && e.key === '5') {
-        e.preventDefault();
-        applyNoteStyle('penting');
-      }
-    });
-  }
-  
-  // ===================================
-  // INISIALISASI: Load dari storage & Set halaman awal
-  // ===================================
+  // INISIALISASI
   loadFromStorage();
-  gantiHalaman(1); // Mulai dari halaman 1 (Default)
+  gantiHalaman(1);
   
 });
