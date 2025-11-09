@@ -370,7 +370,7 @@ body {
 .catatan-wrapper {
   max-width: 1400px;
   margin: 0 auto;
-  padding-bottom: 80px; /* Beri ruang untuk toolbar di bawah */
+  padding-bottom: 80px;
 }
 
 /* Header Catatan dengan Tombol Mode */
@@ -506,13 +506,8 @@ body {
 }
 
 /* ============================
-<<<<<<< HEAD
    TOMBOL FORMAT
 ============================ */
-=======
-   TOMBOL FORMAT & TOOLTIP
-/* Tombol Format */
->>>>>>> cd654311a4c4df11dca1280d6b28f73b9de0dc3c
 .format-btn {
   background-color: rgba(255, 255, 255, 0.05);
   color: var(--text-light);
