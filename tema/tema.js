@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const defaultBtn = document.getElementById('defaultBtn');
   const editBtn = document.getElementById('editBtn');
   const catatanContent = document.getElementById('catatanContent');
+  const catatanModeBtn = document.getElementById('catatanModeBtn');
+  const catatanToolbar = document.getElementById('catatanToolbar');
   
   // Dapatkan nama halaman untuk key localStorage yang unik
   const pageName = document.title.split('|')[0].trim();
@@ -18,7 +20,24 @@ document.addEventListener('DOMContentLoaded', function() {
   // State management
   let currentPage = 1;
   let isEditing = false;
-  let currentKelompok = {1: 'ahlussunnah', 2: 'ahlussunnah'}; // Tracking untuk page 1 & 2
+  let isCatatanEditMode = false;
+  let currentKelompok = {1: 'ahlussunnah', 2: 'ahlussunnah'};
+  
+  // ===================================
+  // BUAT INDIKATOR TERSIMPAN
+  // ===================================
+  const saveIndicator = document.createElement('div');
+  saveIndicator.className = 'save-indicator';
+  saveIndicator.textContent = '✓ Tersimpan';
+  document.body.appendChild(saveIndicator);
+  
+  // Fungsi untuk menampilkan indikator tersimpan
+  function showSaveIndicator() {
+    saveIndicator.classList.add('show');
+    setTimeout(() => {
+      saveIndicator.classList.remove('show');
+    }, 2000);
+  }
   
   // ===================================
   // SIMPAN KONTEN ORIGINAL
@@ -51,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Load catatan content (Halaman 3)
     const savedCatatan = localStorage.getItem(storageKeyCatatan);
-    if (savedCatatan) {
+    if (savedCatatan && catatanContent) {
       catatanContent.innerHTML = savedCatatan;
     }
   }
@@ -66,10 +85,14 @@ document.addEventListener('DOMContentLoaded', function() {
       data[kelompok] = item.innerHTML;
     });
     localStorage.setItem(storageKeyEditing, JSON.stringify(data));
+    showSaveIndicator();
   }
   
   function saveCatatanToStorage() {
-    localStorage.setItem(storageKeyCatatan, catatanContent.innerHTML);
+    if (catatanContent) {
+      localStorage.setItem(storageKeyCatatan, catatanContent.innerHTML);
+      showSaveIndicator();
+    }
   }
   
   // ===================================
@@ -91,36 +114,103 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   // ===================================
-  // FUNGSI: Toggle Edit Mode
+  // FUNGSI: Toggle Edit Mode (Halaman 2)
   // ===================================
   function toggleEditMode() {
     isEditing = !isEditing;
     
     if (isEditing) {
-      // Masuk mode edit
       editBtn.textContent = 'SAVE';
       editBtn.classList.add('editing');
       
-      // Aktifkan contenteditable pada item yang sedang aktif
       const activeItem = document.querySelector('#page2 .penjelasan-item.active');
       if (activeItem) {
         activeItem.contentEditable = true;
         activeItem.focus();
       }
     } else {
-      // Keluar dari mode edit dan simpan
       editBtn.textContent = 'EDIT';
       editBtn.classList.remove('editing');
       
-      // Nonaktifkan contenteditable
       document.querySelectorAll('#page2 .penjelasan-item').forEach(item => {
         item.contentEditable = false;
       });
       
-      // Simpan ke localStorage
       saveEditingToStorage();
-      alert('Perubahan telah disimpan!');
     }
+  }
+  
+  // ===================================
+  // FUNGSI: Toggle Mode Catatan (Halaman 3)
+  // ===================================
+  function toggleCatatanMode() {
+    if (!catatanModeBtn || !catatanContent) return;
+    
+    isCatatanEditMode = !isCatatanEditMode;
+    
+    if (isCatatanEditMode) {
+      // Mode Edit
+      catatanModeBtn.textContent = 'MODE: EDIT';
+      catatanModeBtn.classList.add('active');
+      catatanContent.contentEditable = true;
+      catatanToolbar.classList.add('show');
+      catatanContent.focus();
+    } else {
+      // Mode Baca
+      catatanModeBtn.textContent = 'MODE: BACA';
+      catatanModeBtn.classList.remove('active');
+      catatanContent.contentEditable = false;
+      catatanToolbar.classList.remove('show');
+      saveCatatanToStorage();
+    }
+  }
+  
+  // ===================================
+  // FUNGSI: Apply Style ke Catatan
+  // ===================================
+  function applyNoteStyle(styleType) {
+    if (!isCatatanEditMode) return;
+    
+    const selection = window.getSelection();
+    if (!selection.rangeCount) return;
+    
+    const range = selection.getRangeAt(0);
+    
+    // Jika tidak ada teks yang dipilih, buat elemen baru
+    if (range.collapsed) {
+      const newElement = document.createElement('div');
+      newElement.className = `catatan-${styleType}`;
+      
+      // Teks placeholder berdasarkan jenis
+      const placeholders = {
+        'judul': 'Judul Catatan',
+        'bab': 'BAB I - Nama Bab',
+        'subbab': 'Sub-bab',
+        'biasa': 'Tulis catatan biasa di sini...',
+        'penting': '⚠ Catatan penting'
+      };
+      
+      newElement.textContent = placeholders[styleType] || 'Teks';
+      
+      // Insert element
+      range.insertNode(newElement);
+      
+      // Pindahkan kursor ke dalam elemen baru
+      range.selectNodeContents(newElement);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    } else {
+      // Jika ada teks yang dipilih, wrap dengan style
+      const selectedText = range.toString();
+      const wrapper = document.createElement('div');
+      wrapper.className = `catatan-${styleType}`;
+      wrapper.textContent = selectedText;
+      
+      range.deleteContents();
+      range.insertNode(wrapper);
+    }
+    
+    catatanContent.focus();
   }
   
   // ===================================
@@ -129,13 +219,11 @@ document.addEventListener('DOMContentLoaded', function() {
   function gantiHalaman(pageNum) {
     currentPage = pageNum;
     
-    // Update page containers
     pageContainers.forEach(container => {
       container.classList.remove('active');
     });
     document.getElementById(`page${pageNum}`).classList.add('active');
     
-    // Update page buttons
     pageButtons.forEach(btn => {
       btn.classList.remove('active');
     });
@@ -157,6 +245,12 @@ document.addEventListener('DOMContentLoaded', function() {
         item.contentEditable = false;
       });
     }
+    
+    // Reset mode catatan ke "Baca" saat masuk ke halaman 3
+    if (pageNum === 3 && isCatatanEditMode) {
+      isCatatanEditMode = true; // Set true dulu agar toggle berhasil
+      toggleCatatanMode(); // Akan toggle ke mode baca
+    }
   }
   
   // ===================================
@@ -170,40 +264,33 @@ document.addEventListener('DOMContentLoaded', function() {
     const buttons = container.querySelectorAll('.kelompok-btn');
     const dropdown = container.querySelector('.kelompok-dropdown');
     
-    // Sembunyikan semua penjelasan terlebih dahulu
     items.forEach(item => {
       item.classList.remove('active');
       item.contentEditable = false;
     });
     
-    // Hapus class active dari semua button
     buttons.forEach(btn => {
       btn.classList.remove('active');
     });
     
-    // Tampilkan penjelasan yang sesuai
     const activeItem = container.querySelector(`.penjelasan-item[data-kelompok="${kelompok}"]`);
     if (activeItem) {
       activeItem.classList.add('active');
       
-      // Jika di halaman 2 dan sedang dalam mode edit, aktifkan contenteditable
       if (pageNum === 2 && isEditing) {
         activeItem.contentEditable = true;
       }
     }
     
-    // Aktifkan button yang sesuai
     const activeButton = container.querySelector(`.kelompok-btn[data-kelompok="${kelompok}"]`);
     if (activeButton) {
       activeButton.classList.add('active');
     }
     
-    // Update dropdown value (untuk sinkronisasi)
     if (dropdown) {
       dropdown.value = kelompok;
     }
     
-    // Smooth scroll ke bagian penjelasan (khusus mobile)
     if (window.innerWidth <= 768) {
       const penjelasanSection = container.querySelector('.penjelasan-section');
       if (penjelasanSection) {
@@ -249,7 +336,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   
   // ===================================
-  // EVENT LISTENER: Tombol Edit
+  // EVENT LISTENER: Tombol Edit (Halaman 2)
   // ===================================
   if (editBtn) {
     editBtn.addEventListener('click', toggleEditMode);
@@ -261,6 +348,33 @@ document.addEventListener('DOMContentLoaded', function() {
   if (defaultBtn) {
     defaultBtn.addEventListener('click', resetToDefault);
   }
+  
+  // ===================================
+  // EVENT LISTENER: Mode Catatan (Halaman 3)
+  // ===================================
+  if (catatanModeBtn) {
+    catatanModeBtn.addEventListener('click', toggleCatatanMode);
+  }
+  
+  // ===================================
+  // EVENT LISTENER: Style Buttons (Halaman 3)
+  // ===================================
+  const styleButtons = {
+    'judulBtn': 'judul',
+    'babBtn': 'bab',
+    'subbabBtn': 'subbab',
+    'biasaBtn': 'biasa',
+    'pentingBtn': 'penting'
+  };
+  
+  Object.keys(styleButtons).forEach(btnId => {
+    const btn = document.getElementById(btnId);
+    if (btn) {
+      btn.addEventListener('click', function() {
+        applyNoteStyle(styleButtons[btnId]);
+      });
+    }
+  });
   
   // ===================================
   // KEYBOARD NAVIGATION (Accessibility)
@@ -283,12 +397,10 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('#page2 .penjelasan-item').forEach(item => {
     item.addEventListener('input', function() {
       if (isEditing) {
-        // Debounce auto-save
         clearTimeout(autoSaveTimeout);
         autoSaveTimeout = setTimeout(() => {
           saveEditingToStorage();
-          console.log('Auto-saved editing content!');
-        }, 2000); // Simpan otomatis setelah 2 detik tidak ada perubahan
+        }, 2000);
       }
     });
   });
@@ -299,11 +411,47 @@ document.addEventListener('DOMContentLoaded', function() {
   let catatanSaveTimeout;
   if (catatanContent) {
     catatanContent.addEventListener('input', function() {
-      clearTimeout(catatanSaveTimeout);
-      catatanSaveTimeout = setTimeout(() => {
-        saveCatatanToStorage();
-        console.log('Auto-saved catatan!');
-      }, 2000); // Simpan otomatis setelah 2 detik tidak ada perubahan
+      if (isCatatanEditMode) {
+        clearTimeout(catatanSaveTimeout);
+        catatanSaveTimeout = setTimeout(() => {
+          saveCatatanToStorage();
+        }, 2000);
+      }
+    });
+  }
+  
+  // ===================================
+  // KEYBOARD SHORTCUTS untuk Catatan
+  // ===================================
+  if (catatanContent) {
+    catatanContent.addEventListener('keydown', function(e) {
+      if (!isCatatanEditMode) return;
+      
+      // Ctrl + 1 = Judul
+      if (e.ctrlKey && e.key === '1') {
+        e.preventDefault();
+        applyNoteStyle('judul');
+      }
+      // Ctrl + 2 = BAB
+      else if (e.ctrlKey && e.key === '2') {
+        e.preventDefault();
+        applyNoteStyle('bab');
+      }
+      // Ctrl + 3 = Sub-bab
+      else if (e.ctrlKey && e.key === '3') {
+        e.preventDefault();
+        applyNoteStyle('subbab');
+      }
+      // Ctrl + 4 = Biasa
+      else if (e.ctrlKey && e.key === '4') {
+        e.preventDefault();
+        applyNoteStyle('biasa');
+      }
+      // Ctrl + 5 = Penting
+      else if (e.ctrlKey && e.key === '5') {
+        e.preventDefault();
+        applyNoteStyle('penting');
+      }
     });
   }
   

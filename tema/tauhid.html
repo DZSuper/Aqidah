@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tauhid | Aqidah Salafiyah</title>
   <link rel="stylesheet" href="tema.css">
 </head>
@@ -127,7 +127,6 @@
           <button class="edit-btn" id="editBtn">EDIT</button>
         </div>
         <div class="penjelasan-content" id="penjelasanContent2">
-          <!-- Konten sama seperti halaman 1, akan di-load dari localStorage atau default -->
           <div class="penjelasan-item active" data-kelompok="ahlussunnah">
             <h3>Ahlus Sunnah wal Jama'ah</h3>
             <p>Tauhid menurut Ahlus Sunnah wal Jama'ah adalah mengesakan Allah dalam tiga aspek:</p>
@@ -169,7 +168,7 @@
             <h3>Mu'tazilah</h3>
             <p>Mu'tazilah adalah kelompok yang mendahulukan akal daripada wahyu dan menafikan sebagian sifat Allah.</p>
             <p><strong>Kesalahan mereka dalam Tauhid:</strong></p>
-            <p>• Mereka menafikan sifat-sifat Allah yang menurut mereka "</html>menyerupai makhluk" seperti tangan, wajah, mata, dll.</p>
+            <p>• Mereka menafikan sifat-sifat Allah yang menurut mereka "menyerupai makhluk" seperti tangan, wajah, mata, dll.</p>
             <p>• Mereka menakwil ayat-ayat sifat dengan takwil yang batil. Contoh: "tangan Allah" ditakwil menjadi "kekuasaan Allah".</p>
             <p>• Mereka mengingkari Qadar (takdir) dan mengatakan manusia menciptakan perbuatannya sendiri tanpa campur tangan Allah.</p>
             <p>• Mereka mendahulukan akal daripada nash (Al-Qur'an dan Sunnah), sehingga jika ada nash yang bertentangan dengan akal mereka, maka mereka menolak atau menakwilnya.</p>
@@ -182,8 +181,23 @@
 
   <!-- ========== HALAMAN 3: CATATAN ========== -->
   <div class="page-container" id="page3">
-    <div class="catatan-container">
-      <div class="catatan-content" contenteditable="true" id="catatanContent">
+    <div class="catatan-wrapper">
+      <!-- Header Catatan -->
+      <div class="catatan-header">
+        <button class="catatan-mode-btn" id="catatanModeBtn">MODE: BACA</button>
+        
+        <div class="catatan-toolbar" id="catatanToolbar">
+          <button class="style-btn judul" id="judulBtn" title="Ctrl+1">Judul</button>
+          <button class="style-btn bab" id="babBtn" title="Ctrl+2">BAB</button>
+          <button class="style-btn subbab" id="subbabBtn" title="Ctrl+3">Sub-bab</button>
+          <button class="style-btn" id="biasaBtn" title="Ctrl+4">Biasa</button>
+          <button class="style-btn penting" id="pentingBtn" title="Ctrl+5">⚠ Penting</button>
+        </div>
+      </div>
+      
+      <!-- Container Catatan -->
+      <div class="catatan-container">
+        <div class="catatan-content" contenteditable="false" id="catatanContent"></div>
       </div>
     </div>
   </div>

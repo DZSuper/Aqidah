@@ -1,5 +1,5 @@
 /* === FONT & DASAR === */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
   --bg-dark: #0b0c0e;
@@ -115,6 +115,30 @@ body {
 
 .default-btn:active {
   transform: scale(0.95);
+}
+
+/* === INDIKATOR TERSIMPAN === */
+.save-indicator {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: var(--green);
+  color: var(--bg-dark);
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(0, 255, 136, 0.4);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.save-indicator.show {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* === JUDUL TEMA === */
@@ -334,22 +358,104 @@ body {
 /* ============================
    HALAMAN CATATAN (HALAMAN 3)
 ============================ */
+.catatan-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Header Catatan dengan Tombol Mode dan Toolbar */
+.catatan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.catatan-mode-btn {
+  background-color: transparent;
+  color: var(--gold);
+  border: 2px solid var(--gold);
+  border-radius: 8px;
+  padding: 8px 20px;
+  font-size: 0.9rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.catatan-mode-btn:hover {
+  background-color: rgba(255, 215, 0, 0.1);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.catatan-mode-btn.active {
+  background-color: var(--gold);
+  color: var(--bg-dark);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+}
+
+/* Toolbar Gaya Penulisan */
+.catatan-toolbar {
+  display: none;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.catatan-toolbar.show {
+  display: flex;
+}
+
+.style-btn {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--text-light);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.style-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.style-btn.judul {
+  color: var(--green);
+  border-color: var(--green);
+}
+
+.style-btn.bab {
+  color: #00d4ff;
+  border-color: #00d4ff;
+}
+
+.style-btn.subbab {
+  color: var(--gold);
+  border-color: var(--gold);
+}
+
+.style-btn.penting {
+  background-color: rgba(255, 215, 0, 0.1);
+  color: var(--gold);
+  border-color: var(--gold);
+  font-weight: 600;
+}
+
+/* Container Catatan */
 .catatan-container {
   background-color: rgba(255, 255, 255, 0.03);
   border: 2px solid var(--gold);
   border-radius: 12px;
-  padding: 25px;
+  padding: 30px;
   min-height: 500px;
-  max-width: 1400px;
-  margin: 0 auto;
   position: relative;
-  background-image: repeating-linear-gradient(
-    transparent,
-    transparent 35px,
-    rgba(255, 215, 0, 0.2) 35px,
-    rgba(255, 215, 0, 0.2) 36px
-  );
-  line-height: 36px;
 }
 
 .catatan-content {
@@ -357,12 +463,107 @@ body {
   min-height: 450px;
   color: var(--text-light);
   font-size: 1rem;
+  line-height: 1.8;
+  font-family: 'Poppins', sans-serif;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .catatan-content:empty:before {
-  content: 'Tulis catatan Anda di sini...';
-  color: rgba(242, 242, 242, 0.3);
+  content: 'Buat catatanmu di sini...';
+  color: rgba(242, 242, 242, 0.25);
   font-style: italic;
+}
+
+/* Mode Edit pada Catatan */
+.catatan-content[contenteditable="true"] {
+  cursor: text;
+}
+
+.catatan-content[contenteditable="false"] {
+  cursor: default;
+}
+
+/* ==== GAYA PENULISAN CATATAN ==== */
+
+/* 1. Judul Utama */
+.catatan-judul {
+  color: var(--green);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 20px 0 15px 0;
+  padding-left: 15px;
+  border-left: 5px solid var(--green);
+  line-height: 1.4;
+}
+
+/* 2. BAB */
+.catatan-bab {
+  color: #00d4ff;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 18px 0 12px 0;
+  padding-left: 12px;
+  border-left: 4px solid #00d4ff;
+  line-height: 1.4;
+}
+
+/* 3. Sub-bab */
+.catatan-subbab {
+  color: var(--gold);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 12px 0 8px 0;
+  line-height: 1.5;
+}
+
+/* 4. Catatan Biasa */
+.catatan-biasa {
+  color: var(--text-light);
+  font-size: 1rem;
+  line-height: 1.8;
+  margin: 8px 0;
+}
+
+/* 5. Catatan Penting */
+.catatan-penting {
+  position: relative;
+  background-color: rgba(255, 215, 0, 0.08);
+  border-left: 4px solid var(--gold);
+  border-right: 4px solid var(--gold);
+  padding: 12px 15px;
+  margin: 15px 0;
+  border-radius: 4px;
+  color: var(--text-light);
+  font-size: 1rem;
+  line-height: 1.8;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.15);
+}
+
+.catatan-penting::before {
+  content: '⚠';
+  position: absolute;
+  left: -2px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gold);
+  font-size: 1.2rem;
+  background-color: var(--bg-dark);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.catatan-penting::after {
+  content: '⚠';
+  position: absolute;
+  right: -2px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gold);
+  font-size: 1.2rem;
+  background-color: var(--bg-dark);
+  padding: 2px 4px;
+  border-radius: 3px;
 }
 
 /* ============================
@@ -380,6 +581,18 @@ body {
   .kelompok-btn {
     font-size: 0.9rem;
     padding: 10px 14px;
+  }
+
+  .catatan-container {
+    padding: 25px;
+  }
+
+  .catatan-judul {
+    font-size: 1.6rem;
+  }
+
+  .catatan-bab {
+    font-size: 1.3rem;
   }
 }
 
@@ -423,6 +636,16 @@ body {
     width: 100%;
     text-align: center;
   }
+
+  /* Save indicator untuk mobile */
+  .save-indicator {
+    bottom: 20px;
+    right: 20px;
+    left: 20px;
+    text-align: center;
+    font-size: 0.85rem;
+    padding: 10px 15px;
+  }
   
   /* Layout berubah jadi STACKED (susun vertikal) */
   .content-wrapper {
@@ -462,9 +685,40 @@ body {
     padding: 5px 10px;
   }
 
+  /* Catatan untuk Mobile */
+  .catatan-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .catatan-mode-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .catatan-toolbar {
+    justify-content: center;
+  }
+
   .catatan-container {
     padding: 20px;
     min-height: 400px;
+  }
+
+  .catatan-content {
+    font-size: 0.95rem;
+  }
+
+  .catatan-judul {
+    font-size: 1.4rem;
+  }
+
+  .catatan-bab {
+    font-size: 1.2rem;
+  }
+
+  .catatan-subbab {
+    font-size: 1.05rem;
   }
 
   .page-btn {
