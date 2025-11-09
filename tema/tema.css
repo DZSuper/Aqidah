@@ -347,9 +347,10 @@ body {
 .catatan-wrapper {
   max-width: 1400px;
   margin: 0 auto;
-  padding-bottom: 80px;
+  padding-bottom: 80px; /* Beri ruang untuk toolbar di bawah */
 }
 
+/* Header Catatan dengan Tombol Mode */
 .catatan-header {
   display: flex;
   justify-content: center;
@@ -381,6 +382,7 @@ body {
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
 }
 
+/* Container Catatan */
 .catatan-container {
   background-color: rgba(255, 255, 255, 0.03);
   border: 2px solid var(--gold);
@@ -482,61 +484,6 @@ body {
 
 /* ============================
    TOMBOL FORMAT & TOOLTIP
-============================ */
-.format-btn, .color-btn {
-  position: relative;
-}
-
-/* Tooltip Keren */
-.format-btn::before,
-.color-btn::before {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%) scale(0.9);
-  background-color: var(--tooltip-bg);
-  color: var(--gold);
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.2s ease;
-  z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-/* Panah Tooltip */
-.format-btn::after,
-.color-btn::after {
-  content: '';
-  position: absolute;
-  bottom: calc(100% + 2px);
-  left: 50%;
-  transform: translateX(-50%) scale(0.9);
-  border: 6px solid transparent;
-  border-top-color: var(--tooltip-bg);
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.2s ease;
-  z-index: 1000;
-}
-
-.format-btn:hover::before,
-.color-btn:hover::before {
-  opacity: 1;
-  transform: translateX(-50%) scale(1);
-}
-
-.format-btn:hover::after,
-.color-btn:hover::after {
-  opacity: 1;
-  transform: translateX(-50%) scale(1);
-}
-
 /* Tombol Format */
 .format-btn {
   background-color: rgba(255, 255, 255, 0.05);
@@ -566,14 +513,17 @@ body {
   border-color: var(--gold);
 }
 
+/* Tombol Bold */
 .format-btn.bold {
   font-weight: 700;
 }
 
+/* Tombol Italic */
 .format-btn.italic {
   font-style: italic;
 }
 
+/* Tombol Underline */
 .format-btn.underline {
   text-decoration: underline;
 }
@@ -604,6 +554,7 @@ body {
 .color-btn.yellow { background-color: var(--yellow); }
 .color-btn.green { background-color: var(--green); }
 
+/* Size Buttons */
 .size-btn {
   min-width: 45px;
 }
