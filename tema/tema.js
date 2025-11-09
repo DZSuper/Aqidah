@@ -1,4 +1,4 @@
-// Interaktivitas untuk halaman tema dengan toolbar formatting sederhana
+// Interaktivitas untuk halaman tema dengan toolbar formatting dan semua fix
 document.addEventListener('DOMContentLoaded', function() {
   
   // ===================================
@@ -16,12 +16,20 @@ document.addEventListener('DOMContentLoaded', function() {
   const pageName = document.title.split('|')[0].trim();
   const storageKeyEditing = `aqidah_editing_${pageName.toLowerCase().replace(/\s+/g, '_')}`;
   const storageKeyCatatan = `aqidah_catatan_${pageName.toLowerCase().replace(/\s+/g, '_')}`;
+  const storageKeyFormat = `aqidah_format_${pageName.toLowerCase().replace(/\s+/g, '_')}`;
   
   // State management
   let currentPage = 1;
   let isEditing = false;
   let isCatatanEditMode = false;
   let currentKelompok = {1: 'ahlussunnah', 2: 'ahlussunnah'};
+  let lastFormatSettings = {
+    color: '#b8b8b8',
+    size: '4',
+    bold: false,
+    italic: false,
+    underline: false
+  };
   
   // ===================================
   // BUAT INDIKATOR TERSIMPAN
@@ -70,6 +78,16 @@ document.addEventListener('DOMContentLoaded', function() {
     if (savedCatatan && catatanContent) {
       catatanContent.innerHTML = savedCatatan;
     }
+    
+    // Load format settings
+    const savedFormat = localStorage.getItem(storageKeyFormat);
+    if (savedFormat) {
+      try {
+        lastFormatSettings = JSON.parse(savedFormat);
+      } catch (e) {
+        console.error('Error loading format settings:', e);
+      }
+    }
   }
   
   function saveEditingToStorage() {
@@ -79,13 +97,17 @@ document.addEventListener('DOMContentLoaded', function() {
       data[kelompok] = item.innerHTML;
     });
     localStorage.setItem(storageKeyEditing, JSON.stringify(data));
-    showSaveIndicator();
+    // HANYA tampilkan indikator saat keluar dari edit mode
   }
   
   function saveCatatanToStorage() {
     if (catatanContent) {
       localStorage.setItem(storageKeyCatatan, catatanContent.innerHTML);
     }
+  }
+  
+  function saveFormatSettings() {
+    localStorage.setItem(storageKeyFormat, JSON.stringify(lastFormatSettings));
   }
   
   // ===================================
@@ -127,7 +149,22 @@ document.addEventListener('DOMContentLoaded', function() {
         item.contentEditable = false;
       });
       saveEditingToStorage();
+      showSaveIndicator(); // Tampilkan saat keluar dari edit mode
     }
+  }
+  
+  // ===================================
+  // FUNGSI: Apply Default Format
+  // ===================================
+  function applyDefaultFormat() {
+    // Apply default: Abu, size 16, no bold/italic/underline
+    applyFormat('foreColor', lastFormatSettings.color);
+    applyFormat('fontSize', lastFormatSettings.size);
+    
+    // Remove bold/italic/underline if previously set
+    if (lastFormatSettings.bold) applyFormat('bold');
+    if (lastFormatSettings.italic) applyFormat('italic');
+    if (lastFormatSettings.underline) applyFormat('underline');
   }
   
   // ===================================
@@ -144,13 +181,22 @@ document.addEventListener('DOMContentLoaded', function() {
       catatanContent.contentEditable = true;
       formatToolbar.classList.add('show');
       catatanContent.focus();
+      
+      // Apply format terakhir atau default
+      setTimeout(() => {
+        applyDefaultFormat();
+        updateToolbarState();
+      }, 100);
     } else {
       catatanModeBtn.textContent = 'MODE: BACA';
       catatanModeBtn.classList.remove('active');
       catatanContent.contentEditable = false;
       formatToolbar.classList.remove('show');
+      
+      // Save format settings
+      saveFormatSettings();
       saveCatatanToStorage();
-      showSaveIndicator(); // Tampilkan hanya saat kembali ke mode baca
+      showSaveIndicator(); // Tampilkan saat kembali ke mode baca
     }
   }
   
@@ -162,6 +208,20 @@ document.addEventListener('DOMContentLoaded', function() {
     
     document.execCommand(command, false, value);
     catatanContent.focus();
+    
+    // Update lastFormatSettings
+    if (command === 'foreColor') {
+      lastFormatSettings.color = value;
+    } else if (command === 'fontSize') {
+      lastFormatSettings.size = value;
+    } else if (command === 'bold') {
+      lastFormatSettings.bold = document.queryCommandState('bold');
+    } else if (command === 'italic') {
+      lastFormatSettings.italic = document.queryCommandState('italic');
+    } else if (command === 'underline') {
+      lastFormatSettings.underline = document.queryCommandState('underline');
+    }
+    
     updateToolbarState();
   }
   
@@ -170,9 +230,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // ===================================
   function updateToolbarState() {
     // Update bold, italic, underline buttons
-    document.getElementById('boldBtn').classList.toggle('active', document.queryCommandState('bold'));
-    document.getElementById('italicBtn').classList.toggle('active', document.queryCommandState('italic'));
-    document.getElementById('underlineBtn').classList.toggle('active', document.queryCommandState('underline'));
+    document.getElementById('boldBtn')?.classList.toggle('active', document.queryCommandState('bold'));
+    document.getElementById('italicBtn')?.classList.toggle('active', document.queryCommandState('italic'));
+    document.getElementById('underlineBtn')?.classList.toggle('active', document.queryCommandState('underline'));
     
     // Update color buttons
     const currentColor = document.queryCommandValue('foreColor');
@@ -180,7 +240,6 @@ document.addEventListener('DOMContentLoaded', function() {
       btn.classList.remove('active');
     });
     
-    // Deteksi warna saat ini dan aktifkan tombol yang sesuai
     if (currentColor) {
       const rgb = currentColor.toLowerCase();
       if (rgb.includes('184, 184, 184') || rgb.includes('b8b8b8')) {
@@ -202,6 +261,17 @@ document.addEventListener('DOMContentLoaded', function() {
   // ===================================
   function gantiHalaman(pageNum) {
     currentPage = pageNum;
+    
+    // FIX: Auto non-aktifkan mode edit catatan saat keluar dari halaman 3
+    if (currentPage !== 3 && isCatatanEditMode) {
+      isCatatanEditMode = false;
+      catatanModeBtn.textContent = 'MODE: BACA';
+      catatanModeBtn.classList.remove('active');
+      catatanContent.contentEditable = false;
+      formatToolbar.classList.remove('show'); // FIX: Toolbar hilang otomatis
+      saveFormatSettings();
+      saveCatatanToStorage();
+    }
     
     pageContainers.forEach(container => {
       container.classList.remove('active');
@@ -226,11 +296,6 @@ document.addEventListener('DOMContentLoaded', function() {
       document.querySelectorAll('#page2 .penjelasan-item').forEach(item => {
         item.contentEditable = false;
       });
-    }
-    
-    if (pageNum === 3 && isCatatanEditMode) {
-      isCatatanEditMode = true;
-      toggleCatatanMode();
     }
   }
   
@@ -360,11 +425,11 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Size Buttons
   const sizeButtons = {
-    'size1': '1', // Kecil
-    'size2': '3', // Normal kecil
-    'size3': '4', // Normal
-    'size4': '5', // Besar
-    'size5': '7'  // Sangat besar
+    'size1': '1',
+    'size2': '3',
+    'size3': '4',
+    'size4': '5',
+    'size5': '7'
   };
   
   Object.keys(sizeButtons).forEach(btnId => {
@@ -382,7 +447,35 @@ document.addEventListener('DOMContentLoaded', function() {
     catatanContent.addEventListener('keyup', updateToolbarState);
   }
   
-  // AUTO-SAVE untuk Halaman 2
+  // ===================================
+  // HORIZONTAL SCROLL untuk Toolbar (Desktop dengan Mouse)
+  // ===================================
+  if (formatToolbar) {
+    const toolbarScroll = formatToolbar.querySelector('.toolbar-scroll');
+    
+    if (toolbarScroll) {
+      // Deteksi hover pada toolbar
+      formatToolbar.addEventListener('mouseenter', function() {
+        // Nonaktifkan scroll halaman sementara
+        document.body.style.overflow = 'hidden';
+      });
+      
+      formatToolbar.addEventListener('mouseleave', function() {
+        // Aktifkan kembali scroll halaman
+        document.body.style.overflow = 'auto';
+      });
+      
+      // Scroll horizontal dengan wheel
+      formatToolbar.addEventListener('wheel', function(e) {
+        if (Math.abs(e.deltaY) > 0) {
+          e.preventDefault();
+          toolbarScroll.scrollLeft += e.deltaY;
+        }
+      }, { passive: false });
+    }
+  }
+  
+  // AUTO-SAVE untuk Halaman 2 (TANPA INDIKATOR)
   let autoSaveTimeout;
   document.querySelectorAll('#page2 .penjelasan-item').forEach(item => {
     item.addEventListener('input', function() {
@@ -390,6 +483,7 @@ document.addEventListener('DOMContentLoaded', function() {
         clearTimeout(autoSaveTimeout);
         autoSaveTimeout = setTimeout(() => {
           saveEditingToStorage();
+          // TIDAK ADA showSaveIndicator() di sini
         }, 2000);
       }
     });
@@ -403,6 +497,7 @@ document.addEventListener('DOMContentLoaded', function() {
         clearTimeout(catatanSaveTimeout);
         catatanSaveTimeout = setTimeout(() => {
           saveCatatanToStorage();
+          // TIDAK ADA showSaveIndicator() di sini
         }, 2000);
       }
     });
