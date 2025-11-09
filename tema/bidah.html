@@ -186,27 +186,49 @@
   </div>
 
   <!-- ========== HALAMAN 3: CATATAN ========== -->
-  <div class="page-container" id="page3">
-    <div class="catatan-wrapper">
-      <!-- Header Catatan -->
-      <div class="catatan-header">
-        <button class="catatan-mode-btn" id="catatanModeBtn">MODE: BACA</button>
-        
-        <div class="catatan-toolbar" id="catatanToolbar">
-  <button class="style-btn judul" id="judulBtn" title="Ctrl+1">ABC</button>
-  <button class="style-btn bab" id="babBtn" title="Ctrl+2">123</button>
-  <button class="style-btn subbab" id="subbabBtn" title="Ctrl+3">1.)</button>
-  <button class="style-btn biasa" id="biasaBtn" title="Ctrl+4">abc</button>
-  <button class="style-btn penting" id="pentingBtn" title="Ctrl+5"><em>abc</em></button>
-</div>
-      </div>
-      
-      <!-- Container Catatan -->
-      <div class="catatan-container">
-        <div class="catatan-content" contenteditable="false" id="catatanContent"></div>
-      </div>
+<div class="page-container" id="page3">
+  <div class="catatan-wrapper">
+    <!-- Header Catatan -->
+    <div class="catatan-header">
+      <button class="catatan-mode-btn" id="catatanModeBtn">MODE: BACA</button>
+    </div>
+    
+    <!-- Container Catatan -->
+    <div class="catatan-container">
+      <div class="catatan-content" contenteditable="false" id="catatanContent"></div>
     </div>
   </div>
+</div>
+
+<!-- Format Toolbar (Fixed di Bawah) -->
+<div class="format-toolbar" id="formatToolbar">
+  <div class="toolbar-scroll">
+    <!-- Bold, Italic, Underline -->
+    <div class="toolbar-group">
+      <button class="format-btn bold" id="boldBtn" title="Bold (Tebal)">B</button>
+      <button class="format-btn italic" id="italicBtn" title="Italic (Miring)">I</button>
+      <button class="format-btn underline" id="underlineBtn" title="Underline (Garis Bawah)">U</button>
+    </div>
+    
+    <!-- Color -->
+    <div class="toolbar-group">
+      <button class="color-btn gray" id="colorGray" title="Abu-abu (Default)"></button>
+      <button class="color-btn red" id="colorRed" title="Merah"></button>
+      <button class="color-btn blue" id="colorBlue" title="Biru"></button>
+      <button class="color-btn yellow" id="colorYellow" title="Kuning"></button>
+      <button class="color-btn green" id="colorGreen" title="Hijau"></button>
+    </div>
+    
+    <!-- Size -->
+    <div class="toolbar-group">
+      <button class="format-btn size-btn" id="size1" title="Ukuran Kecil">12</button>
+      <button class="format-btn size-btn" id="size2" title="Ukuran Normal Kecil">14</button>
+      <button class="format-btn size-btn" id="size3" title="Ukuran Normal">16</button>
+      <button class="format-btn size-btn" id="size4" title="Ukuran Besar">18</button>
+      <button class="format-btn size-btn" id="size5" title="Ukuran Sangat Besar">24</button>
+    </div>
+  </div>
+</div>
 
   <script src="tema.js"></script>
 </body>
