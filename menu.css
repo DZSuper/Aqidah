@@ -1,11 +1,30 @@
-/* === FONT & DASAR === */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+/* =============================================
+   FONT & VARIABEL
+============================================= */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
   --bg-dark: #0b0c0e;
+  --bg-card: rgba(255,255,255,0.04);
+  --bg-sidebar: #111318;
   --gold: #ffd700;
   --green: #00ff88;
   --text-light: #f2f2f2;
+  --text-muted: rgba(242,242,242,0.55);
+  --border: rgba(0,255,136,0.18);
+  --transition: 0.3s ease;
+}
+
+/* TEMA TERANG */
+[data-theme="light"] {
+  --bg-dark: #f4f4f0;
+  --bg-card: rgba(0,0,0,0.04);
+  --bg-sidebar: #ffffff;
+  --gold: #b8860b;
+  --green: #1a7a4a;
+  --text-light: #1a1a1a;
+  --text-muted: rgba(30,30,30,0.55);
+  --border: rgba(26,122,74,0.2);
 }
 
 * {
@@ -14,6 +33,14 @@
   box-sizing: border-box;
 }
 
+html {
+  font-size: 16px; /* base, diubah oleh JS */
+}
+
+html[data-textsize="small"]  { font-size: 13px; }
+html[data-textsize="medium"] { font-size: 16px; }
+html[data-textsize="large"]  { font-size: 19px; }
+
 body {
   font-family: 'Poppins', sans-serif;
   background-color: var(--bg-dark);
@@ -21,29 +48,518 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  transition: background-color var(--transition), color var(--transition);
 }
 
-/* === TITLE UTAMA === */
+/* =============================================
+   HAMBURGER BUTTON
+============================================= */
+.hamburger-btn {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  z-index: 1100;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all var(--transition);
+  padding: 0;
+  backdrop-filter: blur(6px);
+}
+
+.hamburger-btn:hover {
+  border-color: var(--green);
+  box-shadow: 0 0 12px rgba(0,255,136,0.2);
+}
+
+.hamburger-btn span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background-color: var(--text-light);
+  border-radius: 2px;
+  transition: all var(--transition);
+}
+
+/* Animasi X saat sidebar terbuka */
+.hamburger-btn.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.hamburger-btn.open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.hamburger-btn.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* =============================================
+   OVERLAY
+============================================= */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 1050;
+  backdrop-filter: blur(2px);
+  animation: fadeOverlay 0.25s ease;
+}
+
+.sidebar-overlay.show {
+  display: block;
+}
+
+@keyframes fadeOverlay {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* =============================================
+   SIDEBAR
+============================================= */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 280px;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(-100%);
+  transition: transform 0.32s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 4px 0 30px rgba(0,0,0,0.4);
+}
+
+.sidebar.open {
+  transform: translateX(0);
+}
+
+/* Header sidebar */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 22px 20px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-logo {
+  font-size: 1.5rem;
+  color: var(--gold);
+}
+
+.sidebar-brand {
+  flex: 1;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--gold);
+  line-height: 1.3;
+}
+
+.sidebar-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all var(--transition);
+  line-height: 1;
+}
+
+.sidebar-close:hover {
+  color: var(--text-light);
+  background: rgba(255,255,255,0.08);
+}
+
+/* Menu items */
+.sidebar-menu {
+  list-style: none;
+  padding: 14px 12px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.sidebar-menu li {
+  margin-bottom: 4px;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  color: var(--text-light);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--transition);
+  text-align: left;
+}
+
+.sidebar-item:hover {
+  background: rgba(255,255,255,0.06);
+  color: var(--green);
+}
+
+.sidebar-item.active {
+  background: rgba(0,255,136,0.1);
+  color: var(--green);
+  font-weight: 600;
+}
+
+.sidebar-icon {
+  font-size: 1.1rem;
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* =============================================
+   PANEL (Pengaturan & Tentang)
+============================================= */
+.panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-dark);
+  z-index: 900;
+  display: none;
+  flex-direction: column;
+  animation: slideUp 0.3s ease;
+  overflow-y: auto;
+}
+
+.panel.show {
+  display: flex;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--bg-dark);
+  z-index: 10;
+}
+
+.panel-back {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--green);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+
+.panel-back:hover {
+  background: var(--green);
+  color: var(--bg-dark);
+}
+
+.panel-title {
+  color: var(--gold);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.panel-body {
+  padding: 28px 24px;
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* =============================================
+   PANEL PENGATURAN - SETTING GROUPS
+============================================= */
+.setting-group {
+  margin-bottom: 32px;
+}
+
+.setting-label {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge-soon {
+  background: rgba(255,215,0,0.15);
+  color: var(--gold);
+  border: 1px solid rgba(255,215,0,0.3);
+  border-radius: 20px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.setting-options {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Tombol Tema */
+.theme-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 20px;
+  color: var(--text-light);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+  min-width: 100px;
+}
+
+.theme-btn:hover {
+  border-color: var(--gold);
+}
+
+.theme-btn.active {
+  border-color: var(--gold);
+  background: rgba(255,215,0,0.08);
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.theme-preview {
+  width: 54px;
+  height: 34px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.dark-preview {
+  background: linear-gradient(135deg, #0b0c0e 50%, #1a1c22 100%);
+}
+
+.light-preview {
+  background: linear-gradient(135deg, #f4f4f0 50%, #e8e8e0 100%);
+}
+
+/* Tombol Ukuran Teks */
+.size-opt-btn {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-light);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 10px 22px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.size-opt-btn:hover {
+  border-color: var(--green);
+}
+
+.size-opt-btn.active {
+  border-color: var(--green);
+  background: rgba(0,255,136,0.08);
+  color: var(--green);
+  font-weight: 600;
+}
+
+/* Tombol Bahasa */
+.lang-btn {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-muted);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 10px 22px;
+  cursor: not-allowed;
+  opacity: 0.5;
+  transition: all var(--transition);
+}
+
+/* =============================================
+   PANEL TENTANG
+============================================= */
+.about-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.about-logo {
+  font-size: 3.5rem;
+  margin-bottom: 12px;
+  color: var(--gold);
+  text-shadow: 0 0 20px rgba(255,215,0,0.4);
+}
+
+.about-appname {
+  color: var(--gold);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.about-desc {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.75;
+  max-width: 480px;
+  margin-bottom: 24px;
+}
+
+.about-divider {
+  width: 100%;
+  border-top: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.about-info {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.about-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.about-key {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.about-val {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: right;
+}
+
+.about-val a {
+  color: var(--green);
+  text-decoration: none;
+  font-size: 0.8rem;
+  word-break: break-all;
+}
+
+.about-val a:hover {
+  text-decoration: underline;
+}
+
+/* =============================================
+   MAIN VIEW
+============================================= */
+.main-view {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  justify-content: space-between;
+  padding-top: 70px; /* ruang untuk hamburger */
+}
+
+/* === JUDUL UTAMA === */
 .main-title {
   text-align: center;
   color: var(--gold);
-  font-size: clamp(2rem, 4vw, 3rem);
-  margin-top: 30px;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  margin-top: 10px;
+  margin-bottom: 8px;
+  text-shadow: 0 0 14px rgba(255,215,0,0.3);
 }
 
-/* === CARD === */
+/* === MATA PELAJARAN === */
+.mapel-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+}
+
+.mapel-title {
+  text-align: center;
+  color: var(--green);
+  font-size: clamp(0.85rem, 2vw, 1.1rem);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 10px;
+  margin-bottom: 4px;
+  text-shadow: 0 0 8px rgba(0,255,136,0.25);
+}
+
+.mapel-divider {
+  max-width: 700px;
+  margin: 10px auto 4px;
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+/* === CARD CONTAINER === */
 .card-container {
   display: grid;
   justify-content: center;
   align-items: start;
-  gap: 20px;
-  padding: 40px 20px;
-}
-
-/* Ukuran grid default: 1 kartu per baris */
-.card-container {
+  gap: 16px;
+  padding: 14px 0 28px;
   grid-template-columns: 1fr;
 }
 
@@ -55,107 +571,57 @@ body {
   color: var(--gold);
   border: 2px solid var(--green);
   border-radius: 12px;
-  padding: 40px 0;
-  font-size: 1.5rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 10px rgba(0, 255, 136, 0.1);
+  padding: 32px 20px;
+  transition: all var(--transition);
+  box-shadow: 0 0 10px rgba(0,255,136,0.08);
 }
 
-/* Hover: efek cahaya lembut */
+.card h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
 .card:hover {
   text-shadow: 0 0 8px var(--green);
   transform: translateY(-3px);
+  box-shadow: 0 0 18px rgba(0,255,136,0.2);
 }
 
-/* Klik: ubah warna background & teks */
 .card:active {
   background-color: var(--green);
-  color: var(--gold);
-  box-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
+  color: var(--bg-dark);
+  box-shadow: 0 0 24px rgba(0,255,136,0.5);
 }
 
 /* === FOOTER === */
 footer {
   text-align: center;
-  padding: 20px 0;
-  color: var(--text-light);
-  opacity: 0.7;
+  padding: 24px 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
 }
 
-/* === RESPONSIVE === */
-
-/* HP landscape: 2 kartu per baris */
+/* =============================================
+   RESPONSIVE
+============================================= */
 @media (max-width: 767px) and (orientation: landscape) {
-  .card-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .card-container { grid-template-columns: repeat(2, 1fr); }
 }
 
-/* Tablet potrait: 2 kartu per baris */
-@media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
-  .card-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
+@media (min-width: 480px) {
+  .card-container { grid-template-columns: repeat(2, 1fr); }
 }
 
-/* Tablet landscape: 3 kartu per baris */
-@media (min-width: 768px) and (max-width: 1023px) and (orientation: landscape) {
-  .card-container {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-/* Desktop: 3 kartu per baris */
-@media (min-width: 1024px) {
-  .card-container {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
-    padding: 60px;
-  }
-}
-
-/* === MATA PELAJARAN SECTION === */
-.mapel-section {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.mapel-title {
-  text-align: center;
-  color: var(--green);
-  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-top: 10px;
-  margin-bottom: 5px;
-  text-shadow: 0 0 8px rgba(0, 255, 136, 0.3);
-}
-
-/* === GARIS PEMISAH === */
-.mapel-divider {
-  max-width: 700px;
-  margin: 30px auto;
-  border: none;
-  border-top: 1px solid rgba(0, 255, 136, 0.15);
-}
-
-/* === UPDATE: card-container tidak lagi pakai padding besar di atas === */
-.mapel-section .card-container {
-  padding-top: 15px;
-  padding-bottom: 30px;
-}
-
-/* === UPDATE: card h3 sama seperti h2 sebelumnya === */
-.card h3 {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin: 0;
+@media (min-width: 768px) {
+  .card-container { grid-template-columns: repeat(3, 1fr); }
 }
 
 @media (min-width: 1024px) {
-  .mapel-section .card-container {
-    padding: 20px 0 35px 0;
+  .card-container {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 18px 0 36px;
   }
+  .mapel-section { padding: 0 40px; }
 }

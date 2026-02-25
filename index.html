@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,62 +7,188 @@
   <link rel="stylesheet" href="menu.css">
 </head>
 <body>
-  <main>
-    <h1 class="main-title">Ilmu Agama Islam</h1>
 
-    <!-- ===== AQIDAH ===== -->
-    <section class="mapel-section">
-      <h2 class="mapel-title">Aqidah</h2>
-      <div class="card-container">
-        <a href="tema/tauhid.html" class="card">
-          <h3>Tauhid</h3>
+  <!-- ===== HAMBURGER BUTTON ===== -->
+  <button class="hamburger-btn" id="hamburgerBtn" aria-label="Buka Menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- ===== OVERLAY ===== -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- ===== SIDEBAR ===== -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-logo">☾</span>
+      <span class="sidebar-brand">Ilmu Agama Islam</span>
+      <button class="sidebar-close" id="sidebarClose" aria-label="Tutup">✕</button>
+    </div>
+
+    <ul class="sidebar-menu">
+      <li>
+        <button class="sidebar-item active" id="navMenuUtama">
+          <span class="sidebar-icon">🏠</span>
+          <span>Menu Utama</span>
+        </button>
+      </li>
+      <li>
+        <button class="sidebar-item" id="navPengaturan">
+          <span class="sidebar-icon">⚙️</span>
+          <span>Pengaturan</span>
+        </button>
+      </li>
+      <li>
+        <a class="sidebar-item" href="https://link.dana.id/minta?full_url=https://qr.dana.id/v1/281012012023041108848503" target="_blank" rel="noopener">
+          <span class="sidebar-icon">💝</span>
+          <span>Donasi</span>
         </a>
-        <a href="tema/bidah.html" class="card">
-          <h3>Bid'ah</h3>
+      </li>
+      <li>
+        <a class="sidebar-item" href="mailto:danisuryaanugrah12345@gmail.com?subject=Masukan%20untuk%20Website%20Ilmu%20Agama%20Islam">
+          <span class="sidebar-icon">✉️</span>
+          <span>Beri Masukan</span>
         </a>
-        <a href="tema/sifat.html" class="card">
-          <h3>Sifat Allah</h3>
-        </a>
-        <a href="tema/coming.html" class="card">
-          <h3>Iman</h3>
-        </a>
+      </li>
+      <li>
+        <button class="sidebar-item" id="navTentang">
+          <span class="sidebar-icon">ℹ️</span>
+          <span>Tentang</span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- ===== PANEL PENGATURAN ===== -->
+  <div class="panel" id="panelPengaturan">
+    <div class="panel-header">
+      <button class="panel-back" id="backFromPengaturan">← Kembali</button>
+      <h2 class="panel-title">Pengaturan</h2>
+    </div>
+    <div class="panel-body">
+
+      <!-- Tema -->
+      <div class="setting-group">
+        <h3 class="setting-label">Tema Tampilan</h3>
+        <div class="setting-options">
+          <button class="theme-btn active" data-theme="dark">
+            <span class="theme-preview dark-preview"></span>
+            <span>Gelap</span>
+          </button>
+          <button class="theme-btn" data-theme="light">
+            <span class="theme-preview light-preview"></span>
+            <span>Terang</span>
+          </button>
+        </div>
       </div>
-    </section>
 
-    <div class="mapel-divider"></div>
-
-    <!-- ===== FIQIH ===== -->
-    <section class="mapel-section">
-      <h2 class="mapel-title">Fiqih</h2>
-      <div class="card-container">
-        <a href="tema/coming.html" class="card">
-          <h3>Matan Abu Syuja'</h3>
-        </a>
-        <a href="tema/coming.html" class="card">
-          <h3>Umdatul Ahkam</h3>
-        </a>
+      <!-- Ukuran Teks -->
+      <div class="setting-group">
+        <h3 class="setting-label">Ukuran Teks</h3>
+        <div class="setting-options">
+          <button class="size-opt-btn" data-size="small">Kecil</button>
+          <button class="size-opt-btn active" data-size="medium">Sedang</button>
+          <button class="size-opt-btn" data-size="large">Besar</button>
+        </div>
       </div>
-    </section>
 
-    <div class="mapel-divider"></div>
-
-    <!-- ===== BAHASA ARAB ===== -->
-    <section class="mapel-section">
-      <h2 class="mapel-title">Bahasa Arab</h2>
-      <div class="card-container">
-        <a href="tema/coming.html" class="card">
-          <h3>Nahwu</h3>
-        </a>
-        <a href="tema/coming.html" class="card">
-          <h3>Shorof</h3>
-        </a>
+      <!-- Bahasa (placeholder) -->
+      <div class="setting-group">
+        <h3 class="setting-label">Bahasa <span class="badge-soon">Segera</span></h3>
+        <div class="setting-options">
+          <button class="lang-btn active" disabled>🇮🇩 Indonesia</button>
+          <button class="lang-btn" disabled>🇸🇦 العربية</button>
+        </div>
       </div>
-    </section>
 
-  </main>
+    </div>
+  </div>
 
-  <footer>
-    <p>© 2025 Ilmu Agama Islam</p>
-  </footer>
+  <!-- ===== PANEL TENTANG ===== -->
+  <div class="panel" id="panelTentang">
+    <div class="panel-header">
+      <button class="panel-back" id="backFromTentang">← Kembali</button>
+      <h2 class="panel-title">Tentang</h2>
+    </div>
+    <div class="panel-body">
+      <div class="about-card">
+        <div class="about-logo">☾</div>
+        <h2 class="about-appname">Ilmu Agama Islam</h2>
+        <p class="about-desc">
+          Website ini merupakan platform belajar ilmu agama Islam berbasis Manhaj Salaf,
+          mencakup berbagai disiplin ilmu seperti Aqidah, Fiqih, Bahasa Arab, Siroh, dan lainnya.
+          Dirancang agar mudah diakses, sederhana, dan bermanfaat bagi setiap penuntut ilmu.
+        </p>
+        <div class="about-divider"></div>
+        <div class="about-info">
+          <div class="about-row">
+            <span class="about-key">Pembuat</span>
+            <span class="about-val">Dani Surya Anugrah</span>
+          </div>
+          <div class="about-row">
+            <span class="about-key">Tanggal Dibuat</span>
+            <span class="about-val">2025</span>
+          </div>
+          <div class="about-row">
+            <span class="about-key">Versi</span>
+            <span class="about-val">1.0.0</span>
+          </div>
+          <div class="about-row">
+            <span class="about-key">Kontak</span>
+            <span class="about-val">
+              <a href="mailto:danisuryaanugrah12345@gmail.com">danisuryaanugrah12345@gmail.com</a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== KONTEN UTAMA ===== -->
+  <div class="main-view" id="mainView">
+    <main>
+      <h1 class="main-title">Ilmu Agama Islam</h1>
+
+      <!-- AQIDAH -->
+      <section class="mapel-section">
+        <h2 class="mapel-title">Aqidah</h2>
+        <div class="card-container">
+          <a href="tema/tauhid.html" class="card"><h3>Tauhid</h3></a>
+          <a href="tema/bidah.html" class="card"><h3>Bid'ah</h3></a>
+          <a href="tema/sifat.html" class="card"><h3>Sifat Allah</h3></a>
+          <a href="tema/coming.html" class="card"><h3>Iman</h3></a>
+        </div>
+      </section>
+
+      <div class="mapel-divider"></div>
+
+      <!-- FIQIH -->
+      <section class="mapel-section">
+        <h2 class="mapel-title">Fiqih</h2>
+        <div class="card-container">
+          <a href="tema/coming.html" class="card"><h3>Matan Abu Syuja'</h3></a>
+          <a href="tema/coming.html" class="card"><h3>Umdatul Ahkam</h3></a>
+        </div>
+      </section>
+
+      <div class="mapel-divider"></div>
+
+      <!-- BAHASA ARAB -->
+      <section class="mapel-section">
+        <h2 class="mapel-title">Bahasa Arab</h2>
+        <div class="card-container">
+          <a href="tema/coming.html" class="card"><h3>Nahwu</h3></a>
+          <a href="tema/coming.html" class="card"><h3>Shorof</h3></a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>© 2025 Ilmu Agama Islam · Dani Surya Anugrah</p>
+    </footer>
+  </div>
+
+  <script src="script/main.js"></script>
 </body>
 </html>
