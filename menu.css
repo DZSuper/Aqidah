@@ -113,3 +113,49 @@ footer {
     padding: 60px;
   }
 }
+
+/* === MATA PELAJARAN SECTION === */
+.mapel-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.mapel-title {
+  text-align: center;
+  color: var(--green);
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  text-shadow: 0 0 8px rgba(0, 255, 136, 0.3);
+}
+
+/* === GARIS PEMISAH === */
+.mapel-divider {
+  max-width: 700px;
+  margin: 30px auto;
+  border: none;
+  border-top: 1px solid rgba(0, 255, 136, 0.15);
+}
+
+/* === UPDATE: card-container tidak lagi pakai padding besar di atas === */
+.mapel-section .card-container {
+  padding-top: 15px;
+  padding-bottom: 30px;
+}
+
+/* === UPDATE: card h3 sama seperti h2 sebelumnya === */
+.card h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+@media (min-width: 1024px) {
+  .mapel-section .card-container {
+    padding: 20px 0 35px 0;
+  }
+}
