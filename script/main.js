@@ -30,8 +30,6 @@ document.addEventListener('DOMContentLoaded', function () {
   var navMasukan        = document.getElementById('navMasukan');
   var panelMasukan      = document.getElementById('panelMasukan');
   var backFromMasukan   = document.getElementById('backFromMasukan');
-  var copyEmailBtn      = document.getElementById('copyEmailBtn');
-  var copyFeedback      = document.getElementById('copyFeedback');
 
   // Guard: pastikan elemen utama tersedia
   if (!hamburgerBtn || !sidebar || !sidebarOverlay) {
@@ -133,39 +131,6 @@ document.addEventListener('DOMContentLoaded', function () {
       panelMasukan && panelMasukan.classList.remove('show');
       setActiveNav(navMenuUtama);
     });
-  }
-
-  if (copyEmailBtn) {
-    copyEmailBtn.addEventListener('click', function () {
-      var email = 'danisuryaanugrah12345@gmail.com';
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(email).then(function () {
-          showCopyFeedback();
-        }).catch(function () {
-          fallbackCopy(email);
-        });
-      } else {
-        fallbackCopy(email);
-      }
-    });
-  }
-
-  function fallbackCopy(text) {
-    var ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.focus();
-    ta.select();
-    try { document.execCommand('copy'); showCopyFeedback(); } catch(e) {}
-    document.body.removeChild(ta);
-  }
-
-  function showCopyFeedback() {
-    if (!copyFeedback) return;
-    copyFeedback.classList.add('show');
-    setTimeout(function () { copyFeedback.classList.remove('show'); }, 2000);
   }
 
   // ── TEMA ───────────────────────────────────
