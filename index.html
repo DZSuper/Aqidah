@@ -45,10 +45,10 @@
         </a>
       </li>
       <li>
-        <a class="sidebar-item" href="mailto:danisuryaanugrah12345@gmail.com?subject=Masukan%20untuk%20Website%20Ilmu%20Agama%20Islam">
+        <button class="sidebar-item" id="navMasukan">
           <span class="sidebar-icon">✉️</span>
           <span>Beri Masukan</span>
-        </a>
+        </button>
       </li>
       <li>
         <button class="sidebar-item" id="navTentang">
@@ -93,6 +93,32 @@
           <button class="lang-btn" disabled>🇮🇩 Indonesia</button>
           <button class="lang-btn" disabled>🇸🇦 العربية</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL BERI MASUKAN -->
+  <div class="panel" id="panelMasukan">
+    <div class="panel-header">
+      <button class="panel-back" id="backFromMasukan">← Kembali</button>
+      <h2 class="panel-title">Beri Masukan</h2>
+    </div>
+    <div class="panel-body">
+      <div class="about-card">
+        <div class="about-logo">✉️</div>
+        <h2 class="about-appname">Hubungi Pembuat</h2>
+        <p class="about-desc">
+          Sampaikan masukan, saran, atau laporan kesalahan kepada pembuat website melalui email berikut.
+        </p>
+        <div class="about-divider"></div>
+        <div class="about-info">
+          <div class="about-row">
+            <span class="about-key">Email</span>
+            <span class="about-val email-copy" id="emailToCopy">danisuryaanugrah12345@gmail.com</span>
+          </div>
+        </div>
+        <button class="copy-email-btn" id="copyEmailBtn">📋 Salin Alamat Email</button>
+        <span class="copy-feedback" id="copyFeedback">✓ Tersalin!</span>
       </div>
     </div>
   </div>

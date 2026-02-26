@@ -264,7 +264,7 @@ body {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 20px 24px;
+  padding: 20px 24px 20px 80px;
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
@@ -624,4 +624,46 @@ footer {
     padding: 18px 0 36px;
   }
   .mapel-section { padding: 0 40px; }
+}
+
+/* ── EMAIL COPY ── */
+.email-copy {
+  word-break: break-all;
+  color: var(--green);
+  font-size: 0.85rem;
+  text-align: right;
+  user-select: all;
+}
+
+.copy-email-btn {
+  margin-top: 20px;
+  background: transparent;
+  border: 2px solid var(--green);
+  border-radius: 10px;
+  color: var(--green);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 12px 28px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.copy-email-btn:hover {
+  background: var(--green);
+  color: var(--bg-dark);
+}
+
+.copy-feedback {
+  display: block;
+  margin-top: 10px;
+  color: var(--green);
+  font-size: 0.9rem;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.copy-feedback.show {
+  opacity: 1;
 }

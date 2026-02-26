@@ -27,6 +27,11 @@ document.addEventListener('DOMContentLoaded', function () {
   var panelTentang      = document.getElementById('panelTentang');
   var backFromPengaturan= document.getElementById('backFromPengaturan');
   var backFromTentang   = document.getElementById('backFromTentang');
+  var navMasukan        = document.getElementById('navMasukan');
+  var panelMasukan      = document.getElementById('panelMasukan');
+  var backFromMasukan   = document.getElementById('backFromMasukan');
+  var copyEmailBtn      = document.getElementById('copyEmailBtn');
+  var copyFeedback      = document.getElementById('copyFeedback');
 
   // Guard: pastikan elemen utama tersedia
   if (!hamburgerBtn || !sidebar || !sidebarOverlay) {
@@ -64,10 +69,11 @@ document.addEventListener('DOMContentLoaded', function () {
   function closeAllPanels() {
     panelPengaturan && panelPengaturan.classList.remove('show');
     panelTentang    && panelTentang.classList.remove('show');
+    panelMasukan    && panelMasukan.classList.remove('show');
   }
 
   function setActiveNav(el) {
-    [navMenuUtama, navPengaturan, navTentang].forEach(function (n) {
+    [navMenuUtama, navPengaturan, navTentang, navMasukan].forEach(function (n) {
       n && n.classList.remove('active');
     });
     el && el.classList.add('active');
@@ -111,6 +117,55 @@ document.addEventListener('DOMContentLoaded', function () {
       panelTentang && panelTentang.classList.remove('show');
       setActiveNav(navMenuUtama);
     });
+  }
+
+  if (navMasukan) {
+    navMasukan.addEventListener('click', function () {
+      closeAllPanels();
+      panelMasukan && panelMasukan.classList.add('show');
+      setActiveNav(navMasukan);
+      closeSidebar();
+    });
+  }
+
+  if (backFromMasukan) {
+    backFromMasukan.addEventListener('click', function () {
+      panelMasukan && panelMasukan.classList.remove('show');
+      setActiveNav(navMenuUtama);
+    });
+  }
+
+  if (copyEmailBtn) {
+    copyEmailBtn.addEventListener('click', function () {
+      var email = 'danisuryaanugrah12345@gmail.com';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(email).then(function () {
+          showCopyFeedback();
+        }).catch(function () {
+          fallbackCopy(email);
+        });
+      } else {
+        fallbackCopy(email);
+      }
+    });
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try { document.execCommand('copy'); showCopyFeedback(); } catch(e) {}
+    document.body.removeChild(ta);
+  }
+
+  function showCopyFeedback() {
+    if (!copyFeedback) return;
+    copyFeedback.classList.add('show');
+    setTimeout(function () { copyFeedback.classList.remove('show'); }, 2000);
   }
 
   // ── TEMA ───────────────────────────────────
