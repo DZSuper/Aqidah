@@ -1,0 +1,28 @@
+{
+  "judul_website": "Ilmu Agama Islam",
+  "mapel": [
+    {
+      "judul": "Aqidah",
+      "kartu": [
+        { "nama": "Tauhid",      "link": "tema/tauhid.html" },
+        { "nama": "Bid'ah",      "link": "tema/bidah.html" },
+        { "nama": "Sifat Allah", "link": "tema/sifat.html" },
+        { "nama": "Iman",        "link": "tema/coming.html" }
+      ]
+    },
+    {
+      "judul": "Fiqih",
+      "kartu": [
+        { "nama": "Matan Abu Syuja'", "link": "tema/coming.html" },
+        { "nama": "Umdatul Ahkam",    "link": "tema/coming.html" }
+      ]
+    },
+    {
+      "judul": "Bahasa Arab",
+      "kartu": [
+        { "nama": "Nahwu",  "link": "tema/coming.html" },
+        { "nama": "Shorof", "link": "tema/coming.html" }
+      ]
+    }
+  ]
+}

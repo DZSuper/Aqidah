@@ -1,0 +1,114 @@
+backend:
+  name: github
+  repo: DZSuper/Aqidah
+  branch: main
+  auth_scope: repo
+
+media_folder: "assets/img"
+public_folder: "/assets/img"
+
+locale: 'id'
+
+collections:
+
+  # ── HALAMAN UTAMA ──────────────────────────────────────────
+  - name: "halaman-utama"
+    label: "🏠 Halaman Utama"
+    files:
+      - name: "beranda"
+        label: "Beranda (Mata Pelajaran & Kartu)"
+        file: "konten/index.json"
+        fields:
+          - name: "judul_website"
+            label: "Judul Website"
+            widget: "string"
+          - name: "mapel"
+            label: "Mata Pelajaran"
+            widget: "list"
+            summary: "{{fields.judul}}"
+            fields:
+              - name: "judul"
+                label: "Judul Mata Pelajaran"
+                widget: "string"
+              - name: "kartu"
+                label: "Kartu-kartu"
+                widget: "list"
+                summary: "{{fields.nama}}"
+                fields:
+                  - name: "nama"
+                    label: "Nama Kartu"
+                    widget: "string"
+                  - name: "link"
+                    label: "Link Halaman"
+                    widget: "string"
+
+  # ── MATERI ──────────────────────────────────────────────────
+  - name: "materi"
+    label: "📚 Materi"
+    files:
+
+      - name: "tauhid"
+        label: "Tauhid"
+        file: "konten/tauhid.json"
+        fields:
+          - name: "judul"
+            label: "Judul Halaman"
+            widget: "string"
+          - name: "kelompok"
+            label: "Kelompok"
+            widget: "list"
+            summary: "{{fields.nama}}"
+            fields:
+              - name: "id"
+                label: "ID (huruf kecil, tanpa spasi)"
+                widget: "string"
+              - name: "nama"
+                label: "Nama Kelompok"
+                widget: "string"
+              - name: "konten"
+                label: "Konten"
+                widget: "markdown"
+
+      - name: "bidah"
+        label: "Bid'ah"
+        file: "konten/bidah.json"
+        fields:
+          - name: "judul"
+            label: "Judul Halaman"
+            widget: "string"
+          - name: "kelompok"
+            label: "Kelompok"
+            widget: "list"
+            summary: "{{fields.nama}}"
+            fields:
+              - name: "id"
+                label: "ID (huruf kecil, tanpa spasi)"
+                widget: "string"
+              - name: "nama"
+                label: "Nama Kelompok"
+                widget: "string"
+              - name: "konten"
+                label: "Konten"
+                widget: "markdown"
+
+      - name: "sifat"
+        label: "Sifat Allah"
+        file: "konten/sifat.json"
+        fields:
+          - name: "judul"
+            label: "Judul Halaman"
+            widget: "string"
+          - name: "kelompok"
+            label: "Kelompok"
+            widget: "list"
+            summary: "{{fields.nama}}"
+            fields:
+              - name: "id"
+                label: "ID (huruf kecil, tanpa spasi)"
+                widget: "string"
+              - name: "nama"
+                label: "Nama Kelompok"
+                widget: "string"
+              - name: "konten"
+                label: "Konten"
+                widget: "markdown"

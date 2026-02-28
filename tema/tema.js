@@ -1,5 +1,98 @@
-// Interaktivitas untuk halaman tema dengan toolbar formatting dan indikator hover
+// =============================================
+// LOADER KONTEN DARI JSON (Decap CMS)
+// =============================================
+(function() {
+  var kontenKey = document.body.getAttribute('data-konten');
+  if (!kontenKey) return; // Halaman tanpa JSON (misal coming.html)
+
+  function renderKelompok(data) {
+    var kelompok = data.kelompok || [];
+
+    // Update judul halaman
+    var temaTitle = document.querySelector('.tema-title');
+    if (temaTitle && data.judul) temaTitle.textContent = data.judul;
+
+    // Update title tag
+    document.title = data.judul + ' | Aqidah Salafiyah';
+
+    // Render kelompok buttons & content untuk page1 dan page2
+    [1, 2].forEach(function(pageNum) {
+      var page = document.getElementById('page' + pageNum);
+      if (!page) return;
+
+      // Render sidebar buttons
+      var btnContainer = page.querySelector('.kelompok-buttons');
+      var dropdown     = page.querySelector('.kelompok-dropdown');
+      var content      = page.querySelector('.penjelasan-content');
+
+      if (!btnContainer || !content) return;
+
+      btnContainer.innerHTML = '';
+      if (dropdown) dropdown.innerHTML = '';
+      content.innerHTML = '';
+
+      kelompok.forEach(function(k, i) {
+        // Button
+        var btn = document.createElement('button');
+        btn.className = 'kelompok-btn' + (i === 0 ? ' active' : '');
+        btn.setAttribute('data-kelompok', k.id);
+        btn.setAttribute('data-page', pageNum);
+        btn.textContent = k.nama;
+        btnContainer.appendChild(btn);
+
+        // Dropdown option
+        if (dropdown) {
+          var opt = document.createElement('option');
+          opt.value = k.id;
+          opt.textContent = k.nama;
+          dropdown.appendChild(opt);
+        }
+
+        // Konten (markdown → HTML via marked.js)
+        var div = document.createElement('div');
+        div.className = 'penjelasan-item' + (i === 0 ? ' active' : '');
+        div.setAttribute('data-kelompok', k.id);
+
+        var html = '';
+        html += '<h3>' + k.nama + '</h3>';
+        if (window.marked) {
+          html += marked.parse(k.konten || '');
+        } else {
+          // Fallback tanpa marked: tampilkan sebagai paragraf biasa
+          html += '<p>' + (k.konten || '').replace(/\n/g, '</p><p>') + '</p>';
+        }
+        div.innerHTML = html;
+        content.appendChild(div);
+      });
+    });
+  }
+
+  // Fetch JSON konten
+  fetch('../konten/' + kontenKey + '.json')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      renderKelompok(data);
+      // Dispatch event supaya tema.js tahu konten sudah siap
+      document.dispatchEvent(new Event('kontenLoaded'));
+    })
+    .catch(function(e) {
+      console.warn('[tema.js] Gagal memuat JSON konten:', e);
+      document.dispatchEvent(new Event('kontenLoaded'));
+    });
+})();
+
+// Interaktivitas untuk halaman tema dengan toolbar formatting dan semua fix
 document.addEventListener('DOMContentLoaded', function() {
+  var kontenKey = document.body.getAttribute('data-konten');
+  if (kontenKey) {
+    // Tunggu konten JSON selesai di-render baru init
+    document.addEventListener('kontenLoaded', initTema);
+  } else {
+    initTema();
+  }
+});
+
+function initTema() {
   
   // ===================================
   // AMBIL ELEMEN-ELEMEN
@@ -44,22 +137,6 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
       saveIndicator.classList.remove('show');
     }, 2000);
-  }
-  
-  // ===================================
-  // BUAT INDIKATOR HOVER TOOLBAR
-  // ===================================
-  const hoverIndicator = document.createElement('div');
-  hoverIndicator.className = 'toolbar-hover-indicator';
-  document.body.appendChild(hoverIndicator);
-  
-  function showHoverIndicator(text) {
-    hoverIndicator.textContent = text;
-    hoverIndicator.classList.add('show');
-  }
-  
-  function hideHoverIndicator() {
-    hoverIndicator.classList.remove('show');
   }
   
   // ===================================
@@ -113,6 +190,7 @@ document.addEventListener('DOMContentLoaded', function() {
       data[kelompok] = item.innerHTML;
     });
     localStorage.setItem(storageKeyEditing, JSON.stringify(data));
+    // HANYA tampilkan indikator saat keluar dari edit mode
   }
   
   function saveCatatanToStorage() {
@@ -164,7 +242,7 @@ document.addEventListener('DOMContentLoaded', function() {
         item.contentEditable = false;
       });
       saveEditingToStorage();
-      showSaveIndicator();
+      showSaveIndicator(); // Tampilkan saat keluar dari edit mode
     }
   }
   
@@ -172,9 +250,11 @@ document.addEventListener('DOMContentLoaded', function() {
   // FUNGSI: Apply Default Format
   // ===================================
   function applyDefaultFormat() {
+    // Apply default: Abu, size 16, no bold/italic/underline
     applyFormat('foreColor', lastFormatSettings.color);
     applyFormat('fontSize', lastFormatSettings.size);
     
+    // Remove bold/italic/underline if previously set
     if (lastFormatSettings.bold) applyFormat('bold');
     if (lastFormatSettings.italic) applyFormat('italic');
     if (lastFormatSettings.underline) applyFormat('underline');
@@ -195,6 +275,7 @@ document.addEventListener('DOMContentLoaded', function() {
       formatToolbar.classList.add('show');
       catatanContent.focus();
       
+      // Apply format terakhir atau default
       setTimeout(() => {
         applyDefaultFormat();
         updateToolbarState();
@@ -204,11 +285,11 @@ document.addEventListener('DOMContentLoaded', function() {
       catatanModeBtn.classList.remove('active');
       catatanContent.contentEditable = false;
       formatToolbar.classList.remove('show');
-      hideHoverIndicator();
       
+      // Save format settings
       saveFormatSettings();
       saveCatatanToStorage();
-      showSaveIndicator();
+      showSaveIndicator(); // Tampilkan saat kembali ke mode baca
     }
   }
   
@@ -221,6 +302,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.execCommand(command, false, value);
     catatanContent.focus();
     
+    // Update lastFormatSettings
     if (command === 'foreColor') {
       lastFormatSettings.color = value;
     } else if (command === 'fontSize') {
@@ -240,10 +322,12 @@ document.addEventListener('DOMContentLoaded', function() {
   // FUNGSI: Update Toolbar State
   // ===================================
   function updateToolbarState() {
+    // Update bold, italic, underline buttons
     document.getElementById('boldBtn')?.classList.toggle('active', document.queryCommandState('bold'));
     document.getElementById('italicBtn')?.classList.toggle('active', document.queryCommandState('italic'));
     document.getElementById('underlineBtn')?.classList.toggle('active', document.queryCommandState('underline'));
     
+    // Update color buttons
     const currentColor = document.queryCommandValue('foreColor');
     document.querySelectorAll('.color-btn').forEach(btn => {
       btn.classList.remove('active');
@@ -271,13 +355,13 @@ document.addEventListener('DOMContentLoaded', function() {
   function gantiHalaman(pageNum) {
     currentPage = pageNum;
     
+    // FIX: Auto non-aktifkan mode edit catatan saat keluar dari halaman 3
     if (currentPage !== 3 && isCatatanEditMode) {
       isCatatanEditMode = false;
       catatanModeBtn.textContent = 'MODE: BACA';
       catatanModeBtn.classList.remove('active');
       catatanContent.contentEditable = false;
-      formatToolbar.classList.remove('show');
-      hideHoverIndicator();
+      formatToolbar.classList.remove('show'); // FIX: Toolbar hilang otomatis
       saveFormatSettings();
       saveCatatanToStorage();
     }
@@ -393,70 +477,60 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   // ===================================
-  // FORMAT TOOLBAR BUTTONS + HOVER INDICATOR
+  // FORMAT TOOLBAR BUTTONS
   // ===================================
   
   // Bold
   const boldBtn = document.getElementById('boldBtn');
   if (boldBtn) {
     boldBtn.addEventListener('click', () => applyFormat('bold'));
-    boldBtn.addEventListener('mouseenter', () => showHoverIndicator('Tebal (Bold)'));
-    boldBtn.addEventListener('mouseleave', hideHoverIndicator);
   }
   
   // Italic
   const italicBtn = document.getElementById('italicBtn');
   if (italicBtn) {
     italicBtn.addEventListener('click', () => applyFormat('italic'));
-    italicBtn.addEventListener('mouseenter', () => showHoverIndicator('Miring (Italic)'));
-    italicBtn.addEventListener('mouseleave', hideHoverIndicator);
   }
   
   // Underline
   const underlineBtn = document.getElementById('underlineBtn');
   if (underlineBtn) {
     underlineBtn.addEventListener('click', () => applyFormat('underline'));
-    underlineBtn.addEventListener('mouseenter', () => showHoverIndicator('Garis Bawah (Underline)'));
-    underlineBtn.addEventListener('mouseleave', hideHoverIndicator);
   }
   
   // Color Buttons
   const colorButtons = {
-    'colorGray': { color: '#b8b8b8', label: 'Abu-abu (Default)' },
-    'colorRed': { color: '#ff6b6b', label: 'Merah' },
-    'colorBlue': { color: '#4dabf7', label: 'Biru' },
-    'colorYellow': { color: '#ffd43b', label: 'Kuning' },
-    'colorGreen': { color: '#00ff88', label: 'Hijau' }
+    'colorGray': '#b8b8b8',
+    'colorRed': '#ff6b6b',
+    'colorBlue': '#4dabf7',
+    'colorYellow': '#ffd43b',
+    'colorGreen': '#00ff88'
   };
   
   Object.keys(colorButtons).forEach(btnId => {
     const btn = document.getElementById(btnId);
     if (btn) {
       btn.addEventListener('click', function() {
-        applyFormat('foreColor', colorButtons[btnId].color);
+        applyFormat('foreColor', colorButtons[btnId]);
       });
-      btn.addEventListener('mouseenter', () => showHoverIndicator(colorButtons[btnId].label));
-      btn.addEventListener('mouseleave', hideHoverIndicator);
     }
   });
   
   // Size Buttons
   const sizeButtons = {
-    'size1': { size: '1', label: 'Kecil (12px)' },
-    'size2': { size: '3', label: 'Normal Kecil (14px)' },
-    'size3': { size: '4', label: 'Normal (16px)' },
-    'size4': { size: '5', label: 'Besar (18px)' },
-    'size5': { size: '7', label: 'Sangat Besar (24px)' }
+    'size1': '1',
+    'size2': '3',
+    'size3': '4',
+    'size4': '5',
+    'size5': '7'
   };
   
   Object.keys(sizeButtons).forEach(btnId => {
     const btn = document.getElementById(btnId);
     if (btn) {
       btn.addEventListener('click', function() {
-        applyFormat('fontSize', sizeButtons[btnId].size);
+        applyFormat('fontSize', sizeButtons[btnId]);
       });
-      btn.addEventListener('mouseenter', () => showHoverIndicator(sizeButtons[btnId].label));
-      btn.addEventListener('mouseleave', hideHoverIndicator);
     }
   });
   
@@ -464,9 +538,6 @@ document.addEventListener('DOMContentLoaded', function() {
   if (catatanContent) {
     catatanContent.addEventListener('mouseup', updateToolbarState);
     catatanContent.addEventListener('keyup', updateToolbarState);
-    
-    // Hide indicator when clicking on content
-    catatanContent.addEventListener('click', hideHoverIndicator);
   }
   
   // ===================================
@@ -476,96 +547,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const toolbarScroll = formatToolbar.querySelector('.toolbar-scroll');
     
     if (toolbarScroll) {
+      // Deteksi hover pada toolbar
       formatToolbar.addEventListener('mouseenter', function() {
+        // Nonaktifkan scroll halaman sementara
         document.body.style.overflow = 'hidden';
       });
       
       formatToolbar.addEventListener('mouseleave', function() {
+        // Aktifkan kembali scroll halaman
         document.body.style.overflow = 'auto';
-        hideHoverIndicator();
       });
       
+      // Scroll horizontal dengan wheel
       formatToolbar.addEventListener('wheel', function(e) {
         if (Math.abs(e.deltaY) > 0) {
           e.preventDefault();
           toolbarScroll.scrollLeft += e.deltaY;
         }
       }, { passive: false });
-      
-      // Hide indicator when scrolling toolbar
-      toolbarScroll.addEventListener('scroll', hideHoverIndicator);
     }
   }
   
-  // ===================================
-  // KEYBOARD SHORTCUTS untuk Format
-  // ===================================
-  if (catatanContent) {
-    catatanContent.addEventListener('keydown', function(e) {
-      if (!isCatatanEditMode) return;
-      
-      // Ctrl+B = Bold
-      if (e.ctrlKey && e.key === 'b') {
-        e.preventDefault();
-        applyFormat('bold');
-        showHoverIndicator('Tebal (Bold) - Ctrl+B');
-        setTimeout(hideHoverIndicator, 1500);
-      }
-      
-      // Ctrl+I = Italic
-      if (e.ctrlKey && e.key === 'i') {
-        e.preventDefault();
-        applyFormat('italic');
-        showHoverIndicator('Miring (Italic) - Ctrl+I');
-        setTimeout(hideHoverIndicator, 1500);
-      }
-      
-      // Ctrl+U = Underline
-      if (e.ctrlKey && e.key === 'u') {
-        e.preventDefault();
-        applyFormat('underline');
-        showHoverIndicator('Garis Bawah - Ctrl+U');
-        setTimeout(hideHoverIndicator, 1500);
-      }
-    });
-  }
-  
-  // ===================================
-  // TOUCH SUPPORT untuk Mobile
-  // ===================================
-  const allFormatButtons = document.querySelectorAll('.format-btn, .color-btn');
-  
-  allFormatButtons.forEach(btn => {
-    // Touch start - show indicator
-    btn.addEventListener('touchstart', function(e) {
-      const label = this.getAttribute('data-label');
-      if (label) {
-        showHoverIndicator(label);
-      }
-    }, { passive: true });
-    
-    // Touch end - hide indicator after delay
-    btn.addEventListener('touchend', function() {
-      setTimeout(hideHoverIndicator, 1000);
-    }, { passive: true });
-  });
-  
-  // Set data-label attributes for touch support
-  if (boldBtn) boldBtn.setAttribute('data-label', 'Tebal (Bold)');
-  if (italicBtn) italicBtn.setAttribute('data-label', 'Miring (Italic)');
-  if (underlineBtn) underlineBtn.setAttribute('data-label', 'Garis Bawah');
-  
-  Object.keys(colorButtons).forEach(btnId => {
-    const btn = document.getElementById(btnId);
-    if (btn) btn.setAttribute('data-label', colorButtons[btnId].label);
-  });
-  
-  Object.keys(sizeButtons).forEach(btnId => {
-    const btn = document.getElementById(btnId);
-    if (btn) btn.setAttribute('data-label', sizeButtons[btnId].label);
-  });
-  
-  // AUTO-SAVE untuk Halaman 2
+  // AUTO-SAVE untuk Halaman 2 (TANPA INDIKATOR)
   let autoSaveTimeout;
   document.querySelectorAll('#page2 .penjelasan-item').forEach(item => {
     item.addEventListener('input', function() {
@@ -573,12 +576,13 @@ document.addEventListener('DOMContentLoaded', function() {
         clearTimeout(autoSaveTimeout);
         autoSaveTimeout = setTimeout(() => {
           saveEditingToStorage();
+          // TIDAK ADA showSaveIndicator() di sini
         }, 2000);
       }
     });
   });
   
-  // AUTO-SAVE untuk Halaman 3
+  // AUTO-SAVE untuk Halaman 3 (TANPA INDIKATOR)
   let catatanSaveTimeout;
   if (catatanContent) {
     catatanContent.addEventListener('input', function() {
@@ -586,6 +590,7 @@ document.addEventListener('DOMContentLoaded', function() {
         clearTimeout(catatanSaveTimeout);
         catatanSaveTimeout = setTimeout(() => {
           saveCatatanToStorage();
+          // TIDAK ADA showSaveIndicator() di sini
         }, 2000);
       }
     });
@@ -595,4 +600,4 @@ document.addEventListener('DOMContentLoaded', function() {
   loadFromStorage();
   gantiHalaman(1);
   
-});
+} // end initTema

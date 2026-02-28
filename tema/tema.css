@@ -11,6 +11,7 @@
   --blue: #4dabf7;
   --yellow: #ffd43b;
   --gray: #b8b8b8;
+  --tooltip-bg: #87ceeb;
 }
 
 * {
@@ -135,31 +136,6 @@ body {
 .save-indicator.show {
   opacity: 1;
   transform: translateY(0);
-}
-
-/* === INDIKATOR HOVER TOOLBAR === */
-.toolbar-hover-indicator {
-  position: fixed;
-  bottom: 80px;
-  left: 20px;
-  background-color: rgba(255, 215, 0, 0.95);
-  color: var(--bg-dark);
-  padding: 10px 18px;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
-  opacity: 0;
-  transform: translateX(-20px);
-  transition: all 0.3s ease;
-  pointer-events: none;
-  z-index: 998;
-  white-space: nowrap;
-}
-
-.toolbar-hover-indicator.show {
-  opacity: 1;
-  transform: translateX(0);
 }
 
 /* === JUDUL TEMA === */
@@ -301,7 +277,7 @@ body {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background-image: none;
+  background-image: none; /* Hilangkan panah default */
 }
 
 .kelompok-dropdown:hover {
@@ -354,9 +330,10 @@ body {
   padding-left: 12px;
 }
 
+/* FIX: Text sejajar kiri seperti halaman 1 */
 .penjelasan-item p {
   margin-bottom: 12px;
-  text-align: left;
+  text-align: left; /* Diubah dari justify ke left */
 }
 
 .penjelasan-item strong {
@@ -370,7 +347,7 @@ body {
 .catatan-wrapper {
   max-width: 1400px;
   margin: 0 auto;
-  padding-bottom: 80px;
+  padding-bottom: 80px; /* Beri ruang untuk toolbar di bawah */
 }
 
 /* Header Catatan dengan Tombol Mode */
@@ -506,8 +483,8 @@ body {
 }
 
 /* ============================
-   TOMBOL FORMAT
-============================ */
+   TOMBOL FORMAT & TOOLTIP
+/* Tombol Format */
 .format-btn {
   background-color: rgba(255, 255, 255, 0.05);
   color: var(--text-light);
@@ -648,13 +625,6 @@ body {
     font-size: 0.85rem;
     padding: 10px 15px;
   }
-
-  .toolbar-hover-indicator {
-    bottom: 70px;
-    left: 15px;
-    font-size: 0.8rem;
-    padding: 8px 15px;
-  }
   
   .content-wrapper {
     flex-direction: column;
@@ -724,5 +694,12 @@ body {
   .color-btn {
     width: 30px;
     height: 30px;
+  }
+
+  /* Tooltip lebih kecil di mobile */
+  .format-btn::before,
+  .color-btn::before {
+    font-size: 0.7rem;
+    padding: 4px 8px;
   }
 }

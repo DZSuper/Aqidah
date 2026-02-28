@@ -1,29 +1,219 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aqidah Salafiyah</title>
+  <title>Ilmu Agama Islam</title>
   <link rel="stylesheet" href="menu.css">
 </head>
 <body>
-  <main>
-    <h1 class="main-title">Aqidah Salafiyah</h1>
-    <section class="card-container">
-      <a href="tema/tauhid.html" class="card">
-        <h2>Tauhid</h2>
-      </a>
-      <a href="tema/bidah.html" class="card">
-        <h2>Bid‘ah</h2> 
-      </a>
-      <a href="tema/sifat.html" class="card">
-        <h2>Sifat Allah</h2>
-      </a>
-    </section>
-  </main>
 
-  <footer>
-    <p>© 2025 Aqidah Salafiyah</p>
-  </footer>
+  <!-- HAMBURGER -->
+  <button class="hamburger-btn" id="hamburgerBtn" aria-label="Buka Menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- OVERLAY -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-logo">☾</span>
+      <span class="sidebar-brand">Ilmu Agama Islam</span>
+      <button class="sidebar-close" id="sidebarClose">✕</button>
+    </div>
+    <ul class="sidebar-menu">
+      <li>
+        <button class="sidebar-item active" id="navMenuUtama">
+          <span class="sidebar-icon">🏠</span>
+          <span>Menu Utama</span>
+        </button>
+      </li>
+      <li>
+        <button class="sidebar-item" id="navPengaturan">
+          <span class="sidebar-icon">⚙️</span>
+          <span>Pengaturan</span>
+        </button>
+      </li>
+      <li>
+        <a class="sidebar-item" href="https://link.dana.id/minta?full_url=https://qr.dana.id/v1/281012012023041108848503" target="_blank" rel="noopener">
+          <span class="sidebar-icon">💝</span>
+          <span>Donasi</span>
+        </a>
+      </li>
+      <li>
+        <button class="sidebar-item" id="navMasukan">
+          <span class="sidebar-icon">✉️</span>
+          <span>Beri Masukan</span>
+        </button>
+      </li>
+      <li>
+        <button class="sidebar-item" id="navTentang">
+          <span class="sidebar-icon">ℹ️</span>
+          <span>Tentang</span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- PANEL PENGATURAN -->
+  <div class="panel" id="panelPengaturan">
+    <div class="panel-header">
+      <button class="panel-back" id="backFromPengaturan">← Kembali</button>
+      <h2 class="panel-title">Pengaturan</h2>
+    </div>
+    <div class="panel-body">
+      <div class="setting-group">
+        <h3 class="setting-label">Tema Tampilan</h3>
+        <div class="setting-options">
+          <button class="theme-btn active" data-theme="dark">
+            <span class="theme-preview dark-preview"></span>
+            <span>Gelap</span>
+          </button>
+          <button class="theme-btn" data-theme="light">
+            <span class="theme-preview light-preview"></span>
+            <span>Terang</span>
+          </button>
+        </div>
+      </div>
+      <div class="setting-group">
+        <h3 class="setting-label">Ukuran Teks</h3>
+        <div class="setting-options">
+          <button class="size-opt-btn" data-size="small">Kecil</button>
+          <button class="size-opt-btn active" data-size="medium">Sedang</button>
+          <button class="size-opt-btn" data-size="large">Besar</button>
+        </div>
+      </div>
+      <div class="setting-group">
+        <h3 class="setting-label">Bahasa <span class="badge-soon">Segera</span></h3>
+        <div class="setting-options">
+          <button class="lang-btn" disabled>🇮🇩 Indonesia</button>
+          <button class="lang-btn" disabled>🇸🇦 العربية</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL BERI MASUKAN -->
+  <div class="panel" id="panelMasukan">
+    <div class="panel-header">
+      <button class="panel-back" id="backFromMasukan">← Kembali</button>
+      <h2 class="panel-title">Beri Masukan</h2>
+    </div>
+    <div class="panel-body">
+      <div class="about-card">
+        <div class="about-logo">✉️</div>
+        <h2 class="about-appname">Beri Masukan</h2>
+        <p class="about-desc">
+          Sampaikan masukan, saran, atau laporan kesalahan kepada pembuat website. Klik tombol di bawah untuk langsung mengirim email.
+        </p>
+        <div class="about-divider"></div>
+        <a class="copy-email-btn" 
+           href="https://mail.google.com/mail/?view=cm&to=danisuryaanugrah12345@gmail.com&subject=Masukan%20untuk%20Website%20Ilmu%20Agama%20Islam" 
+           target="_blank" rel="noopener" style="text-decoration:none; display:inline-block; margin-top:10px;">
+          📧 Kirim Email ke Pembuat
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL TENTANG -->
+  <div class="panel" id="panelTentang">
+    <div class="panel-header">
+      <button class="panel-back" id="backFromTentang">← Kembali</button>
+      <h2 class="panel-title">Tentang</h2>
+    </div>
+    <div class="panel-body">
+      <div class="about-card">
+        <div class="about-logo">☾</div>
+        <h2 class="about-appname">Ilmu Agama Islam</h2>
+        <p class="about-desc">
+          Website ini merupakan platform belajar ilmu agama Islam berbasis Manhaj Salaf,
+          mencakup berbagai disiplin ilmu seperti Aqidah, Fiqih, Bahasa Arab, Siroh, dan lainnya.
+          Dirancang agar mudah diakses, sederhana, dan bermanfaat bagi setiap penuntut ilmu.
+        </p>
+        <div class="about-divider"></div>
+        <div class="about-info">
+          <div class="about-row">
+            <span class="about-key">Pembuat</span>
+            <span class="about-val">Dani Surya Anugrah</span>
+          </div>
+          <div class="about-row">
+            <span class="about-key">Tanggal Dibuat</span>
+            <span class="about-val">2025</span>
+          </div>
+          <div class="about-row">
+            <span class="about-key">Versi</span>
+            <span class="about-val">1.0.0</span>
+          </div>
+          <div class="about-row">
+            <span class="about-key">WhatsApp</span>
+            <span class="about-val">0895-0722-6233</span>
+          </div>
+            <a class="copy-email-btn" href="https://wa.me/6289507226233" target="_blank" rel="noopener" style="margin-top:20px; display:inline-block; text-decoration:none;">
+              💬 Chat WhatsApp
+            </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KONTEN UTAMA -->
+  <div class="main-view" id="mainView">
+    <main id="mainContent">
+      <h1 class="main-title" id="judulWebsite">Ilmu Agama Islam</h1>
+      <!-- Konten dimuat dari konten/index.json -->
+    </main>
+    <footer>
+      <p>© 2025 Ilmu Agama Islam · Dani Surya Anugrah</p>
+    </footer>
+  </div>
+
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script src="script/main.js"></script>
+  <script>
+    // Load konten dari JSON
+    fetch('konten/index.json')
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        var main = document.getElementById('mainContent');
+        var judul = document.getElementById('judulWebsite');
+        if (data.judul_website) judul.textContent = data.judul_website;
+
+        var html = '';
+        data.mapel.forEach(function(mapel, i){
+          if (i > 0) html += '<div class="mapel-divider"></div>';
+          html += '<section class="mapel-section">';
+          html += '<h2 class="mapel-title">' + mapel.judul + '</h2>';
+          html += '<div class="card-container">';
+          mapel.kartu.forEach(function(kartu){
+            html += '<a href="' + kartu.link + '" class="card"><h3>' + kartu.nama + '</h3></a>';
+          });
+          html += '</div></section>';
+        });
+
+        // Sisipkan setelah h1
+        judul.insertAdjacentHTML('afterend', html);
+      })
+      .catch(function(){
+        // Fallback jika fetch gagal (misal buka dari file lokal)
+        var main = document.getElementById('mainContent');
+        main.innerHTML += '<p style="text-align:center;color:var(--text-muted);margin-top:40px;">Buka website melalui server untuk memuat konten.</p>';
+      });
+
+    // Netlify Identity redirect
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on('init', function(user) {
+        if (!user) {
+          window.netlifyIdentity.on('login', function() {
+            document.location.href = '/admin/';
+          });
+        }
+      });
+    }
+  </script>
 </body>
 </html>
