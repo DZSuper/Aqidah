@@ -1,8 +1,6 @@
 backend:
-  name: github
+  name: git-gateway
   repo: DZSuper/Aqidah
-  branch: main
-  auth_scope: repo
 
 media_folder: "assets/img"
 public_folder: "/assets/img"
