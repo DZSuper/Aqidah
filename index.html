@@ -163,45 +163,57 @@
 
   <!-- KONTEN UTAMA -->
   <div class="main-view" id="mainView">
-    <main>
-      <h1 class="main-title">Ilmu Agama Islam</h1>
-
-      <section class="mapel-section">
-        <h2 class="mapel-title">Aqidah</h2>
-        <div class="card-container">
-          <a href="tema/tauhid.html" class="card"><h3>Tauhid</h3></a>
-          <a href="tema/bidah.html" class="card"><h3>Bid'ah</h3></a>
-          <a href="tema/sifat.html" class="card"><h3>Sifat Allah</h3></a>
-          <a href="tema/coming.html" class="card"><h3>Iman</h3></a>
-        </div>
-      </section>
-
-      <div class="mapel-divider"></div>
-
-      <section class="mapel-section">
-        <h2 class="mapel-title">Fiqih</h2>
-        <div class="card-container">
-          <a href="tema/coming.html" class="card"><h3>Matan Abu Syuja'</h3></a>
-          <a href="tema/coming.html" class="card"><h3>Umdatul Ahkam</h3></a>
-        </div>
-      </section>
-
-      <div class="mapel-divider"></div>
-
-      <section class="mapel-section">
-        <h2 class="mapel-title">Bahasa Arab</h2>
-        <div class="card-container">
-          <a href="tema/coming.html" class="card"><h3>Nahwu</h3></a>
-          <a href="tema/coming.html" class="card"><h3>Shorof</h3></a>
-        </div>
-      </section>
+    <main id="mainContent">
+      <h1 class="main-title" id="judulWebsite">Ilmu Agama Islam</h1>
+      <!-- Konten dimuat dari konten/index.json -->
     </main>
-
     <footer>
       <p>© 2025 Ilmu Agama Islam · Dani Surya Anugrah</p>
     </footer>
   </div>
 
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <script src="script/main.js"></script>
+  <script>
+    // Load konten dari JSON
+    fetch('konten/index.json')
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        var main = document.getElementById('mainContent');
+        var judul = document.getElementById('judulWebsite');
+        if (data.judul_website) judul.textContent = data.judul_website;
+
+        var html = '';
+        data.mapel.forEach(function(mapel, i){
+          if (i > 0) html += '<div class="mapel-divider"></div>';
+          html += '<section class="mapel-section">';
+          html += '<h2 class="mapel-title">' + mapel.judul + '</h2>';
+          html += '<div class="card-container">';
+          mapel.kartu.forEach(function(kartu){
+            html += '<a href="' + kartu.link + '" class="card"><h3>' + kartu.nama + '</h3></a>';
+          });
+          html += '</div></section>';
+        });
+
+        // Sisipkan setelah h1
+        judul.insertAdjacentHTML('afterend', html);
+      })
+      .catch(function(){
+        // Fallback jika fetch gagal (misal buka dari file lokal)
+        var main = document.getElementById('mainContent');
+        main.innerHTML += '<p style="text-align:center;color:var(--text-muted);margin-top:40px;">Buka website melalui server untuk memuat konten.</p>';
+      });
+
+    // Netlify Identity redirect
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on('init', function(user) {
+        if (!user) {
+          window.netlifyIdentity.on('login', function() {
+            document.location.href = '/admin/';
+          });
+        }
+      });
+    }
+  </script>
 </body>
 </html>

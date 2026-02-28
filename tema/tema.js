@@ -1,5 +1,98 @@
+// =============================================
+// LOADER KONTEN DARI JSON (Decap CMS)
+// =============================================
+(function() {
+  var kontenKey = document.body.getAttribute('data-konten');
+  if (!kontenKey) return; // Halaman tanpa JSON (misal coming.html)
+
+  function renderKelompok(data) {
+    var kelompok = data.kelompok || [];
+
+    // Update judul halaman
+    var temaTitle = document.querySelector('.tema-title');
+    if (temaTitle && data.judul) temaTitle.textContent = data.judul;
+
+    // Update title tag
+    document.title = data.judul + ' | Aqidah Salafiyah';
+
+    // Render kelompok buttons & content untuk page1 dan page2
+    [1, 2].forEach(function(pageNum) {
+      var page = document.getElementById('page' + pageNum);
+      if (!page) return;
+
+      // Render sidebar buttons
+      var btnContainer = page.querySelector('.kelompok-buttons');
+      var dropdown     = page.querySelector('.kelompok-dropdown');
+      var content      = page.querySelector('.penjelasan-content');
+
+      if (!btnContainer || !content) return;
+
+      btnContainer.innerHTML = '';
+      if (dropdown) dropdown.innerHTML = '';
+      content.innerHTML = '';
+
+      kelompok.forEach(function(k, i) {
+        // Button
+        var btn = document.createElement('button');
+        btn.className = 'kelompok-btn' + (i === 0 ? ' active' : '');
+        btn.setAttribute('data-kelompok', k.id);
+        btn.setAttribute('data-page', pageNum);
+        btn.textContent = k.nama;
+        btnContainer.appendChild(btn);
+
+        // Dropdown option
+        if (dropdown) {
+          var opt = document.createElement('option');
+          opt.value = k.id;
+          opt.textContent = k.nama;
+          dropdown.appendChild(opt);
+        }
+
+        // Konten (markdown → HTML via marked.js)
+        var div = document.createElement('div');
+        div.className = 'penjelasan-item' + (i === 0 ? ' active' : '');
+        div.setAttribute('data-kelompok', k.id);
+
+        var html = '';
+        html += '<h3>' + k.nama + '</h3>';
+        if (window.marked) {
+          html += marked.parse(k.konten || '');
+        } else {
+          // Fallback tanpa marked: tampilkan sebagai paragraf biasa
+          html += '<p>' + (k.konten || '').replace(/\n/g, '</p><p>') + '</p>';
+        }
+        div.innerHTML = html;
+        content.appendChild(div);
+      });
+    });
+  }
+
+  // Fetch JSON konten
+  fetch('../konten/' + kontenKey + '.json')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      renderKelompok(data);
+      // Dispatch event supaya tema.js tahu konten sudah siap
+      document.dispatchEvent(new Event('kontenLoaded'));
+    })
+    .catch(function(e) {
+      console.warn('[tema.js] Gagal memuat JSON konten:', e);
+      document.dispatchEvent(new Event('kontenLoaded'));
+    });
+})();
+
 // Interaktivitas untuk halaman tema dengan toolbar formatting dan semua fix
 document.addEventListener('DOMContentLoaded', function() {
+  var kontenKey = document.body.getAttribute('data-konten');
+  if (kontenKey) {
+    // Tunggu konten JSON selesai di-render baru init
+    document.addEventListener('kontenLoaded', initTema);
+  } else {
+    initTema();
+  }
+});
+
+function initTema() {
   
   // ===================================
   // AMBIL ELEMEN-ELEMEN
@@ -507,4 +600,4 @@ document.addEventListener('DOMContentLoaded', function() {
   loadFromStorage();
   gantiHalaman(1);
   
-});
+} // end initTema
