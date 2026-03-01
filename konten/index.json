@@ -4,24 +4,61 @@
     {
       "judul": "Aqidah",
       "kartu": [
-        { "nama": "Tauhid",      "link": "tema/tauhid.html" },
-        { "nama": "Bid'ah",      "link": "tema/bidah.html" },
-        { "nama": "Sifat Allah", "link": "tema/sifat.html" },
-        { "nama": "Iman",        "link": "tema/coming.html" }
+        {
+          "nama": "Tauhid",
+          "link": "tema/tauhid.html"
+        },
+        {
+          "nama": "Bid'ah",
+          "link": "tema/bidah.html"
+        },
+        {
+          "nama": "Sifat Allah",
+          "link": "tema/sifat.html"
+        },
+        {
+          "nama": "Iman",
+          "link": "tema/coming.html"
+        }
       ]
     },
     {
       "judul": "Fiqih",
       "kartu": [
-        { "nama": "Matan Abu Syuja'", "link": "tema/coming.html" },
-        { "nama": "Umdatul Ahkam",    "link": "tema/coming.html" }
+        {
+          "nama": "Matan Abu Syuja'",
+          "link": "tema/coming.html"
+        },
+        {
+          "nama": "Umdatul Ahkam",
+          "link": "tema/coming.html"
+        }
       ]
     },
     {
-      "judul": "Bahasa Arab",
+      "judul": "Nahwu",
       "kartu": [
-        { "nama": "Nahwu",  "link": "tema/coming.html" },
-        { "nama": "Shorof", "link": "tema/coming.html" }
+        {
+          "nama": "Matan Jurumiyah",
+          "link": "tema/coming.html"
+        },
+        {
+          "nama": "Mutammimah",
+          "link": "tema/coming.html"
+        }
+      ]
+    },
+    {
+      "judul": "Shorof",
+      "kartu": [
+        {
+          "nama": "Kaedah-kaedah Tashrif",
+          "link": "tema/coming.html"
+        },
+        {
+          "nama": "Wazan-wazan Shorf",
+          "link": "tema/coming.html"
+        }
       ]
     }
   ]
