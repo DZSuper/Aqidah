@@ -73,6 +73,31 @@
           "link": "tema/coming.html"
         }
       ]
+    },
+    {
+      "judul": "Template",
+      "kartu": [
+        {
+          "nama": "tema 1",
+          "link": "template/template1.html"
+        },
+        {
+          "nama": "tema 2",
+          "link": "template/template2.html"
+        },
+        {
+          "nama": "tema 3",
+          "link": "template/template3.html"
+        },
+        {
+          "nama": "tema 4",
+          "link": "template/template4.html"
+        },
+        {
+          "nama": "tema 5",
+          "link": "template/template5.html"
+        }
+      ]
     }
   ]
 }
