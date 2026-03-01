@@ -1,0 +1,30 @@
+{
+  "judul": "Matan Jurumiyah",
+  "kelompok": [
+    {
+      "id": "pengenalan",
+      "nama": "Pengenalan Kitab",
+      "konten": "**Al-Ajurrumiyah** (المقدمة الآجرومية) adalah kitab nahwu paling populer untuk pemula, ditulis oleh **Muhammad bin Muhammad bin Dawud Ash-Shanhaji** yang dikenal dengan **Ibnu Ajurrum** (wafat 723 H).\n\nNama *Ajurrum* berasal dari bahasa Berber yang berarti *fakir yang sufi*.\n\n**Keistimewaan kitab ini:**\n\n- Paling ringkas dan sistematis untuk pemula\n- Hanya ~4 halaman teks aslinya, namun mencakup pondasi nahwu\n- Dihafal oleh jutaan pelajar ilmu di seluruh dunia\n- Banyak syarahnya: Tuhfatus Saniyah, Syarah Ibnu 'Utsaimin, dll\n\n**Mengapa nahwu penting?**\n\nNahwu adalah ilmu yang mempelajari **perubahan harakat akhir kata Arab** (i'rab) akibat pengaruh 'amil yang masuk padanya. Tanpa nahwu, seseorang tidak bisa membaca Al-Qur'an dan kitab kuning dengan benar."
+    },
+    {
+      "id": "kalam",
+      "nama": "Kalam & Pembagian Kata",
+      "konten": "**KALAM (الكلام)**\n\nKalam adalah lafazh yang tersusun, bermakna, dan dengan sengaja diucapkan.\n\nSyarat kalam ada 4:\n1. Lafazh (suara yang mengandung huruf)\n2. Murakkab (tersusun minimal 2 kata)\n3. Mufid (bermakna/memberikan faedah)\n4. Wadh'i (disengaja/bukan tidak sengaja)\n\n---\n\n**PEMBAGIAN KATA (الكلم)**\n\nKata dalam bahasa Arab terbagi 3:\n\n**1. Isim (اسم) — Kata Benda**\n\nKata yang menunjukkan makna pada dirinya sendiri dan tidak terikat waktu.\n\nTanda-tanda isim:\n- Bisa dimasuki AL (ال): الكتاب\n- Bisa bertanwin: كتابٌ\n- Bisa dimasuki huruf jarr: في المدرسة\n- Bisa menjadi mudhaf: كتابُ الطالب\n\n**2. Fi'il (فعل) — Kata Kerja**\n\nKata yang menunjukkan makna pada dirinya sendiri dan terikat dengan salah satu waktu.\n\nPembagian: Fi'il Madhi (كَتَبَ), Fi'il Mudhari' (يَكْتُبُ), Fi'il Amr (اُكْتُبْ)\n\n**3. Harf (حرف) — Kata Tugas/Partikel**\n\nKata yang maknanya baru tampak ketika bersambung dengan kata lain.\n\nContoh: في (di dalam), من (dari), إلى (ke), لَمْ (tidak)"
+    },
+    {
+      "id": "irab",
+      "nama": "I'rab",
+      "konten": "**I'RAB (الإعراب)**\n\nI'rab adalah perubahan harakat akhir kata karena pengaruh 'amil (faktor) yang berbeda-beda.\n\n**4 Macam I'rab:**\n\n**1. Rafa' (الرفع)** — tanda asli: Dhammah (ُ)\n- Posisi: mubtada', khabar, fa'il, na'ibul fa'il\n- Contoh: جاءَ **الطالبُ** (siswa itu datang)\n\n**2. Nashab (النصب)** — tanda asli: Fathah (َ)\n- Posisi: maf'ul bih, hal, tamyiz\n- Contoh: رَأيتُ **الطالبَ** (aku melihat siswa itu)\n\n**3. Jarr (الجر)** — tanda asli: Kasrah (ِ)\n- Posisi: setelah huruf jarr atau mudhaf ilaih\n- Contoh: مَرَرتُ بـ**الطالبِ** (aku melewati siswa itu)\n\n**4. Jazm (الجزم)** — tanda asli: Sukun (ْ)\n- Khusus untuk fi'il mudhari'\n- Contoh: **لَمْ يَذهَبْ** (ia tidak pergi)\n\n---\n\n**Kata yang mabni (tidak berubah):**\n\nTidak semua kata mengalami i'rab. Kata yang **mabni** harakat akhirnya tidak berubah, seperti: dhamir (هو، هي، أنت), isim isyarah (هذا، هذه), dan semua harf."
+    },
+    {
+      "id": "marfuat",
+      "nama": "Marfu'atul Asma'",
+      "konten": "**MARFU'ATUL ASMA' (المرفوعات)**\n\nIsim yang dibaca rafa' ada 7:\n\n**1. Fa'il (الفاعل)**\nIsim yang melakukan pekerjaan. Selalu setelah fi'il.\nContoh: ضَرَبَ **زيدٌ** — Zaid memukul\n\n**2. Na'ibul Fa'il (نائب الفاعل)**\nIsim yang menggantikan fa'il setelah fi'il diubah ke majhul.\nContoh: ضُرِبَ **زيدٌ** — Zaid dipukul\n\n**3. Mubtada' (المبتدأ)**\nPokok kalimat nominal (jumlah ismiyah).\nContoh: **زيدٌ** قائمٌ — Zaid berdiri\n\n**4. Khabar (الخبر)**\nPenjelas mubtada'.\nContoh: زيدٌ **قائمٌ** — Zaid **berdiri**\n\n**5. Isim Kana (اسم كان)**\nContoh: كانَ **زيدٌ** قائماً\n\n**6. Khabar Inna (خبر إنّ)**\nContoh: إنَّ زيداً **قائمٌ**\n\n**7. Tabi' Marfu' (التابع للمرفوع)**\nNa'at, 'athaf, taukid, badal yang mengikuti kata marfu'."
+    },
+    {
+      "id": "mansubat",
+      "nama": "Manshubat & Majrurat",
+      "konten": "**MANSHUBATUL ASMA' (المنصوبات)**\n\nIsim yang dibaca nashab ada 15, yang utama:\n\n- **Maf'ul bih** — objek langsung: ضَرَبتُ **زيداً**\n- **Maf'ul muthlaq** — mashdar penegasan: ضَرَبتُ **ضَرباً**\n- **Maf'ul fih** — keterangan waktu/tempat: جِئتُ **يومَ الجمعةِ**\n- **Maf'ul li ajlih** — keterangan sebab: قُمتُ **إجلالاً** لك\n- **Maf'ul ma'ah** — bersama: جئتُ **والنيلَ**\n- **Hal** — keadaan pelaku/objek: جاءَ زيدٌ **راكباً**\n- **Tamyiz** — penjelasan dari kesamaran: اشتريتُ عِشرينَ **كتاباً**\n- **Mustatsna** — pengecualian: قامَ القومُ **إلا زيداً**\n- **Isim Inna** — إنَّ **زيداً** قائمٌ\n- **Khabar Kana** — كانَ زيدٌ **قائماً**\n\n---\n\n**MAJRURATUL ASMA' (المجرورات)**\n\nIsim dibaca jarr karena 2 sebab:\n\n1. **Huruf Jarr:** من، إلى، عن، على، في، رُبَّ، الباء، الكاف، اللام\n\nContoh: ذهبتُ **إلى المدرسةِ**\n\n2. **Idhafah:** isim yang disandarkan kepada isim lain\n\nContoh: كتابُ **الطالبِ** — buku milik siswa"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "judul": "Kaedah-kaedah Tashrif",
+  "kelompok": [
+    {
+      "id": "pengenalan",
+      "nama": "Pengenalan Ilmu Shorof",
+      "konten": "**Ilmu Shorof** (الصرف) adalah ilmu yang membahas **perubahan bentuk kata** Arab dari satu bentuk ke bentuk lainnya untuk mendapatkan makna yang berbeda.\n\nJika Nahwu membahas **harakat akhir kata** (i'rab), maka Shorof membahas **perubahan struktur/bentuk kata** itu sendiri.\n\n**Hubungan Nahwu dan Shorof:**\n\n- Nahwu = bapaknya ilmu (Al-Ab)\n- Shorof = ibunya ilmu (Al-Umm)\n\nKeduanya tidak bisa dipisahkan dalam memahami bahasa Arab.\n\n**Tashrif** adalah proses mengubah satu kata ke berbagai bentuknya. Ada dua jenis:\n\n1. **Tashrif Lughawi** — perubahan kata kerja mengikuti dhamir (pelaku)\n2. **Tashrif Ishthilahi** — perubahan kata ke berbagai wazan (timbangan) untuk makna yang berbeda\n\n**Contoh sederhana tashrif ishthilahi dari kata كَتَبَ:**\n\nكَتَبَ (menulis) → كِتَابٌ (tulisan/kitab) → كَاتِبٌ (penulis) → مَكْتُوبٌ (yang ditulis) → مَكْتَبٌ (tempat menulis/kantor)"
+    },
+    {
+      "id": "wazan-dasar",
+      "nama": "Wazan Dasar Fi'il Tsulatsi",
+      "konten": "**FI'IL TSULATSI MUJARRAD** adalah fi'il yang terdiri dari **3 huruf asal** tanpa tambahan.\n\nWazan dasarnya: **فَعَلَ — يَفْعُلُ** (bab 1 hingga 6)\n\n**6 Bab Fi'il Tsulatsi Mujarrad:**\n\n| Bab | Madhi | Mudhari' | Contoh |\n|---|---|---|---|\n| 1 | فَعَلَ | يَفْعُلُ | نَصَرَ — يَنْصُرُ (menolong) |\n| 2 | فَعَلَ | يَفْعِلُ | ضَرَبَ — يَضْرِبُ (memukul) |\n| 3 | فَعَلَ | يَفْعَلُ | فَتَحَ — يَفْتَحُ (membuka) |\n| 4 | فَعِلَ | يَفْعَلُ | عَلِمَ — يَعْلَمُ (mengetahui) |\n| 5 | فَعُلَ | يَفْعُلُ | كَرُمَ — يَكْرُمُ (mulia) |\n| 6 | فَعِلَ | يَفْعِلُ | حَسِبَ — يَحْسِبُ (menyangka) |\n\n**Cara menentukan bab suatu fi'il:**\n\nLihat harakat 'ain fi'il (huruf tengah) pada fi'il madhi dan mudhari':\n- Madhi fathah, mudhari' dhammah → bab 1\n- Madhi fathah, mudhari' kasrah → bab 2\n- Madhi fathah, mudhari' fathah → bab 3\n- Madhi kasrah, mudhari' fathah → bab 4\n- Madhi dhammah, mudhari' dhammah → bab 5\n- Madhi kasrah, mudhari' kasrah → bab 6"
+    },
+    {
+      "id": "mazid",
+      "nama": "Fi'il Tsulatsi Mazid",
+      "konten": "**FI'IL TSULATSI MAZID** adalah fi'il 3 huruf asal yang ditambah 1, 2, atau 3 huruf tambahan untuk mengubah makna.\n\n**Mazid 1 huruf (3 wazan):**\n\n**1. فَعَّلَ** (tasydid 'ain)\n- Makna: muta'addi (transitif), mubalaghah (berlebihan)\n- Contoh: عَلَّمَ (mengajarkan), كَسَّرَ (menghancurkan)\n\n**2. فَاعَلَ** (tambah alif)\n- Makna: musyarakah (saling/bersama)\n- Contoh: ضَارَبَ (saling memukul), قَاتَلَ (memerangi)\n\n**3. أَفْعَلَ** (tambah hamzah di awal)\n- Makna: muta'addi, menjadikan\n- Contoh: أَكْرَمَ (memuliakan), أَخْرَجَ (mengeluarkan)\n\n---\n\n**Mazid 2 huruf (5 wazan):**\n\n- **تَفَعَّلَ** — مُطَاوَعَة dari فعّل: تَعَلَّمَ (belajar)\n- **تَفَاعَلَ** — مُطَاوَعَة dari فاعل: تَقَاتَلَ (saling berperang)\n- **اِنْفَعَلَ** — مُطَاوَعَة dari أفعل: اِنْكَسَرَ (pecah/terpecah)\n- **اِفْتَعَلَ** — makna beragam: اِجْتَمَعَ (berkumpul)\n- **اِفْعَلَّ** — untuk warna/cacat: اِحْمَرَّ (memerah)"
+    },
+    {
+      "id": "masdar",
+      "nama": "Masdar & Isim-isim Turunan",
+      "konten": "**MASDAR (المصدر)**\n\nMasdar adalah kata benda yang menunjukkan pekerjaan tanpa terikat waktu — akar dari semua turunan kata.\n\nContoh: كِتَابَة (kegiatan menulis), ضَرْب (pemukulan), عِلْم (pengetahuan)\n\n---\n\n**ISIM FA'IL (اسم الفاعل) — Kata Pelaku**\n\nBentuk: **فَاعِل** untuk tsulatsi mujarrad\n\nContoh: كَاتِب (penulis), عَالِم (ulama/orang berilmu), قَارِئ (pembaca)\n\n---\n\n**ISIM MAF'UL (اسم المفعول) — Kata yang Dikenai**\n\nBentuk: **مَفْعُول** untuk tsulatsi mujarrad\n\nContoh: مَكْتُوب (yang ditulis), مَعْلُوم (yang diketahui), مَقْرُوء (yang dibaca)\n\n---\n\n**ISIM ZAMAN & MAKAN (اسم الزمان والمكان) — Waktu & Tempat**\n\nBentuk: **مَفْعَل / مَفْعِل**\n\nContoh: مَسْجِد (masjid/tempat sujud), مَكْتَب (kantor/tempat menulis), مَطْلَع (tempat terbit)\n\n---\n\n**ISIM ALAT (اسم الآلة) — Alat**\n\nBentuk: **مِفْعَل / مِفْعَلَة / مِفْعَال**\n\nContoh: مِفْتَاح (kunci/alat membuka), مِقْلَم (tempat pena), مِنْشَار (gergaji)"
+    },
+    {
+      "id": "mutal",
+      "nama": "Fi'il Mu'tal",
+      "konten": "**FI'IL MU'TAL (الفعل المعتل)**\n\nFi'il mu'tal adalah fi'il yang salah satu huruf asalnya berupa huruf illat (و، ي، أ).\n\n**Pembagian Fi'il Mu'tal:**\n\n**1. Mitsal (المثال)**\nHuruf illat ada di fa' fi'il (huruf pertama).\nContoh: وَعَدَ — يَعِدُ (berjanji), وَجَدَ — يَجِدُ (menemukan)\n\n*Perubahan: wawu dibuang pada fi'il mudhari' bab ke-2*\n\n**2. Ajwaf (الأجوف)**\nHuruf illat ada di 'ain fi'il (huruf tengah).\nContoh: قَالَ — يَقُولُ (berkata), بَاعَ — يَبِيعُ (menjual)\n\n*Perubahan: 'ain fi'il berubah jadi mad atau dibuang saat jazm/amr*\n\n**3. Naqish (الناقص)**\nHuruf illat ada di lam fi'il (huruf terakhir).\nContoh: دَعَا — يَدْعُو (memanggil/berdoa), رَمَى — يَرْمِي (melempar)\n\n*Perubahan: huruf illat terakhir sering dibuang*\n\n**4. Lafif (اللفيف)**\nMengandung 2 huruf illat:\n- Lafif Mafruq: di fa' dan lam. Contoh: وَقَى — يَقِي\n- Lafif Maqrun: di 'ain dan lam. Contoh: طَوَى — يَطْوِي"
+    }
+  ]
+}

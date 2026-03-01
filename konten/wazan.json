@@ -1,0 +1,30 @@
+{
+  "judul": "Wazan-wazan Shorf",
+  "kelompok": [
+    {
+      "id": "pengenalan",
+      "nama": "Pengenalan Wazan",
+      "konten": "**Wazan (الوزن)** adalah timbangan/pola kata Arab yang digunakan untuk menentukan bentuk dan makna sebuah kata.\n\nWazan menggunakan huruf **ف — ع — ل** sebagai simbol:\n- **ف** (fa') mewakili huruf pertama kata\n- **ع** ('ain) mewakili huruf kedua\n- **ل** (lam) mewakili huruf ketiga\n\n**Contoh:**\n- كَتَبَ mengikuti wazan فَعَلَ\n- كَاتِب mengikuti wazan فَاعِل\n- مَكْتُوب mengikuti wazan مَفْعُول\n\n**Kegunaan menguasai wazan:**\n\n1. Mengetahui akar kata (asal fi'il) suatu kata\n2. Memahami makna kata tanpa kamus jika kenal wazannya\n3. Membentuk kata-kata turunan (isim fa'il, isim maf'ul, masdar, dll)\n4. Membaca kitab kuning dengan benar\n\n**Jumlah wazan:**\n\nWazan fi'il tsulatsi mujarrad ada 6. Wazan tsulatsi mazid ada sekitar 14. Wazan ruba'i (4 huruf) ada tambahan lagi."
+    },
+    {
+      "id": "wazan-mujarrad",
+      "nama": "Wazan Fi'il Mujarrad",
+      "konten": "**WAZAN TSULATSI MUJARRAD (3 huruf tanpa tambahan)**\n\n| No | Madhi | Mudhari' | Masdar | Contoh |\n|---|---|---|---|---|\n| 1 | فَعَلَ | يَفْعُلُ | فَعْل | نَصَرَ — يَنْصُرُ — نَصْرٌ |\n| 2 | فَعَلَ | يَفْعِلُ | فَعْل | ضَرَبَ — يَضْرِبُ — ضَرْبٌ |\n| 3 | فَعَلَ | يَفْعَلُ | فَعْل | فَتَحَ — يَفْتَحُ — فَتْحٌ |\n| 4 | فَعِلَ | يَفْعَلُ | فَعَل | عَلِمَ — يَعْلَمُ — عِلْمٌ |\n| 5 | فَعُلَ | يَفْعُلُ | فُعُوْلَة | كَرُمَ — يَكْرُمُ — كَرَامَةٌ |\n| 6 | فَعِلَ | يَفْعِلُ | فَعِل | حَسِبَ — يَحْسِبُ — حِسْبَانٌ |\n\n**WAZAN RUBA'I MUJARRAD (4 huruf tanpa tambahan)**\n\nHanya 1 wazan: **فَعْلَلَ — يُفَعْلِلُ — فَعْلَلَةً**\n\nContoh: دَحْرَجَ — يُدَحْرِجُ — دَحْرَجَةً (menggelindingkan)\n\n**Catatan penting:**\n\nMasdar fi'il tsulatsi mujarrad bersifat **sima'i** (harus didengar/dihafal), tidak ada kaidah pasti. Berbeda dengan mazid yang masdamya qiyasi (bisa ditentukan dengan kaidah)."
+    },
+    {
+      "id": "wazan-mazid",
+      "nama": "Wazan Fi'il Mazid",
+      "konten": "**WAZAN TSULATSI MAZID SATU HURUF**\n\n| Wazan Madhi | Wazan Mudhari' | Masdar | Contoh |\n|---|---|---|---|\n| فَعَّلَ | يُفَعِّلُ | تَفْعِيل | عَلَّمَ — يُعَلِّمُ — تَعْلِيمٌ |\n| فَاعَلَ | يُفَاعِلُ | مُفَاعَلَة | قَاتَلَ — يُقَاتِلُ — مُقَاتَلَةٌ |\n| أَفْعَلَ | يُفْعِلُ | إِفْعَال | أَكْرَمَ — يُكْرِمُ — إِكْرَامٌ |\n\n**WAZAN TSULATSI MAZID DUA HURUF**\n\n| Wazan | Masdar | Contoh |\n|---|---|---|\n| تَفَعَّلَ | تَفَعُّل | تَعَلَّمَ — تَعَلُّمٌ (belajar) |\n| تَفَاعَلَ | تَفَاعُل | تَقَاتَلَ — تَقَاتُلٌ (saling berperang) |\n| اِنْفَعَلَ | اِنْفِعَال | اِنْكَسَرَ — اِنْكِسَارٌ (pecah) |\n| اِفْتَعَلَ | اِفْتِعَال | اِجْتَمَعَ — اِجْتِمَاعٌ (berkumpul) |\n| اِفْعَلَّ | اِفْعِلَال | اِحْمَرَّ — اِحْمِرَارٌ (memerah) |\n\n**WAZAN TSULATSI MAZID TIGA HURUF**\n\n| Wazan | Masdar | Contoh |\n|---|---|---|\n| اِسْتَفْعَلَ | اِسْتِفْعَال | اِسْتَغْفَرَ — اِسْتِغْفَارٌ (meminta ampun) |\n| اِفْعَوْعَلَ | اِفْعِيعَال | اِخْشَوْشَنَ (menjadi kasar) |\n| اِفْعَالَّ | اِفْعِيلَال | اِحْمَارَّ (sangat memerah) |"
+    },
+    {
+      "id": "isim-turunan",
+      "nama": "Wazan Isim-isim Turunan",
+      "konten": "**WAZAN MASDAR (المصدر)**\n\nMasdar mazid bersifat qiyasi (mengikuti kaidah):\n\n- فَعَّلَ → تَفْعِيل: تَعْلِيم، تَكْرِيم\n- أَفْعَلَ → إِفْعَال: إِكْرَام، إِخْرَاج\n- تَفَعَّلَ → تَفَعُّل: تَعَلُّم، تَكَبُّر\n- اِنْفَعَلَ → اِنْفِعَال: اِنْكِسَار، اِنْفِتَاح\n- اِفْتَعَلَ → اِفْتِعَال: اِجْتِمَاع، اِكْتِسَاب\n- اِسْتَفْعَلَ → اِسْتِفْعَال: اِسْتِغْفَار، اِسْتِعْمَار\n\n---\n\n**WAZAN ISIM FA'IL (اسم الفاعل)**\n\n- Tsulatsi: فَاعِل — كَاتِب، عَالِم، ضَارِب\n- Mazid: مُفَعِّل، مُفَاعِل، مُفْعِل، مُتَفَعِّل...\n- Contoh: مُعَلِّم (pengajar)، مُجَاهِد (pejuang)، مُخْرِج (sutradara)\n\n---\n\n**WAZAN ISIM MAF'UL (اسم المفعول)**\n\n- Tsulatsi: مَفْعُول — مَكْتُوب، مَعْلُوم، مَضْرُوب\n- Mazid: مُفَعَّل، مُفَاعَل، مُفْعَل، مُتَفَعَّل...\n- Contoh: مُعَلَّم (yang diajarkan)، مُجَاهَد (yang diperangi)\n\n---\n\n**WAZAN SIFAT MUSYABBAHAH (الصفة المشبهة)**\n\nUntuk sifat tetap/bawaan, bukan pekerjaan:\n\n- فَعِيل: كَرِيم (dermawan)، جَمِيل (indah)، عَظِيم (agung)\n- فَعُول: صَبُور (sabar)، شَكُور (bersyukur)\n- فَعْلَان: عَطْشَان (haus)، جَوْعَان (lapar)\n- أَفْعَل: أَحْمَر (merah)، أَكْبَر (lebih besar)"
+    },
+    {
+      "id": "latihan",
+      "nama": "Cara Mentashrif",
+      "konten": "**CARA MENTASHRIF ISHTHILAHI**\n\nBerikut contoh tashrif lengkap dari kata **كَتَبَ** (menulis) — bab 2:\n\n| Bentuk | Kata | Arti |\n|---|---|---|\n| Fi'il Madhi | كَتَبَ | telah menulis |\n| Fi'il Mudhari' | يَكْتُبُ | sedang/akan menulis |\n| Masdar | كِتَابَةً | kegiatan menulis |\n| Isim Fa'il | كَاتِبٌ | penulis |\n| Isim Maf'ul | مَكْتُوبٌ | yang ditulis/surat |\n| Fi'il Amr | اُكْتُبْ | tulislah! |\n| Fi'il Nahi | لَا تَكْتُبْ | jangan menulis! |\n| Isim Zaman/Makan | مَكْتَبٌ | kantor/waktu menulis |\n| Isim Alat | مِكْتَبٌ | alat tulis |\n\n---\n\n**CARA MENTASHRIF LUGHAWI**\n\nMentashrif fi'il mengikuti semua dhamir:\n\nكَتَبَ — كَتَبَا — كَتَبُوا — كَتَبَتْ — كَتَبَتَا — كَتَبْنَ — كَتَبْتَ — كَتَبْتُمَا — كَتَبْتُمْ — كَتَبْتِ — كَتَبْتُمَا — كَتَبْتُنَّ — كَتَبْتُ — كَتَبْنَا\n\n**Tips menguasai tashrif:**\n\n1. Hafal 6 bab fi'il tsulatsi mujarrad\n2. Hafal wazan-wazan mazid beserta maknanya\n3. Latihan mentashrif setiap hari minimal 1 fi'il\n4. Gunakan kamus Arab untuk mengecek wazan kata yang ditemui"
+    }
+  ]
+}

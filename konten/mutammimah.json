@@ -1,0 +1,30 @@
+{
+  "judul": "Mutammimah",
+  "kelompok": [
+    {
+      "id": "pengenalan",
+      "nama": "Pengenalan Kitab",
+      "konten": "**Mutammimah Al-Ajurrumiyah** (المتممة الآجرومية) adalah kitab nahwu tingkat menengah yang ditulis oleh **Muhammad bin Muhammad bin Ahmad Al-Ra'ini Asy-Syinqithi** yang dikenal dengan **Al-Khatthab** (wafat 954 H).\n\nKitab ini merupakan **kelanjutan dan penyempurna** dari Matan Jurumiyah — membahas topik-topik yang tidak dibahas atau tidak dituntaskan dalam Jurumiyah.\n\n**Posisi dalam kurikulum nahwu:**\n\n1. **Jurumiyah** — tingkat pemula\n2. **Mutammimah** — tingkat menengah\n3. **Alfiyah Ibnu Malik** — tingkat mahir\n\n**Topik-topik tambahan dalam Mutammimah:**\n\n- Pembahasan lebih detail tentang isim-isim yang mabni\n- Isim-isim yang mu'rab dengan huruf (bukan harakat)\n- Asmaul Khamsah (5 isim khusus)\n- Af'alul Khamsah\n- Pembahasan nun taukid\n- Dan topik nahwu lainnya yang belum dibahas Jurumiyah"
+    },
+    {
+      "id": "asmaul-khamsah",
+      "nama": "Asmaul Khamsah",
+      "konten": "**ASMAUL KHAMSAH (الأسماء الخمسة)**\n\nAsmaul Khamsah adalah 5 isim yang mu'rabnya menggunakan **huruf** bukan harakat:\n\n1. **أبو** (ayah dari...)\n2. **أخو** (saudara dari...)\n3. **حَمو** (mertua/ipar dari...)\n4. **فو** (mulut — dalam keadaan tertentu)\n5. **ذو** (yang memiliki...)\n\n**Tanda i'rabnya:**\n\n| I'rab | Tanda | Contoh |\n|---|---|---|\n| Rafa' | Wawu (و) | جاءَ **أبوكَ** |\n| Nashab | Alif (ا) | رأيتُ **أباكَ** |\n| Jarr | Ya' (ي) | مررتُ بـ**أبيكَ** |\n\n**Syarat berlakunya i'rab dengan huruf:**\n\n1. Harus mudhaf (disandarkan kepada kata lain)\n2. Mudhaf ilaihnya bukan ya' mutakallim\n3. Tidak dalam kondisi tatsniyah (dua)\n\n**Contoh kalimat:**\n\n- **أبوكَ** عالمٌ — Ayahmu adalah seorang ulama (rafa')\n- رأيتُ **أخاكَ** — Aku melihat saudaramu (nashab)\n- ذهبتُ مع **ذي** علمٍ — Aku pergi bersama orang berilmu (jarr)"
+    },
+    {
+      "id": "afal-khamsah",
+      "nama": "Af'alul Khamsah",
+      "konten": "**AF'ALUL KHAMSAH (الأفعال الخمسة)**\n\nAf'alul Khamsah adalah 5 bentuk fi'il mudhari' yang i'rabnya menggunakan **nun** bukan harakat.\n\n**5 Bentuk tersebut:**\n\n1. **تفعلانِ** — kamu berdua (lk) melakukan\n2. **يفعلانِ** — mereka berdua (lk) melakukan\n3. **تفعلونَ** — kalian (lk) melakukan\n4. **يفعلونَ** — mereka (lk) melakukan\n5. **تفعلينَ** — kamu (pr) melakukan\n\n**Tanda i'rabnya:**\n\n| I'rab | Tanda | Contoh |\n|---|---|---|\n| Rafa' | Nun tetap (ن) | هم **يكتبونَ** |\n| Nashab | Nun dibuang | لن **يكتبوا** |\n| Jazm | Nun dibuang | لم **يكتبوا** |\n\n**Contoh dalam kalimat:**\n\n- هم **يذهبونَ** إلى المسجدِ — Mereka pergi ke masjid (rafa')\n- لن **يذهبوا** إلى المسجدِ — Mereka tidak akan pergi ke masjid (nashab)\n- لم **يذهبوا** إلى المسجدِ — Mereka tidak pergi ke masjid (jazm)"
+    },
+    {
+      "id": "mabni",
+      "nama": "Isim Mabni",
+      "konten": "**ISIM-ISIM MABNI (الأسماء المبنية)**\n\nIsim mabni adalah isim yang harakat akhirnya tidak berubah meskipun posisinya dalam kalimat berubah.\n\n**1. Dhamir (الضمير) — Kata Ganti**\n\nDhamir Munfashil (terpisah):\n- Rafa': أنا، نحن، أنتَ، أنتِ، أنتما، أنتم، أنتن، هو، هي، هما، هم، هن\n- Nashab: إياي، إيانا، إياكَ، إياكِ...\n\nDhamir Muttashil (sambung):\n- Rafa': تُ، نا، تَ، تِ، تما...\n- Nashab/Jarr: ي، نا، كَ، كِ، ه، ها...\n\n**2. Isim Isyarah (اسم الإشارة) — Kata Tunjuk**\n\n- Dekat: هذا (ini - lk), هذه (ini - pr), هذان/هاتان (dua), هؤلاء (jamak)\n- Jauh: ذلك (itu - lk), تلك (itu - pr), أولئك (jamak)\n\n**3. Isim Maushul (الاسم الموصول) — Kata Sambung**\n\n- الذي (yang - lk tunggal), التي (yang - pr tunggal)\n- اللذان/اللتان (yang - dua), الذين/اللاتي (yang - jamak)\n\n**4. Isim Istifham (اسم الاستفهام) — Kata Tanya**\n\nمَن (siapa), ما (apa), متى (kapan), أين (di mana), كيف (bagaimana), كم (berapa)"
+    },
+    {
+      "id": "tawabi",
+      "nama": "Tawabi' (Pengikut)",
+      "konten": "**TAWABI' (التوابع)**\n\nTawabi' adalah kata-kata yang mengikuti i'rab kata sebelumnya. Ada 4 macam:\n\n**1. Na'at / Sifat (النعت)**\n\nIsim yang menjelaskan isim sebelumnya. Harus sesuai dalam: i'rab, mufrad-tatsniyah-jamak, mudzakkar-muannats, ma'rifah-nakirah.\n\nContoh: جاءَ الطالبُ **المجتهدُ** — Datang siswa yang rajin\n\n**2. 'Athaf (العطف)**\n\nKata yang dihubungkan dengan kata sebelumnya melalui huruf 'athaf (و، ف، ثم، أو، بل، لكن، لا، حتى، أم).\n\nContoh: جاءَ زيدٌ **وعمرٌو** — Datang Zaid **dan Amr**\n\n**3. Taukid (التوكيد)**\n\nKata penegasan. Ada dua jenis:\n- Lafzhi: mengulang kata yang sama\n- Ma'nawi: menggunakan kata نفس، عين، كل، جميع، كلا، كلتا\n\nContoh: جاءَ زيدٌ **نفسُه** — Datang Zaid **sendiri**\n\n**4. Badal (البدل)**\n\nKata yang menggantikan kata sebelumnya sebagai inti pembicaraan.\n\nContoh: جاءَ أخوكَ **زيدٌ** — Datang saudaramu, **yaitu Zaid**"
+    }
+  ]
+}

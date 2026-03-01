@@ -1,0 +1,30 @@
+{
+  "judul": "Matan Abu Syuja'",
+  "kelompok": [
+    {
+      "id": "pengenalan",
+      "nama": "Pengenalan Kitab",
+      "konten": "**Matan Abu Syuja'** atau dikenal dengan nama **Ghayatul Ikhtishar** adalah kitab fiqih ringkas madzhab Syafi'i yang ditulis oleh **Syaikh Ahmad bin Husain Abu Syuja' Al-Ashfahani** (wafat sekitar 593 H).\n\nKitab ini menjadi salah satu matan (teks dasar) yang paling banyak dipelajari di pesantren-pesantren seluruh dunia, khususnya di Asia Tenggara.\n\n**Keistimewaan kitab ini:**\n\n- Ringkas namun padat — mencakup pokok-pokok fiqih ibadah dan muamalah\n- Bahasa Arab yang mudah dipahami\n- Cocok untuk pemula yang ingin mempelajari fiqih madzhab Syafi'i\n- Banyak ulama besar yang mensyarahnya, seperti Ibnu Qasim Al-Ghazzi dalam **Fathul Qarib**"
+    },
+    {
+      "id": "thaharah",
+      "nama": "Thaharah (Bersuci)",
+      "konten": "Thaharah adalah pokok pertama yang dibahas dalam fiqih, karena ia syarat sahnya shalat.\n\n**Pembagian Air:**\n\n- **Air mutlak** (suci dan menyucikan): air hujan, laut, sungai, sumur, salju, embun\n- **Air musta'mal** (suci tidak menyucikan): air yang sudah digunakan bersuci\n- **Air mutanajjis** (terkena najis): tidak boleh digunakan\n\n**Najis dan Pembagiannya:**\n\n- **Najis mughallazhah** (berat): najis anjing dan babi — dibasuh 7 kali, salah satunya dengan tanah\n- **Najis mukhaffafah** (ringan): air kencing bayi laki-laki yang belum makan selain ASI — cukup diperciki air\n- **Najis mutawassithah** (sedang): selain keduanya — dibasuh hingga hilang warna, bau, dan rasanya\n\n**Wudhu — Fardhu-fardhunya:**\n\n1. Niat\n2. Membasuh wajah\n3. Membasuh dua tangan hingga siku\n4. Mengusap sebagian kepala\n5. Membasuh dua kaki hingga mata kaki\n6. Tertib (berurutan)"
+    },
+    {
+      "id": "shalat",
+      "nama": "Shalat",
+      "konten": "Shalat adalah tiang agama dan ibadah pertama yang akan dihisab di hari kiamat.\n\n**Syarat Sah Shalat:**\n\n1. Suci dari hadats besar dan kecil\n2. Suci badan, pakaian, dan tempat dari najis\n3. Menutup aurat\n4. Menghadap kiblat\n5. Masuk waktu shalat\n\n**Rukun-rukun Shalat (18 rukun):**\n\n1. Niat\n2. Berdiri bagi yang mampu\n3. Takbiratul ihram\n4. Membaca Al-Fatihah\n5. Ruku'\n6. Thuma'ninah dalam ruku'\n7. I'tidal\n8. Thuma'ninah dalam i'tidal\n9. Sujud dua kali\n10. Thuma'ninah dalam sujud\n11. Duduk antara dua sujud\n12. Thuma'ninah dalam duduk\n13. Tasyahud akhir\n14. Duduk tasyahud akhir\n15. Shalawat atas Nabi ﷺ\n16. Salam pertama\n17. Niat keluar dari shalat\n18. Tertib\n\n**Waktu-waktu Shalat Fardhu:**\n\n- **Shubuh:** fajar shadiq hingga terbit matahari\n- **Zhuhur:** matahari tergelincir hingga bayangan sama panjang\n- **Ashar:** setelah Zhuhur hingga terbenam matahari\n- **Maghrib:** terbenam matahari hingga hilang syafaq merah\n- **Isya:** setelah Maghrib hingga fajar shadiq"
+    },
+    {
+      "id": "zakat",
+      "nama": "Zakat & Puasa",
+      "konten": "**ZAKAT**\n\nZakat adalah hak wajib pada harta tertentu untuk golongan tertentu pada waktu tertentu.\n\n**Harta yang wajib dizakati:**\n\n- **Emas dan perak** (termasuk uang): nishab emas 20 mitsqal (~85 gram), perak 200 dirham (~595 gram), haul 1 tahun, kadar 2,5%\n- **Hewan ternak:** unta, sapi, kambing — ada nishabnya masing-masing\n- **Hasil bumi:** gandum, kurma, dll — nishab 5 wasaq (~653 kg), kadar 10% (tadah hujan) atau 5% (irigasi)\n- **Barang dagangan:** dinilai setiap akhir haul\n- **Zakat fitrah:** 1 sha' (±2,5 kg) makanan pokok, wajib sebelum shalat Ied\n\n**8 Golongan Penerima Zakat (QS. At-Taubah: 60):**\n\nFakir, miskin, amil, muallaf, riqab, gharim, fi sabilillah, ibnu sabil.\n\n---\n\n**PUASA**\n\n**Syarat wajib puasa:** Islam, baligh, berakal, mampu, mukim (tidak safar), suci dari haidh dan nifas.\n\n**Rukun puasa:** Niat (malam hari untuk puasa wajib) + menahan diri dari pembatal puasa.\n\n**Pembatal puasa:** Masuknya sesuatu ke rongga tubuh dengan sengaja, muntah dengan sengaja, jima', haidh/nifas, gila, murtad."
+    },
+    {
+      "id": "haji",
+      "nama": "Haji & Umrah",
+      "konten": "**HAJI**\n\nHaji adalah rukun Islam kelima, wajib sekali seumur hidup bagi yang mampu.\n\n**Syarat wajib haji:** Islam, baligh, berakal, merdeka, istitha'ah (mampu secara fisik dan finansial).\n\n**Rukun Haji:**\n\n1. **Ihram** — niat masuk ibadah haji dari miqat\n2. **Wuquf di Arafah** — pada 9 Dzulhijjah\n3. **Thawaf ifadhah** — mengelilingi Ka'bah 7 kali\n4. **Sa'i** — berjalan antara Shafa dan Marwah 7 kali\n5. **Tahallul** — mencukur/memotong rambut\n6. **Tertib**\n\n**Wajib Haji (jika ditinggal wajib dam/denda):**\n\nIhram dari miqat, mabit di Muzdalifah, mabit di Mina, melontar jumrah, thawaf wada'.\n\n---\n\n**UMRAH**\n\nUmrah disebut juga haji kecil. Hukumnya **fardhu ain** menurut madzhab Syafi'i.\n\n**Rukun Umrah:** Ihram, thawaf, sa'i, tahallul, tertib."
+    }
+  ]
+}

@@ -110,3 +110,137 @@ collections:
               - name: "konten"
                 label: "Konten"
                 widget: "markdown"
+
+      - name: "iman"
+        label: "Iman"
+        file: "konten/iman.json"
+        fields:
+          - name: "judul"
+            label: "Judul Halaman"
+            widget: "string"
+          - name: "kelompok"
+            label: "Kelompok"
+            widget: "list"
+            summary: "{{fields.nama}}"
+            fields:
+              - name: "id"
+                label: "ID (huruf kecil, tanpa spasi)"
+                widget: "string"
+              - name: "nama"
+                label: "Nama Kelompok"
+                widget: "string"
+              - name: "konten"
+                label: "Konten"
+                widget: "markdown"
+
+      - name: "abu-syuja"
+        label: "Matan Abu Syuja'"
+        file: "konten/abu-syuja.json"
+        fields:
+          - {name: "judul", label: "Judul Halaman", widget: "string"}
+          - name: "kelompok"
+            label: "Kelompok"
+            widget: "list"
+            summary: "{{fields.nama}}"
+            fields:
+              - {name: "id", label: "ID", widget: "string"}
+              - {name: "nama", label: "Nama Kelompok", widget: "string"}
+              - {name: "konten", label: "Konten", widget: "markdown"}
+
+      - name: "umdatul-ahkam"
+        label: "Umdatul Ahkam"
+        file: "konten/umdatul-ahkam.json"
+        fields:
+          - {name: "judul", label: "Judul Halaman", widget: "string"}
+          - name: "kelompok"
+            label: "Kelompok"
+            widget: "list"
+            summary: "{{fields.nama}}"
+            fields:
+              - {name: "id", label: "ID", widget: "string"}
+              - {name: "nama", label: "Nama Kelompok", widget: "string"}
+              - {name: "konten", label: "Konten", widget: "markdown"}
+
+      - name: "jurumiyah"
+        label: "Matan Jurumiyah"
+        file: "konten/jurumiyah.json"
+        fields:
+          - {name: "judul", label: "Judul Halaman", widget: "string"}
+          - name: "kelompok"
+            label: "Kelompok"
+            widget: "list"
+            summary: "{{fields.nama}}"
+            fields:
+              - {name: "id", label: "ID", widget: "string"}
+              - {name: "nama", label: "Nama Kelompok", widget: "string"}
+              - {name: "konten", label: "Konten", widget: "markdown"}
+
+      - name: "mutammimah"
+        label: "Mutammimah"
+        file: "konten/mutammimah.json"
+        fields:
+          - {name: "judul", label: "Judul Halaman", widget: "string"}
+          - name: "kelompok"
+            label: "Kelompok"
+            widget: "list"
+            summary: "{{fields.nama}}"
+            fields:
+              - {name: "id", label: "ID", widget: "string"}
+              - {name: "nama", label: "Nama Kelompok", widget: "string"}
+              - {name: "konten", label: "Konten", widget: "markdown"}
+
+      - name: "tashrif"
+        label: "Kaedah-kaedah Tashrif"
+        file: "konten/tashrif.json"
+        fields:
+          - {name: "judul", label: "Judul Halaman", widget: "string"}
+          - name: "kelompok"
+            label: "Kelompok"
+            widget: "list"
+            summary: "{{fields.nama}}"
+            fields:
+              - {name: "id", label: "ID", widget: "string"}
+              - {name: "nama", label: "Nama Kelompok", widget: "string"}
+              - {name: "konten", label: "Konten", widget: "markdown"}
+
+      - name: "wazan"
+        label: "Wazan-wazan Shorf"
+        file: "konten/wazan.json"
+        fields:
+          - {name: "judul", label: "Judul Halaman", widget: "string"}
+          - name: "kelompok"
+            label: "Kelompok"
+            widget: "list"
+            summary: "{{fields.nama}}"
+            fields:
+              - {name: "id", label: "ID", widget: "string"}
+              - {name: "nama", label: "Nama Kelompok", widget: "string"}
+              - {name: "konten", label: "Konten", widget: "markdown"}
+
+      - name: "siroh-nabawi"
+        label: "Siroh Nabawi"
+        file: "konten/siroh-nabawi.json"
+        fields:
+          - {name: "judul", label: "Judul Halaman", widget: "string"}
+          - name: "kelompok"
+            label: "Kelompok"
+            widget: "list"
+            summary: "{{fields.nama}}"
+            fields:
+              - {name: "id", label: "ID", widget: "string"}
+              - {name: "nama", label: "Nama Kelompok", widget: "string"}
+              - {name: "konten", label: "Konten", widget: "markdown"}
+
+      - name: "siroh-sahabat"
+        label: "Siroh Sahabat"
+        file: "konten/siroh-sahabat.json"
+        fields:
+          - {name: "judul", label: "Judul Halaman", widget: "string"}
+          - name: "kelompok"
+            label: "Kelompok"
+            widget: "list"
+            summary: "{{fields.nama}}"
+            fields:
+              - {name: "id", label: "ID", widget: "string"}
+              - {name: "nama", label: "Nama Kelompok", widget: "string"}
+              - {name: "konten", label: "Konten", widget: "markdown"}

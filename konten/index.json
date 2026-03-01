@@ -18,7 +18,7 @@
         },
         {
           "nama": "Iman",
-          "link": "tema/coming.html"
+          "link": "tema/iman.html"
         }
       ]
     },
@@ -27,11 +27,11 @@
       "kartu": [
         {
           "nama": "Matan Abu Syuja'",
-          "link": "tema/coming.html"
+          "link": "tema/abu-syuja.html"
         },
         {
           "nama": "Umdatul Ahkam",
-          "link": "tema/coming.html"
+          "link": "tema/umdatul-ahkam.html"
         }
       ]
     },
@@ -40,11 +40,11 @@
       "kartu": [
         {
           "nama": "Matan Jurumiyah",
-          "link": "tema/coming.html"
+          "link": "tema/jurumiyah.html"
         },
         {
           "nama": "Mutammimah",
-          "link": "tema/coming.html"
+          "link": "tema/mutammimah.html"
         }
       ]
     },
@@ -53,11 +53,11 @@
       "kartu": [
         {
           "nama": "Kaedah-kaedah Tashrif",
-          "link": "tema/coming.html"
+          "link": "tema/tashrif.html"
         },
         {
           "nama": "Wazan-wazan Shorf",
-          "link": "tema/coming.html"
+          "link": "tema/wazan.html"
         }
       ]
     },
@@ -66,36 +66,11 @@
       "kartu": [
         {
           "nama": "Siroh Nabawi",
-          "link": "tema/coming.html"
+          "link": "tema/siroh-nabawi.html"
         },
         {
           "nama": "Siroh Sahabat",
-          "link": "tema/coming.html"
-        }
-      ]
-    },
-    {
-      "judul": "Template",
-      "kartu": [
-        {
-          "nama": "tema 1",
-          "link": "template/template1.html"
-        },
-        {
-          "nama": "tema 2",
-          "link": "template/template2.html"
-        },
-        {
-          "nama": "tema 3",
-          "link": "template/template3.html"
-        },
-        {
-          "nama": "tema 4",
-          "link": "template/template4.html"
-        },
-        {
-          "nama": "tema 5",
-          "link": "template/template5.html"
+          "link": "tema/siroh-sahabat.html"
         }
       ]
     }
