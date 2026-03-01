@@ -51,6 +51,13 @@
         </button>
       </li>
       <li>
+        <button class="sidebar-item" id="navComingSoon">
+          <span class="sidebar-icon">🔭</span>
+          <span>Coming Soon</span>
+          <span class="sidebar-badge" id="comingSoonBadge">BARU</span>
+        </button>
+      </li>
+      <li>
         <button class="sidebar-item" id="navTentang">
           <span class="sidebar-icon">ℹ️</span>
           <span>Tentang</span>
@@ -120,6 +127,17 @@
     </div>
   </div>
 
+  <!-- PANEL COMING SOON -->
+  <div class="panel" id="panelComingSoon">
+    <div class="panel-header">
+      <button class="panel-back" id="backFromComingSoon">← Kembali</button>
+      <h2 class="panel-title">Coming Soon</h2>
+    </div>
+    <div class="panel-body" id="comingSoonBody">
+      <div class="cs-loading">Memuat...</div>
+    </div>
+  </div>
+
   <!-- PANEL TENTANG -->
   <div class="panel" id="panelTentang">
     <div class="panel-header">
@@ -162,6 +180,11 @@
   </div>
 
   <!-- KONTEN UTAMA -->
+  <!-- Hidden Netlify Form untuk Vote Template -->
+  <form name="template-vote" netlify netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="template_id">
+    <input type="hidden" name="vote_type">
+  </form>
   <div class="main-view" id="mainView">
     <main id="mainContent">
       <h1 class="main-title" id="judulWebsite">Ilmu Agama Islam</h1>

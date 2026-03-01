@@ -667,3 +667,161 @@ footer {
 .copy-feedback.show {
   opacity: 1;
 }
+
+/* =============================================
+   COMING SOON PANEL
+   ============================================= */
+.sidebar-badge {
+  margin-left: auto;
+  background: var(--accent);
+  color: white;
+  font-size: 0.55rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+  letter-spacing: 0.05em;
+}
+
+.cs-loading {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 40px 20px;
+}
+
+.cs-header {
+  margin-bottom: 20px;
+}
+
+.cs-desc {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.cs-berita {
+  margin-bottom: 24px;
+}
+
+.cs-berita-judul {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.cs-berita-desc {
+  font-size: 0.83rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin-bottom: 12px;
+}
+
+.cs-vote-hint {
+  font-size: 0.78rem;
+  color: var(--accent);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.cs-item {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 10px;
+  transition: border-color 0.2s;
+}
+
+.cs-item:hover {
+  border-color: var(--accent);
+}
+
+.cs-item-header {
+  margin-bottom: 6px;
+}
+
+.cs-item-link {
+  text-decoration: none;
+  display: inline-block;
+}
+
+.cs-item-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cs-link-icon {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.cs-item-sub {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.cs-item-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.cs-vote-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cs-vote-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--card-border);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.cs-vote-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.cs-like.voted {
+  background: rgba(74, 222, 128, 0.15);
+  border-color: #4ade80;
+  color: #4ade80;
+}
+
+.cs-dislike.voted {
+  background: rgba(248, 113, 113, 0.15);
+  border-color: #f87171;
+  color: #f87171;
+}
+
+.cs-vote-icon {
+  font-size: 0.9rem;
+}
+
+.cs-vote-count {
+  font-variant-numeric: tabular-nums;
+}
+
+.cs-voted-label {
+  font-size: 0.75rem;
+  color: #4ade80;
+  margin-left: 4px;
+}

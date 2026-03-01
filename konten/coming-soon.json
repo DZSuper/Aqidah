@@ -1,0 +1,49 @@
+{
+  "judul": "Coming Soon",
+  "deskripsi": "Berikut adalah rencana pengembangan website ini ke depannya. Kamu bisa ikut berpartisipasi dengan memberikan pendapatmu!",
+  "berita": [
+    {
+      "id": "template",
+      "judul": "🎨 Pemilihan Template",
+      "deskripsi": "Website ini akan segera tampil dengan desain baru! Ada 5 kandidat template yang sedang dipertimbangkan. Lihat dan pilih favoritmu — pendapatmu sangat berarti untuk menentukan tampilan website ini ke depannya.",
+      "status": "voting",
+      "items": [
+        {
+          "id": "template1",
+          "nama": "Template 1",
+          "subjudul": "Manuskrip Islam",
+          "deskripsi": "Nuansa klasik seperti kitab kuno. Sidebar navigasi, ornamen geometris Islam, font serif elegan.",
+          "link": "tema/template1.html"
+        },
+        {
+          "id": "template2",
+          "nama": "Template 2",
+          "subjudul": "Dashboard Modern",
+          "deskripsi": "Tampilan seperti aplikasi belajar profesional dengan statistik, badge warna, dan info box.",
+          "link": "tema/template2.html"
+        },
+        {
+          "id": "template3",
+          "nama": "Template 3",
+          "subjudul": "Ensiklopedia Akordion",
+          "deskripsi": "Semua kelompok tampil sekaligus, tap untuk buka/tutup. Ada fitur pencarian langsung.",
+          "link": "tema/template3.html"
+        },
+        {
+          "id": "template4",
+          "nama": "Template 4",
+          "subjudul": "Flashcard Interaktif",
+          "deskripsi": "Kartu yang bisa dibalik dengan animasi 3D. Support keyboard. Paling interaktif dan gamifikasi.",
+          "link": "tema/template4.html"
+        },
+        {
+          "id": "template5",
+          "nama": "Template 5",
+          "subjudul": "Peta Perbandingan",
+          "deskripsi": "Layout split: sidebar kiri + konten kanan. Tabel perbandingan antar kelompok yang sistematis.",
+          "link": "tema/template5.html"
+        }
+      ]
+    }
+  ]
+}

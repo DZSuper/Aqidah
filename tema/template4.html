@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Template 4 – Flashcard Interaktif</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #13111c;
+  --surface: #1e1a2e;
+  --surface2: #2a2440;
+  --border: rgba(255,255,255,0.08);
+  --purple: #a78bfa;
+  --purple2: #7c3aed;
+  --pink: #f472b6;
+  --cyan: #22d3ee;
+  --green: #4ade80;
+  --yellow: #fbbf24;
+  --red: #f87171;
+  --text: #f8f7ff;
+  --muted: #6b6a8a;
+}
+[data-theme="light"] {
+  --bg: #f5f3ff;
+  --surface: #ffffff;
+  --surface2: #ede9fe;
+  --border: rgba(0,0,0,0.08);
+  --purple: #7c3aed;
+  --purple2: #6d28d9;
+  --text: #1e1a2e;
+  --muted: #9ca3af;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+/* HEADER */
+.header { padding:20px 24px; display:flex; align-items:center; justify-content:space-between; }
+.back-btn { color:var(--muted); text-decoration:none; font-size:0.85rem; font-weight:600; display:flex; align-items:center; gap:6px; }
+.back-btn:hover { color:var(--purple); }
+.header-right { display:flex; align-items:center; gap:12px; }
+.theme-btn { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:6px 12px; color:var(--muted); cursor:pointer; font-size:0.8rem; font-family:inherit; font-weight:600; }
+.theme-btn:hover { color:var(--purple); border-color:var(--purple); }
+
+/* PROGRESS TOP */
+.progress-section { padding:0 24px 20px; max-width:800px; margin:0 auto; }
+.progress-info { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.progress-text { font-size:0.85rem; font-weight:700; color:var(--muted); }
+.progress-count { font-size:1rem; font-weight:900; color:var(--purple); }
+.progress-bar { height:8px; background:var(--surface2); border-radius:10px; overflow:hidden; }
+.progress-fill { height:100%; background:linear-gradient(90deg,var(--purple2),var(--pink)); border-radius:10px; transition:width 0.5s cubic-bezier(0.4,0,0.2,1); }
+
+/* TITLE */
+.page-title-section { text-align:center; padding:0 24px 30px; }
+.page-title { font-size:clamp(1.5rem,4vw,2.2rem); font-weight:900; }
+.page-title span { color:var(--purple); }
+.page-sub { color:var(--muted); font-size:0.9rem; margin-top:6px; font-weight:600; }
+
+/* CARD AREA */
+.card-area { max-width:640px; margin:0 auto; padding:0 20px; }
+
+/* FLASHCARD */
+.flashcard {
+  perspective:1200px;
+  height:360px;
+  margin-bottom:24px;
+  cursor:pointer;
+}
+.flashcard-inner {
+  width:100%; height:100%;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:transform 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+.flashcard.flipped .flashcard-inner { transform:rotateY(180deg); }
+.card-face {
+  position:absolute; width:100%; height:100%;
+  backface-visibility:hidden;
+  border-radius:24px;
+  padding:32px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.card-front {
+  background:linear-gradient(135deg,var(--surface),var(--surface2));
+  border:2px solid var(--border);
+  align-items:center;
+  text-align:center;
+}
+.card-back {
+  background:linear-gradient(135deg,var(--surface2),var(--surface));
+  border:2px solid var(--purple);
+  transform:rotateY(180deg);
+  overflow-y:auto;
+}
+.card-front-num {
+  width:60px; height:60px;
+  background:linear-gradient(135deg,var(--purple2),var(--pink));
+  border-radius:16px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.5rem; font-weight:900; color:white;
+  margin-bottom:16px;
+}
+.card-front-title {
+  font-size:1.5rem; font-weight:900; line-height:1.2;
+  margin-bottom:10px;
+}
+.card-front-badge {
+  display:inline-block;
+  padding:4px 14px;
+  border-radius:20px;
+  font-size:0.8rem; font-weight:700;
+  margin-bottom:20px;
+}
+.card-flip-hint { font-size:0.8rem; color:var(--muted); font-weight:600; display:flex; align-items:center; gap:6px; }
+.card-back-label { font-size:0.7rem; font-weight:800; letter-spacing:0.15em; text-transform:uppercase; color:var(--purple); margin-bottom:12px; }
+.card-back-content { font-size:0.9rem; line-height:1.7; color:var(--text); }
+.card-back-content p { margin-bottom:10px; }
+.card-back-content strong { color:var(--purple); }
+.card-back-point { display:flex; gap:8px; margin-bottom:6px; font-size:0.88rem; line-height:1.5; }
+.card-back-dot { color:var(--pink); font-size:0.7rem; margin-top:5px; flex-shrink:0; }
+
+/* CONTROLS */
+.controls { display:flex; gap:12px; justify-content:center; margin-bottom:24px; }
+.ctrl-btn {
+  display:flex; align-items:center; gap:8px;
+  padding:12px 24px;
+  border-radius:16px;
+  border:none;
+  font-family:inherit; font-size:0.9rem; font-weight:800;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.btn-prev { background:var(--surface2); color:var(--muted); }
+.btn-prev:hover:not(:disabled) { color:var(--text); }
+.btn-prev:disabled { opacity:0.3; cursor:default; }
+.btn-next { background:linear-gradient(135deg,var(--purple2),var(--pink)); color:white; }
+.btn-next:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(124,58,237,0.4); }
+.btn-next:disabled { opacity:0.4; cursor:default; transform:none; }
+
+/* DOTS */
+.dots { display:flex; justify-content:center; gap:8px; margin-bottom:30px; }
+.dot { width:8px; height:8px; border-radius:50%; background:var(--surface2); cursor:pointer; transition:all 0.3s; }
+.dot.active { background:var(--purple); transform:scale(1.4); }
+.dot:hover { background:var(--muted); }
+
+/* KEYBOARD HINT */
+.keyboard-hint { text-align:center; color:var(--muted); font-size:0.78rem; font-weight:600; }
+.kbd { background:var(--surface2); border:1px solid var(--border); border-radius:5px; padding:2px 7px; font-size:0.75rem; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a href="#" class="back-btn">← Beranda</a>
+  <div class="header-right">
+    <button class="theme-btn" onclick="toggleTheme()">☀ Tema</button>
+  </div>
+</div>
+
+<div class="progress-section">
+  <div class="progress-info">
+    <span class="progress-text">PROGRES BELAJAR</span>
+    <span class="progress-count" id="progressCount">1 / 5</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:20%"></div></div>
+</div>
+
+<div class="page-title-section">
+  <h1 class="page-title">Belajar <span>Tauhid</span></h1>
+  <p class="page-sub">Tap kartu untuk melihat penjelasan • Gunakan tombol navigasi</p>
+</div>
+
+<div class="card-area">
+  <div class="flashcard" id="flashcard" onclick="flipCard()">
+    <div class="flashcard-inner">
+      <div class="card-face card-front" id="cardFront"></div>
+      <div class="card-face card-back" id="cardBack"></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="ctrl-btn btn-prev" id="prevBtn" onclick="go(current-1)">← Prev</button>
+    <button class="ctrl-btn btn-next" id="nextBtn" onclick="go(current+1)">Next →</button>
+  </div>
+
+  <div class="dots" id="dotsWrap"></div>
+  <div class="keyboard-hint">Tekan <span class="kbd">Space</span> untuk flip · <span class="kbd">←</span> <span class="kbd">→</span> untuk navigasi</div>
+</div>
+
+<script>
+const data = [
+  {
+    nama:"Ahlus Sunnah wal Jama'ah",
+    badge:"✅ Manhaj Benar",
+    badgeColor:"rgba(74,222,128,0.15)",
+    badgeText:"#4ade80",
+    back:`
+      <div class="card-back-label">Penjelasan Lengkap</div>
+      <div class="card-back-content">
+        <p><strong>3 Aspek Tauhid yang tidak bisa dipisahkan:</strong></p>
+        <div class="card-back-point"><span class="card-back-dot">◆</span><span><strong>Rububiyah</strong> — Allah satu-satunya Pencipta dan Pengatur alam</span></div>
+        <div class="card-back-point"><span class="card-back-dot">◆</span><span><strong>Uluhiyah</strong> — Ibadah hanya untuk Allah semata</span></div>
+        <div class="card-back-point"><span class="card-back-dot">◆</span><span><strong>Asma' wa Sifat</strong> — Menetapkan sifat Allah tanpa tahrif, ta'thil, takyif, tamtsil</span></div>
+        <p>Barangsiapa menegakkan tauhid ini dengan sempurna, Allah janjikan surga tanpa hisab.</p>
+      </div>
+    `
+  },
+  {
+    nama:"Murji'ah",
+    badge:"⚠ Menyimpang",
+    badgeColor:"rgba(251,191,36,0.15)",
+    badgeText:"#fbbf24",
+    back:`
+      <div class="card-back-label">Penyimpangan Mereka</div>
+      <div class="card-back-content">
+        <p>Iman hanya pembenaran hati — tanpa amal dan perkataan.</p>
+        <div class="card-back-point"><span class="card-back-dot">◆</span><span>Memisahkan amal dari hakikat iman</span></div>
+        <div class="card-back-point"><span class="card-back-dot">◆</span><span>Pelaku dosa besar dianggap mukmin sempurna</span></div>
+        <div class="card-back-point"><span class="card-back-dot">◆</span><span>Meremehkan pentingnya amal shalih</span></div>
+        <p><strong>Bantahan:</strong> QS. Al-Hujurat: 15 menegaskan iman harus disertai ketiadaan keraguan dan amal.</p>
+      </div>
+    `
+  },
+  {
+    nama:"Khawarij",
+    badge:"🚫 Sangat Berbahaya",
+    badgeColor:"rgba(248,113,113,0.15)",
+    badgeText:"#f87171",
+    back:`
+      <div class="card-back-label">Bahaya Khawarij</div>
+      <div class="card-back-content">
+        <p>Mengkafirkan pelaku dosa besar dan menghalalkan darah muslimin.</p>
+        <div class="card-back-point"><span class="card-back-dot">◆</span><span>Takfir kepada pelaku dosa besar</span></div>
+        <div class="card-back-point"><span class="card-back-dot">◆</span><span>Menghalalkan darah dan harta muslimin</span></div>
+        <div class="card-back-point"><span class="card-back-dot">◆</span><span>Keluar dari ketaatan pemimpin</span></div>
+        <p><strong>Nabi ﷺ:</strong> "Mereka keluar dari agama sebagaimana anak panah keluar dari busurnya."</p>
+      </div>
+    `
+  },
+  {
+    nama:"Jahmiyah",
+    badge:"⚠ Menyimpang",
+    badgeColor:"rgba(251,191,36,0.15)",
+    badgeText:"#fbbf24",
+    back:`
+      <div class="card-back-label">Penyimpangan Jahmiyah</div>
+      <div class="card-back-content">
+        <p>Pengikut Jahm bin Shafwan. Ta'thil total — menafikan seluruh sifat Allah.</p>
+        <div class="card-back-point"><span class="card-back-dot">◆</span><span>Menafikan semua sifat Allah — ilmu, kuasa, hidup</span></div>
+        <div class="card-back-point"><span class="card-back-dot">◆</span><span>Mengingkari Allah di atas Arsy-Nya</span></div>
+        <div class="card-back-point"><span class="card-back-dot">◆</span><span>Al-Qur'an dianggap makhluk (ciptaan)</span></div>
+        <p>Bertentangan langsung dengan puluhan ayat Al-Qur'an.</p>
+      </div>
+    `
+  },
+  {
+    nama:"Mu'tazilah",
+    badge:"⚠ Menyimpang",
+    badgeColor:"rgba(251,191,36,0.15)",
+    badgeText:"#fbbf24",
+    back:`
+      <div class="card-back-label">Penyimpangan Mu'tazilah</div>
+      <div class="card-back-content">
+        <p>Mendahulukan akal atas wahyu — menakwil sifat Allah dengan takwil batil.</p>
+        <div class="card-back-point"><span class="card-back-dot">◆</span><span>Takwil "tangan Allah" → "kekuasaan"</span></div>
+        <div class="card-back-point"><span class="card-back-dot">◆</span><span>Takwil "istiwa" → "penguasaan"</span></div>
+        <div class="card-back-point"><span class="card-back-dot">◆</span><span>Mengingkari Qadar Allah</span></div>
+        <p><strong>Prinsip Salaf:</strong> Akal yang benar tidak bertentangan dengan wahyu yang shahih.</p>
+      </div>
+    `
+  }
+];
+
+let current = 0;
+let isFlipped = false;
+
+function render() {
+  const d = data[current];
+  isFlipped = false;
+  document.getElementById('flashcard').classList.remove('flipped');
+
+  document.getElementById('cardFront').innerHTML = `
+    <div class="card-front-num">${current+1}</div>
+    <h2 class="card-front-title">${d.nama}</h2>
+    <span class="card-front-badge" style="background:${d.badgeColor};color:${d.badgeText}">${d.badge}</span>
+    <div class="card-flip-hint">👆 Tap untuk penjelasan</div>
+  `;
+  document.getElementById('cardBack').innerHTML = d.back;
+
+  document.getElementById('progressCount').textContent = `${current+1} / ${data.length}`;
+  document.getElementById('progressFill').style.width = ((current+1)/data.length*100)+'%';
+  document.getElementById('prevBtn').disabled = current===0;
+  document.getElementById('nextBtn').textContent = current===data.length-1 ? '🏆 Selesai!' : 'Next →';
+  document.getElementById('nextBtn').disabled = current===data.length-1;
+
+  document.getElementById('dotsWrap').innerHTML = data.map((_,i)=>`<div class="dot ${i===current?'active':''}" onclick="go(${i})"></div>`).join('');
+}
+
+function flipCard() {
+  isFlipped = !isFlipped;
+  document.getElementById('flashcard').classList.toggle('flipped', isFlipped);
+}
+
+function go(i) {
+  if(i<0||i>=data.length) return;
+  current=i; render();
+}
+
+document.addEventListener('keydown', e=>{
+  if(e.code==='Space'){e.preventDefault();flipCard();}
+  if(e.code==='ArrowRight') go(current+1);
+  if(e.code==='ArrowLeft') go(current-1);
+});
+
+function toggleTheme(){
+  const h=document.documentElement;
+  h.setAttribute('data-theme',h.getAttribute('data-theme')==='dark'?'light':'dark');
+}
+
+render();
+</script>
+</body>
+</html>

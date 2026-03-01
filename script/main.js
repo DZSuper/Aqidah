@@ -168,3 +168,184 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
 });
+
+// =============================================
+// COMING SOON
+// =============================================
+(function() {
+  var navComingSoon      = document.getElementById('navComingSoon');
+  var panelComingSoon    = document.getElementById('panelComingSoon');
+  var backFromComingSoon = document.getElementById('backFromComingSoon');
+  var comingSoonBody     = document.getElementById('comingSoonBody');
+  var comingSoonLoaded   = false;
+
+  // Sembunyikan badge setelah pernah dibuka
+  var badgeEl = document.getElementById('comingSoonBadge');
+  try {
+    if (localStorage.getItem('cs_visited')) {
+      if (badgeEl) badgeEl.style.display = 'none';
+    }
+  } catch(e) {}
+
+  function closeAllPanelsCS() {
+    document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('show'); });
+  }
+
+  function setActiveNavCS(el) {
+    document.querySelectorAll('.sidebar-item').forEach(function(n) { n.classList.remove('active'); });
+    if (el) el.classList.add('active');
+  }
+
+  if (navComingSoon) {
+    navComingSoon.addEventListener('click', function() {
+      closeAllPanelsCS();
+      panelComingSoon && panelComingSoon.classList.add('show');
+      setActiveNavCS(navComingSoon);
+      // Sembunyikan badge
+      try { localStorage.setItem('cs_visited', '1'); } catch(e) {}
+      if (badgeEl) badgeEl.style.display = 'none';
+      // Sidebar harus ditutup dulu
+      var sidebar = document.getElementById('sidebar');
+      var sidebarOverlay = document.getElementById('sidebarOverlay');
+      var hamburgerBtn = document.getElementById('hamburgerBtn');
+      if (sidebar) sidebar.classList.remove('open');
+      if (sidebarOverlay) sidebarOverlay.classList.remove('show');
+      if (hamburgerBtn) hamburgerBtn.classList.remove('open');
+      document.body.style.overflow = '';
+      // Load konten
+      if (!comingSoonLoaded) loadComingSoon();
+    });
+  }
+
+  if (backFromComingSoon) {
+    backFromComingSoon.addEventListener('click', function() {
+      panelComingSoon && panelComingSoon.classList.remove('show');
+      var navMenuUtama = document.getElementById('navMenuUtama');
+      setActiveNavCS(navMenuUtama);
+    });
+  }
+
+  function getVotes() {
+    try { return JSON.parse(localStorage.getItem('cs_votes') || '{}'); } catch(e) { return {}; }
+  }
+
+  function saveVotes(votes) {
+    try { localStorage.setItem('cs_votes', JSON.stringify(votes)); } catch(e) {}
+  }
+
+  function getVoteCounts() {
+    try { return JSON.parse(localStorage.getItem('cs_vote_counts') || '{}'); } catch(e) { return {}; }
+  }
+
+  function saveVoteCounts(counts) {
+    try { localStorage.setItem('cs_vote_counts', JSON.stringify(counts)); } catch(e) {}
+  }
+
+  function submitToNetlify(templateId, voteType) {
+    var formData = new FormData();
+    formData.append('form-name', 'template-vote');
+    formData.append('template_id', templateId);
+    formData.append('vote_type', voteType);
+    fetch('/', { method: 'POST', body: formData }).catch(function() {});
+  }
+
+  function renderVoteButtons(itemId, container) {
+    var votes = getVotes();
+    var counts = getVoteCounts();
+    var userVote = votes[itemId] || null;
+    var likeCount = counts[itemId + '_like'] || 0;
+    var dislikeCount = counts[itemId + '_dislike'] || 0;
+
+    var html = '<div class="cs-vote-row">';
+    html += '<button class="cs-vote-btn cs-like' + (userVote === 'like' ? ' voted' : '') + '" data-id="' + itemId + '" data-type="like">';
+    html += '<span class="cs-vote-icon">👍</span> <span class="cs-vote-count">' + likeCount + '</span></button>';
+    html += '<button class="cs-vote-btn cs-dislike' + (userVote === 'dislike' ? ' voted' : '') + '" data-id="' + itemId + '" data-type="dislike">';
+    html += '<span class="cs-vote-icon">👎</span> <span class="cs-vote-count">' + dislikeCount + '</span></button>';
+    if (userVote) {
+      html += '<span class="cs-voted-label">Suaramu tersimpan ✓</span>';
+    }
+    html += '</div>';
+    container.innerHTML = html;
+
+    container.querySelectorAll('.cs-vote-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var id = this.getAttribute('data-id');
+        var type = this.getAttribute('data-type');
+        var currentVote = getVotes()[id];
+        var currentCounts = getVoteCounts();
+
+        // Cabut vote lama jika ada
+        if (currentVote) {
+          currentCounts[id + '_' + currentVote] = Math.max(0, (currentCounts[id + '_' + currentVote] || 0) - 1);
+        }
+
+        if (currentVote === type) {
+          // Klik sama = batalkan vote
+          var newVotes = getVotes();
+          delete newVotes[id];
+          saveVotes(newVotes);
+        } else {
+          // Vote baru
+          var newVotes2 = getVotes();
+          newVotes2[id] = type;
+          saveVotes(newVotes2);
+          currentCounts[id + '_' + type] = (currentCounts[id + '_' + type] || 0) + 1;
+          submitToNetlify(id, type);
+        }
+
+        saveVoteCounts(currentCounts);
+        renderVoteButtons(id, container);
+      });
+    });
+  }
+
+  function loadComingSoon() {
+    fetch('konten/coming-soon.json')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        comingSoonLoaded = true;
+        var html = '<div class="cs-header">';
+        html += '<p class="cs-desc">' + data.deskripsi + '</p></div>';
+
+        data.berita.forEach(function(berita) {
+          html += '<div class="cs-berita">';
+          html += '<h3 class="cs-berita-judul">' + berita.judul + '</h3>';
+          html += '<p class="cs-berita-desc">' + berita.deskripsi + '</p>';
+
+          if (berita.status === 'voting') {
+            html += '<div class="cs-vote-hint">👆 Tap template untuk melihat • Beri suaramu!</div>';
+          }
+
+          if (berita.items) {
+            berita.items.forEach(function(item) {
+              html += '<div class="cs-item" id="cs-item-' + item.id + '">';
+              html += '<div class="cs-item-header">';
+              html += '<a class="cs-item-link" href="' + item.link + '" target="_blank">';
+              html += '<div class="cs-item-name">' + item.nama + ' <span class="cs-link-icon">↗</span></div>';
+              html += '<div class="cs-item-sub">' + item.subjudul + '</div></a>';
+              html += '</div>';
+              html += '<p class="cs-item-desc">' + item.deskripsi + '</p>';
+              html += '<div class="cs-vote-wrap" id="vote-' + item.id + '"></div>';
+              html += '</div>';
+            });
+          }
+          html += '</div>';
+        });
+
+        comingSoonBody.innerHTML = html;
+
+        // Render vote buttons untuk setiap item
+        data.berita.forEach(function(berita) {
+          if (berita.items) {
+            berita.items.forEach(function(item) {
+              var voteWrap = document.getElementById('vote-' + item.id);
+              if (voteWrap) renderVoteButtons(item.id, voteWrap);
+            });
+          }
+        });
+      })
+      .catch(function() {
+        comingSoonBody.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:20px">Gagal memuat konten.</p>';
+      });
+  }
+})();

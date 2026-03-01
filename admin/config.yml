@@ -244,3 +244,36 @@ collections:
               - {name: "id", label: "ID", widget: "string"}
               - {name: "nama", label: "Nama Kelompok", widget: "string"}
               - {name: "konten", label: "Konten", widget: "markdown"}
+
+  - name: "coming-soon"
+    label: "Coming Soon"
+    files:
+      - name: "coming-soon"
+        label: "Halaman Coming Soon"
+        file: "konten/coming-soon.json"
+        fields:
+          - {name: "judul", label: "Judul", widget: "string"}
+          - {name: "deskripsi", label: "Deskripsi", widget: "text"}
+          - name: "berita"
+            label: "Daftar Berita"
+            widget: "list"
+            summary: "{{fields.judul}}"
+            fields:
+              - {name: "id", label: "ID (huruf kecil, tanpa spasi)", widget: "string"}
+              - {name: "judul", label: "Judul Berita", widget: "string"}
+              - {name: "deskripsi", label: "Deskripsi", widget: "text"}
+              - name: "status"
+                label: "Status"
+                widget: "select"
+                options: ["voting", "aktif", "selesai"]
+              - name: "items"
+                label: "Item-item"
+                widget: "list"
+                required: false
+                summary: "{{fields.nama}}"
+                fields:
+                  - {name: "id", label: "ID", widget: "string"}
+                  - {name: "nama", label: "Nama", widget: "string"}
+                  - {name: "subjudul", label: "Subjudul", widget: "string"}
+                  - {name: "deskripsi", label: "Deskripsi", widget: "text"}
+                  - {name: "link", label: "Link", widget: "string"}
