@@ -172,7 +172,6 @@
     </footer>
   </div>
 
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <script src="script/main.js"></script>
   <script>
     // Load konten dari JSON
@@ -203,17 +202,6 @@
         var main = document.getElementById('mainContent');
         main.innerHTML += '<p style="text-align:center;color:var(--text-muted);margin-top:40px;">Buka website melalui server untuk memuat konten.</p>';
       });
-
-    // Netlify Identity redirect
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on('init', function(user) {
-        if (!user) {
-          window.netlifyIdentity.on('login', function() {
-            document.location.href = '/admin/';
-          });
-        }
-      });
-    }
   </script>
 </body>
 </html>
