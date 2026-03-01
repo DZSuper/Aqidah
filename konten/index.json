@@ -60,6 +60,19 @@
           "link": "tema/coming.html"
         }
       ]
+    },
+    {
+      "judul": "Siroh",
+      "kartu": [
+        {
+          "nama": "Siroh Nabawi",
+          "link": "tema/coming.html"
+        },
+        {
+          "nama": "Siroh Sahabat",
+          "link": "tema/coming.html"
+        }
+      ]
     }
   ]
 }
