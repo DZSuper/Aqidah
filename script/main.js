@@ -7,7 +7,7 @@
     if (t) document.documentElement.setAttribute('data-theme', t);
     var s = localStorage.getItem('iai_textsize');
     if (s) document.documentElement.setAttribute('data-textsize', s);
-  } catch (e) { /* localStorage mungkin diblokir */ }
+  } catch (e) {}
 })();
 
 // =============================================
@@ -20,22 +20,24 @@ document.addEventListener('DOMContentLoaded', function () {
   var sidebar        = document.getElementById('sidebar');
   var sidebarOverlay = document.getElementById('sidebarOverlay');
   var sidebarClose   = document.getElementById('sidebarClose');
-  var navMenuUtama   = document.getElementById('navMenuUtama');
-  var navPengaturan  = document.getElementById('navPengaturan');
-  var navTentang     = document.getElementById('navTentang');
-  var panelPengaturan   = document.getElementById('panelPengaturan');
-  var panelTentang      = document.getElementById('panelTentang');
-  var backFromPengaturan= document.getElementById('backFromPengaturan');
-  var backFromTentang   = document.getElementById('backFromTentang');
-  var navMasukan        = document.getElementById('navMasukan');
-  var panelMasukan      = document.getElementById('panelMasukan');
-  var backFromMasukan   = document.getElementById('backFromMasukan');
 
-  // Guard: pastikan elemen utama tersedia
-  if (!hamburgerBtn || !sidebar || !sidebarOverlay) {
-    console.error('[main.js] Elemen sidebar tidak ditemukan di DOM.');
-    return;
-  }
+  var navMenuUtama  = document.getElementById('navMenuUtama');
+  var navPengaturan = document.getElementById('navPengaturan');
+  var navTentang    = document.getElementById('navTentang');
+  var navMasukan    = document.getElementById('navMasukan');
+  var navComingSoon = document.getElementById('navComingSoon');
+
+  var panelPengaturan = document.getElementById('panelPengaturan');
+  var panelTentang    = document.getElementById('panelTentang');
+  var panelMasukan    = document.getElementById('panelMasukan');
+  var panelComingSoon = document.getElementById('panelComingSoon');
+
+  var backFromPengaturan = document.getElementById('backFromPengaturan');
+  var backFromTentang    = document.getElementById('backFromTentang');
+  var backFromMasukan    = document.getElementById('backFromMasukan');
+  var backFromComingSoon = document.getElementById('backFromComingSoon');
+
+  if (!hamburgerBtn || !sidebar || !sidebarOverlay) return;
 
   // ── SIDEBAR ────────────────────────────────
   function openSidebar() {
@@ -55,28 +57,33 @@ document.addEventListener('DOMContentLoaded', function () {
   hamburgerBtn.addEventListener('click', function () {
     sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
   });
-
-  sidebarClose  && sidebarClose.addEventListener('click', closeSidebar);
+  sidebarClose   && sidebarClose.addEventListener('click', closeSidebar);
   sidebarOverlay.addEventListener('click', closeSidebar);
-
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') { closeSidebar(); closeAllPanels(); }
   });
 
-  // ── PANEL ──────────────────────────────────
+  // ── PANEL SYSTEM ───────────────────────────
+  var allPanels = [panelPengaturan, panelTentang, panelMasukan, panelComingSoon];
+  var allNavs   = [navMenuUtama, navPengaturan, navTentang, navMasukan, navComingSoon];
+
   function closeAllPanels() {
-    panelPengaturan && panelPengaturan.classList.remove('show');
-    panelTentang    && panelTentang.classList.remove('show');
-    panelMasukan    && panelMasukan.classList.remove('show');
+    allPanels.forEach(function (p) { p && p.classList.remove('show'); });
   }
 
   function setActiveNav(el) {
-    [navMenuUtama, navPengaturan, navTentang, navMasukan].forEach(function (n) {
-      n && n.classList.remove('active');
-    });
+    allNavs.forEach(function (n) { n && n.classList.remove('active'); });
     el && el.classList.add('active');
   }
 
+  function openPanel(panel, nav) {
+    closeAllPanels();
+    panel && panel.classList.add('show');
+    setActiveNav(nav);
+    closeSidebar();
+  }
+
+  // ── NAV EVENTS ─────────────────────────────
   if (navMenuUtama) {
     navMenuUtama.addEventListener('click', function () {
       closeAllPanels();
@@ -87,51 +94,59 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (navPengaturan) {
     navPengaturan.addEventListener('click', function () {
-      closeAllPanels();
-      panelPengaturan && panelPengaturan.classList.add('show');
-      setActiveNav(navPengaturan);
-      closeSidebar();
+      openPanel(panelPengaturan, navPengaturan);
     });
   }
 
   if (navTentang) {
     navTentang.addEventListener('click', function () {
-      closeAllPanels();
-      panelTentang && panelTentang.classList.add('show');
-      setActiveNav(navTentang);
-      closeSidebar();
-    });
-  }
-
-  if (backFromPengaturan) {
-    backFromPengaturan.addEventListener('click', function () {
-      panelPengaturan && panelPengaturan.classList.remove('show');
-      setActiveNav(navMenuUtama);
-    });
-  }
-
-  if (backFromTentang) {
-    backFromTentang.addEventListener('click', function () {
-      panelTentang && panelTentang.classList.remove('show');
-      setActiveNav(navMenuUtama);
+      openPanel(panelTentang, navTentang);
     });
   }
 
   if (navMasukan) {
     navMasukan.addEventListener('click', function () {
-      closeAllPanels();
-      panelMasukan && panelMasukan.classList.add('show');
-      setActiveNav(navMasukan);
-      closeSidebar();
+      openPanel(panelMasukan, navMasukan);
     });
   }
 
-  if (backFromMasukan) {
-    backFromMasukan.addEventListener('click', function () {
-      panelMasukan && panelMasukan.classList.remove('show');
-      setActiveNav(navMenuUtama);
+  if (navComingSoon) {
+    navComingSoon.addEventListener('click', function () {
+      openPanel(panelComingSoon, navComingSoon);
+      var badge = document.getElementById('comingSoonBadge');
+      if (badge) badge.style.display = 'none';
+      try { localStorage.setItem('cs_visited', '1'); } catch(e) {}
+      if (!comingSoonLoaded) loadComingSoon();
     });
   }
+
+  // ── BACK BUTTONS ───────────────────────────
+  [
+    [backFromPengaturan, navMenuUtama],
+    [backFromTentang,    navMenuUtama],
+    [backFromMasukan,    navMenuUtama],
+    [backFromComingSoon, navMenuUtama]
+  ].forEach(function(pair) {
+    if (pair[0]) {
+      pair[0].addEventListener('click', function () {
+        closeAllPanels();
+        setActiveNav(pair[1]);
+      });
+    }
+  });
+
+  // ── AUTO BUKA PANEL DARI URL HASH ──────────
+  // Digunakan tombol "kembali" dari halaman berita (index.html#coming-soon)
+  function checkHash() {
+    if (window.location.hash === '#coming-soon') {
+      openPanel(panelComingSoon, navComingSoon);
+      if (!comingSoonLoaded) loadComingSoon();
+      // Bersihkan hash dari URL
+      history.replaceState(null, '', window.location.pathname);
+    }
+  }
+  checkHash();
+  window.addEventListener('hashchange', checkHash);
 
   // ── TEMA ───────────────────────────────────
   function applyTheme(theme) {
@@ -141,13 +156,9 @@ document.addEventListener('DOMContentLoaded', function () {
       btn.classList.toggle('active', btn.getAttribute('data-theme') === theme);
     });
   }
-
   applyTheme(html.getAttribute('data-theme') || 'dark');
-
   document.querySelectorAll('.theme-btn').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      applyTheme(this.getAttribute('data-theme'));
-    });
+    btn.addEventListener('click', function () { applyTheme(this.getAttribute('data-theme')); });
   });
 
   // ── UKURAN TEKS ────────────────────────────
@@ -158,194 +169,80 @@ document.addEventListener('DOMContentLoaded', function () {
       btn.classList.toggle('active', btn.getAttribute('data-size') === size);
     });
   }
-
   applyTextSize(html.getAttribute('data-textsize') || 'medium');
-
   document.querySelectorAll('.size-opt-btn').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      applyTextSize(this.getAttribute('data-size'));
-    });
+    btn.addEventListener('click', function () { applyTextSize(this.getAttribute('data-size')); });
   });
 
-});
-
-// =============================================
-// COMING SOON
-// =============================================
-(function() {
-  var navComingSoon      = document.getElementById('navComingSoon');
-  var panelComingSoon    = document.getElementById('panelComingSoon');
-  var backFromComingSoon = document.getElementById('backFromComingSoon');
-  var comingSoonBody     = document.getElementById('comingSoonBody');
-  var comingSoonLoaded   = false;
-
-  // Sembunyikan badge setelah pernah dibuka
-  var badgeEl = document.getElementById('comingSoonBadge');
+  // ── BADGE COMING SOON ──────────────────────
   try {
-    if (localStorage.getItem('cs_visited')) {
-      if (badgeEl) badgeEl.style.display = 'none';
-    }
+    var badge = document.getElementById('comingSoonBadge');
+    if (badge && localStorage.getItem('cs_visited')) badge.style.display = 'none';
   } catch(e) {}
 
-  function closeAllPanelsCS() {
-    document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('show'); });
-  }
+  // =============================================
+  // COMING SOON — KARTU + LOAD
+  // =============================================
+  var comingSoonLoaded = false;
+  var comingSoonBody   = document.getElementById('comingSoonBody');
+  var CS_CACHE_KEY     = 'cs_html_cache';
 
-  function setActiveNavCS(el) {
-    document.querySelectorAll('.sidebar-item').forEach(function(n) { n.classList.remove('active'); });
-    if (el) el.classList.add('active');
-  }
+  function buildComingSoonHtml(data) {
+    var out = '<p class="cs-desc">' + data.deskripsi + '</p>';
+    out += '<div class="cs-cards">';
+    data.berita.forEach(function(berita) {
+      var statusHtml = '';
+      if (berita.status === 'voting')
+        statusHtml = '<span class="cs-status-badge voting">🗳 Voting</span>';
+      else if (berita.status === 'selesai')
+        statusHtml = '<span class="cs-status-badge done">✓ Selesai</span>';
+      else
+        statusHtml = '<span class="cs-status-badge">📌 Aktif</span>';
 
-  if (navComingSoon) {
-    navComingSoon.addEventListener('click', function() {
-      closeAllPanelsCS();
-      panelComingSoon && panelComingSoon.classList.add('show');
-      setActiveNavCS(navComingSoon);
-      // Sembunyikan badge
-      try { localStorage.setItem('cs_visited', '1'); } catch(e) {}
-      if (badgeEl) badgeEl.style.display = 'none';
-      // Sidebar harus ditutup dulu
-      var sidebar = document.getElementById('sidebar');
-      var sidebarOverlay = document.getElementById('sidebarOverlay');
-      var hamburgerBtn = document.getElementById('hamburgerBtn');
-      if (sidebar) sidebar.classList.remove('open');
-      if (sidebarOverlay) sidebarOverlay.classList.remove('show');
-      if (hamburgerBtn) hamburgerBtn.classList.remove('open');
-      document.body.style.overflow = '';
-      // Load konten
-      if (!comingSoonLoaded) loadComingSoon();
+      out += '<a class="cs-news-card" href="' + berita.link + '">' +
+        '<div class="cs-news-card-content">' +
+          '<div class="cs-news-title">' + berita.judul + '</div>' +
+          '<div class="cs-news-desc">'  + berita.deskripsi + '</div>' +
+        '</div>' +
+        '<div class="cs-news-right">' +
+          statusHtml +
+          '<span class="cs-news-arrow">›</span>' +
+        '</div>' +
+      '</a>';
     });
-  }
-
-  if (backFromComingSoon) {
-    backFromComingSoon.addEventListener('click', function() {
-      panelComingSoon && panelComingSoon.classList.remove('show');
-      var navMenuUtama = document.getElementById('navMenuUtama');
-      setActiveNavCS(navMenuUtama);
-    });
-  }
-
-  function getVotes() {
-    try { return JSON.parse(localStorage.getItem('cs_votes') || '{}'); } catch(e) { return {}; }
-  }
-
-  function saveVotes(votes) {
-    try { localStorage.setItem('cs_votes', JSON.stringify(votes)); } catch(e) {}
-  }
-
-  function getVoteCounts() {
-    try { return JSON.parse(localStorage.getItem('cs_vote_counts') || '{}'); } catch(e) { return {}; }
-  }
-
-  function saveVoteCounts(counts) {
-    try { localStorage.setItem('cs_vote_counts', JSON.stringify(counts)); } catch(e) {}
-  }
-
-  function submitToNetlify(templateId, voteType) {
-    var formData = new FormData();
-    formData.append('form-name', 'template-vote');
-    formData.append('template_id', templateId);
-    formData.append('vote_type', voteType);
-    fetch('/', { method: 'POST', body: formData }).catch(function() {});
-  }
-
-  function renderVoteButtons(itemId, container) {
-    var votes = getVotes();
-    var counts = getVoteCounts();
-    var userVote = votes[itemId] || null;
-    var likeCount = counts[itemId + '_like'] || 0;
-    var dislikeCount = counts[itemId + '_dislike'] || 0;
-
-    var html = '<div class="cs-vote-row">';
-    html += '<button class="cs-vote-btn cs-like' + (userVote === 'like' ? ' voted' : '') + '" data-id="' + itemId + '" data-type="like">';
-    html += '<span class="cs-vote-icon">👍</span> <span class="cs-vote-count">' + likeCount + '</span></button>';
-    html += '<button class="cs-vote-btn cs-dislike' + (userVote === 'dislike' ? ' voted' : '') + '" data-id="' + itemId + '" data-type="dislike">';
-    html += '<span class="cs-vote-icon">👎</span> <span class="cs-vote-count">' + dislikeCount + '</span></button>';
-    if (userVote) {
-      html += '<span class="cs-voted-label">Suaramu tersimpan ✓</span>';
-    }
-    html += '</div>';
-    container.innerHTML = html;
-
-    container.querySelectorAll('.cs-vote-btn').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var id = this.getAttribute('data-id');
-        var type = this.getAttribute('data-type');
-        var currentVote = getVotes()[id];
-        var currentCounts = getVoteCounts();
-
-        // Cabut vote lama jika ada
-        if (currentVote) {
-          currentCounts[id + '_' + currentVote] = Math.max(0, (currentCounts[id + '_' + currentVote] || 0) - 1);
-        }
-
-        if (currentVote === type) {
-          // Klik sama = batalkan vote
-          var newVotes = getVotes();
-          delete newVotes[id];
-          saveVotes(newVotes);
-        } else {
-          // Vote baru
-          var newVotes2 = getVotes();
-          newVotes2[id] = type;
-          saveVotes(newVotes2);
-          currentCounts[id + '_' + type] = (currentCounts[id + '_' + type] || 0) + 1;
-          submitToNetlify(id, type);
-        }
-
-        saveVoteCounts(currentCounts);
-        renderVoteButtons(id, container);
-      });
-    });
+    out += '</div>';
+    return out;
   }
 
   function loadComingSoon() {
+    if (!comingSoonBody) return;
+
+    // Cek cache localStorage — persisten lintas halaman & reload
+    try {
+      var cached = localStorage.getItem(CS_CACHE_KEY);
+      if (cached) {
+        comingSoonBody.innerHTML = cached;
+        comingSoonLoaded = true;
+        return; // Langsung tampil, tanpa "Memuat"
+      }
+    } catch(e) {}
+
+    // Belum ada cache sama sekali — fetch pertama kali
+    comingSoonBody.innerHTML = '<div class="cs-loading">Memuat...</div>';
+
     fetch('konten/coming-soon.json')
       .then(function(r) { return r.json(); })
       .then(function(data) {
         comingSoonLoaded = true;
-        var html = '<div class="cs-header">';
-        html += '<p class="cs-desc">' + data.deskripsi + '</p></div>';
-
-        data.berita.forEach(function(berita) {
-          html += '<div class="cs-berita">';
-          html += '<h3 class="cs-berita-judul">' + berita.judul + '</h3>';
-          html += '<p class="cs-berita-desc">' + berita.deskripsi + '</p>';
-
-          if (berita.status === 'voting') {
-            html += '<div class="cs-vote-hint">👆 Tap template untuk melihat • Beri suaramu!</div>';
-          }
-
-          if (berita.items) {
-            berita.items.forEach(function(item) {
-              html += '<div class="cs-item" id="cs-item-' + item.id + '">';
-              html += '<div class="cs-item-header">';
-              html += '<a class="cs-item-link" href="' + item.link + '" target="_blank">';
-              html += '<div class="cs-item-name">' + item.nama + ' <span class="cs-link-icon">↗</span></div>';
-              html += '<div class="cs-item-sub">' + item.subjudul + '</div></a>';
-              html += '</div>';
-              html += '<p class="cs-item-desc">' + item.deskripsi + '</p>';
-              html += '<div class="cs-vote-wrap" id="vote-' + item.id + '"></div>';
-              html += '</div>';
-            });
-          }
-          html += '</div>';
-        });
-
+        var html = buildComingSoonHtml(data);
         comingSoonBody.innerHTML = html;
-
-        // Render vote buttons untuk setiap item
-        data.berita.forEach(function(berita) {
-          if (berita.items) {
-            berita.items.forEach(function(item) {
-              var voteWrap = document.getElementById('vote-' + item.id);
-              if (voteWrap) renderVoteButtons(item.id, voteWrap);
-            });
-          }
-        });
+        // Simpan ke localStorage agar kembali dari berita langsung tampil
+        try { localStorage.setItem(CS_CACHE_KEY, html); } catch(e) {}
       })
       .catch(function() {
-        comingSoonBody.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:20px">Gagal memuat konten.</p>';
+        if (comingSoonBody)
+          comingSoonBody.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:20px">Gagal memuat konten.</p>';
       });
   }
-})();
+
+});

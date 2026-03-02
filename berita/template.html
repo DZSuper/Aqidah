@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pemilihan Template | Ilmu Agama Islam</title>
+  <style>
+    /* ── INIT TEMA (cegah flash) ── */
+    :root {
+      --bg:           #0a0a0a;
+      --surface:      #111111;
+      --card-bg:      #161616;
+      --card-border:  #2a2a2a;
+      --gold:         #c9a84c;
+      --green:        #00ff88;
+      --accent:       #00ff88;
+      --text-main:    #e8e8e8;
+      --text-muted:   #888;
+      --transition:   0.2s ease;
+    }
+    [data-theme="light"] {
+      --bg:           #f5f5f0;
+      --surface:      #ffffff;
+      --card-bg:      #ffffff;
+      --card-border:  #ddd;
+      --gold:         #8a6500;
+      --green:        #007744;
+      --accent:       #007744;
+      --text-main:    #1a1a1a;
+      --text-muted:   #666;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--surface);
+      border-bottom: 1px solid var(--card-border);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 7px 14px;
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: inherit;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+    .back-btn:hover {
+      background: var(--card-bg);
+      border-color: var(--accent);
+    }
+    .header-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+    .header-badge {
+      margin-left: auto;
+      background: rgba(234,179,8,0.15);
+      color: #eab308;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+    }
+
+    /* ── BODY ── */
+    .page-body {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 24px 16px 60px;
+    }
+
+    .berita-judul {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .berita-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 28px;
+      border-left: 3px solid var(--accent);
+      padding-left: 12px;
+    }
+
+    /* ── TEMPLATE CARDS ── */
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .vote-hint {
+      font-size: 0.82rem;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .template-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: border-color var(--transition), transform var(--transition);
+    }
+    .template-card:hover { border-color: var(--accent); }
+    .template-card:active { transform: scale(0.99); }
+
+    .template-card-main {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      gap: 14px;
+    }
+
+    .template-num {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--card-border), var(--card-bg));
+      border: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .template-info { flex: 1; min-width: 0; }
+    .template-nama {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 2px;
+    }
+    .template-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .template-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      background: rgba(0,255,136,0.08);
+      border: 1px solid rgba(0,255,136,0.25);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: all var(--transition);
+    }
+    .template-link:hover {
+      background: rgba(0,255,136,0.15);
+      border-color: var(--accent);
+    }
+
+    .template-desc-row {
+      padding: 0 16px 12px;
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      border-top: 1px solid var(--card-border);
+      padding-top: 10px;
+    }
+
+    /* ── VOTE ROW ── */
+    .vote-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px 14px;
+      flex-wrap: wrap;
+    }
+
+    .vote-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--card-border);
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-family: inherit;
+    }
+    .vote-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .vote-btn.like.voted  { background: rgba(74,222,128,0.15); border-color: #4ade80; color: #4ade80; }
+    .vote-btn.dislike.voted { background: rgba(248,113,113,0.15); border-color: #f87171; color: #f87171; }
+    .vote-count { font-variant-numeric: tabular-nums; }
+    .voted-label { font-size: 0.76rem; color: #4ade80; font-weight: 600; }
+
+    /* ── DIVIDER ── */
+    .divider { height: 1px; background: var(--card-border); margin: 4px 0; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="top-header">
+  <a class="back-btn" href="../index.html#coming-soon">← Kembali</a>
+  <span class="header-title">Coming Soon</span>
+  <span class="header-badge">🗳 Voting</span>
+</div>
+
+<!-- BODY -->
+<div class="page-body">
+  <h1 class="berita-judul">🎨 Pemilihan Template</h1>
+  <p class="berita-desc">
+    Website ini akan segera tampil dengan desain baru! Ada 5 kandidat template yang sedang dipertimbangkan.
+    Lihat dan pilih favoritmu — pendapatmu sangat berarti untuk menentukan tampilan website ini ke depannya.
+  </p>
+
+  <div class="section-label">5 Kandidat Template</div>
+  <div class="vote-hint">👆 Lihat template lalu beri suaramu di bawah!</div>
+
+  <div id="templateList"></div>
+</div>
+
+<script>
+(function() {
+  // Terapkan tema tersimpan
+  try {
+    var t = localStorage.getItem('iai_theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+  } catch(e) {}
+})();
+
+var templates = [
+  { id:'template1', nama:'Template 1', sub:'Manuskrip Islam',       desc:'Nuansa klasik seperti kitab kuno. Sidebar navigasi, ornamen geometris Islam, font serif elegan.',                              link:'template/template1.html' },
+  { id:'template2', nama:'Template 2', sub:'Dashboard Modern',       desc:'Tampilan seperti aplikasi belajar profesional dengan statistik, badge warna, dan info box berwarna.',                        link:'template/template2.html' },
+  { id:'template3', nama:'Template 3', sub:'Ensiklopedia Akordion',  desc:'Semua kelompok tampil sekaligus, tap untuk buka/tutup. Ada fitur pencarian langsung di dalam halaman.',                     link:'template/template3.html' },
+  { id:'template4', nama:'Template 4', sub:'Flashcard Interaktif',   desc:'Kartu yang bisa dibalik dengan animasi 3D. Support keyboard (Space = flip). Paling interaktif dan gamifikasi.',            link:'template/template4.html' },
+  { id:'template5', nama:'Template 5', sub:'Peta Perbandingan',      desc:'Layout split: sidebar kiri + konten kanan. Tabel perbandingan antar kelompok yang rapi dan sistematis.',                   link:'template/template5.html' }
+];
+
+function getVotes()  { try { return JSON.parse(localStorage.getItem('cs_votes') || '{}'); } catch(e) { return {}; } }
+function saveVotes(v){ try { localStorage.setItem('cs_votes', JSON.stringify(v)); } catch(e) {} }
+function getCounts() { try { return JSON.parse(localStorage.getItem('cs_vote_counts') || '{}'); } catch(e) { return {}; } }
+function saveCounts(c){ try { localStorage.setItem('cs_vote_counts', JSON.stringify(c)); } catch(e) {} }
+
+function renderVote(itemId, wrap) {
+  var uv = getVotes()[itemId] || null;
+  var cc = getCounts();
+  var lc = cc[itemId+'_like']    || 0;
+  var dc = cc[itemId+'_dislike'] || 0;
+
+  wrap.innerHTML =
+    '<div class="vote-row">' +
+    '<button class="vote-btn like'    + (uv==='like'    ? ' voted':'') + '" data-id="'+itemId+'" data-type="like"><span>👍</span><span class="vote-count">'+lc+'</span></button>' +
+    '<button class="vote-btn dislike' + (uv==='dislike' ? ' voted':'') + '" data-id="'+itemId+'" data-type="dislike"><span>👎</span><span class="vote-count">'+dc+'</span></button>' +
+    (uv ? '<span class="voted-label">Suaramu tersimpan ✓</span>' : '') +
+    '</div>';
+
+  wrap.querySelectorAll('.vote-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id   = this.getAttribute('data-id');
+      var type = this.getAttribute('data-type');
+      var vv   = getVotes();
+      var cc2  = getCounts();
+      var prev = vv[id];
+
+      if (prev) cc2[id+'_'+prev] = Math.max(0, (cc2[id+'_'+prev]||0) - 1);
+
+      if (prev === type) {
+        delete vv[id];
+      } else {
+        vv[id] = type;
+        cc2[id+'_'+type] = (cc2[id+'_'+type]||0) + 1;
+        // Kirim ke Netlify Forms
+        try {
+          var fd = new FormData();
+          fd.append('form-name','template-vote');
+          fd.append('template_id', id);
+          fd.append('vote_type', type);
+          fetch('../../', { method:'POST', body:fd }).catch(function(){});
+        } catch(e) {}
+      }
+
+      saveVotes(vv);
+      saveCounts(cc2);
+      renderVote(id, wrap);
+    });
+  });
+}
+
+function render() {
+  var list = document.getElementById('templateList');
+  var html = '';
+  templates.forEach(function(t, i) {
+    html += '<div class="template-card">' +
+      '<div class="template-card-main">' +
+        '<div class="template-num">'+ (i+1) +'</div>' +
+        '<div class="template-info">' +
+          '<div class="template-nama">'+ t.nama +'</div>' +
+          '<div class="template-sub">'+ t.sub +'</div>' +
+        '</div>' +
+        '<a class="template-link" href="'+ t.link +'" >Lihat ↗</a>' +
+      '</div>' +
+      '<div class="divider"></div>' +
+      '<div class="template-desc-row">'+ t.desc +'</div>' +
+      '<div class="divider"></div>' +
+      '<div id="vote-'+ t.id +'"></div>' +
+    '</div>';
+  });
+  list.innerHTML = html;
+  templates.forEach(function(t) {
+    renderVote(t.id, document.getElementById('vote-'+t.id));
+  });
+}
+
+render();
+</script>
+</body>
+</html>
