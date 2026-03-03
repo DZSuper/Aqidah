@@ -1,0 +1,49 @@
+<svg width="512" height="512" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="lampG" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffd700"/>
+      <stop offset="100%" stop-color="#883300"/>
+    </linearGradient>
+    <linearGradient id="flameG" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#ffd700"/>
+      <stop offset="60%" stop-color="#00ff88"/>
+      <stop offset="100%" stop-color="#00ffaa" stop-opacity="0.7"/>
+    </linearGradient>
+    <radialGradient id="glowG" cx="50%" cy="100%" r="60%">
+      <stop offset="0%" stop-color="#ffd700" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#ffd700" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100" height="100" rx="22" fill="#0b0c0e"/>
+
+  <!-- Glow bawah -->
+  <ellipse cx="50" cy="75" rx="30" ry="12" fill="url(#glowG)"/>
+
+  <!-- Pegangan atas -->
+  <path d="M 42,24 Q 42,18 50,18 Q 58,18 58,24"
+    fill="none" stroke="#ffd700" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+
+  <!-- Badan lentera segi 6 -->
+  <polygon points="50,28 64,36 64,60 50,68 36,60 36,36"
+    fill="url(#lampG)" opacity="0.12"/>
+  <polygon points="50,28 64,36 64,60 50,68 36,60 36,36"
+    fill="none" stroke="url(#lampG)" stroke-width="2"/>
+
+  <!-- Garis silang dekorasi dalam lentera -->
+  <line x1="50" y1="28" x2="50" y2="68" stroke="#ffd700" stroke-width="0.7" opacity="0.2"/>
+  <line x1="36" y1="36" x2="64" y2="60" stroke="#ffd700" stroke-width="0.7" opacity="0.2"/>
+  <line x1="64" y1="36" x2="36" y2="60" stroke="#ffd700" stroke-width="0.7" opacity="0.2"/>
+
+  <!-- Cahaya dalam lentera -->
+  <ellipse cx="50" cy="48" rx="8" ry="11" fill="#ffd700" opacity="0.08"/>
+
+  <!-- Nyala api di atas -->
+  <path d="M 50,28 Q 45,20 48,13 Q 50,8 52,13 Q 55,20 50,28 Z"
+    fill="url(#flameG)"/>
+
+  <!-- Alas lentera -->
+  <rect x="36" y="68" width="28" height="4" rx="2" fill="url(#lampG)" opacity="0.85"/>
+  <rect x="40" y="72" width="20" height="3" rx="1.5" fill="url(#lampG)" opacity="0.5"/>
+</svg>
