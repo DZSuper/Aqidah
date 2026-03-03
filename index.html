@@ -76,11 +76,6 @@
 <body>
 
   <!-- HAMBURGER -->
-  <button class="hamburger-btn" id="hamburgerBtn" aria-label="Buka Menu">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
 
   <!-- OVERLAY -->
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -278,11 +273,78 @@
     <input type="hidden" name="template_id">
     <input type="hidden" name="vote_type">
   </form>
-  <div class="main-view" id="mainView">
-    <main id="mainContent">
+  <div class="sticky-header">
+    <!-- TOPBAR: hamburger kiri + judul tengah -->
+    <div class="topbar">
+      <button class="hamburger-btn" id="hamburgerBtn" aria-label="Buka Menu">
+        <span></span><span></span><span></span>
+      </button>
       <h1 class="main-title" id="judulWebsite">Ilmu Agama Islam</h1>
+      <div class="topbar-spacer"></div>
+    </div>
+    <!-- TAB BAR -->
+    <div class="tab-bar" id="tabBar">
+      <button class="tab-btn active" data-tab="materi">
+        <span class="tab-icon">📚</span> Materi
+      </button>
+      <button class="tab-btn" data-tab="ceramah">
+        <span class="tab-icon">🎤</span> Ceramah
+      </button>
+      <button class="tab-btn" data-tab="dalil">
+        <span class="tab-icon">📖</span> Dalil
+      </button>
+      <button class="tab-btn" data-tab="kutipan">
+        <span class="tab-icon">💬</span> Kutipan
+      </button>
+      <button class="tab-btn" data-tab="catatan">
+        <span class="tab-icon">✏️</span> Catatan
+      </button>
+    </div>
+  </div><!-- end sticky-header -->
+
+  <div class="main-view" id="mainView">
+
+    <!-- TAB: MATERI -->
+    <main class="tab-content active" id="tab-materi">
       <!-- Konten dimuat dari konten/index.json -->
     </main>
+
+    <!-- TAB: CERAMAH -->
+    <main class="tab-content" id="tab-ceramah">
+      <div class="tab-empty">
+        <div class="tab-empty-icon">🎤</div>
+        <div class="tab-empty-title">Ceramah</div>
+        <div class="tab-empty-desc">Outline dan materi ceramah akan segera tersedia.<br>Pantau terus di Coming Soon!</div>
+      </div>
+    </main>
+
+    <!-- TAB: DALIL -->
+    <main class="tab-content" id="tab-dalil">
+      <div class="tab-empty">
+        <div class="tab-empty-icon">📖</div>
+        <div class="tab-empty-title">Dalil</div>
+        <div class="tab-empty-desc">Referensi dalil Al-Qur'an, Hadits, dan Ijma'<br>akan segera tersedia.</div>
+      </div>
+    </main>
+
+    <!-- TAB: KUTIPAN -->
+    <main class="tab-content" id="tab-kutipan">
+      <div class="tab-empty">
+        <div class="tab-empty-icon">💬</div>
+        <div class="tab-empty-title">Kutipan Ulama</div>
+        <div class="tab-empty-desc">Kumpulan perkataan dan hikmah para Ulama Salaf<br>akan segera tersedia.</div>
+      </div>
+    </main>
+
+    <!-- TAB: CATATAN -->
+    <main class="tab-content" id="tab-catatan">
+      <div class="tab-empty">
+        <div class="tab-empty-icon">✏️</div>
+        <div class="tab-empty-title">Catatan Kajian</div>
+        <div class="tab-empty-desc">Fitur catatan pribadi untuk menyimpan<br>hasil kajianmu akan segera tersedia.</div>
+      </div>
+    </main>
+
     <footer>
       <p>© 2025 Ilmu Agama Islam · Dani Surya Anugrah</p>
     </footer>
@@ -294,7 +356,7 @@
     fetch('konten/index.json')
       .then(function(r){ return r.json(); })
       .then(function(data){
-        var main = document.getElementById('mainContent');
+        var main = document.getElementById('tab-materi');
         var judul = document.getElementById('judulWebsite');
         if (data.judul_website) judul.textContent = data.judul_website;
 
@@ -310,12 +372,11 @@
           html += '</div></section>';
         });
 
-        // Sisipkan setelah h1
-        judul.insertAdjacentHTML('afterend', html);
+        main.innerHTML = html;
       })
       .catch(function(){
         // Fallback jika fetch gagal (misal buka dari file lokal)
-        var main = document.getElementById('mainContent');
+        var main = document.getElementById('tab-materi');
         main.innerHTML += '<p style="text-align:center;color:var(--text-muted);margin-top:40px;">Buka website melalui server untuk memuat konten.</p>';
       });
   </script>
@@ -357,5 +418,7 @@
       });
     })();
   </script>
+
+
 </body>
 </html>

@@ -135,6 +135,38 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
+
+  // ── TAB BAR ────────────────────────────────
+  var tabBtns = document.querySelectorAll('.tab-btn');
+  var tabContents = document.querySelectorAll('.tab-content');
+
+  tabBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var target = btn.getAttribute('data-tab');
+      tabBtns.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      tabContents.forEach(function(t) { t.classList.remove('active'); });
+      var el = document.getElementById('tab-' + target);
+      if (el) el.classList.add('active');
+      try { localStorage.setItem('iai_active_tab', target); } catch(e) {}
+    });
+  });
+
+  // Pulihkan tab terakhir
+  try {
+    var lastTab = localStorage.getItem('iai_active_tab');
+    if (lastTab) {
+      var lastBtn = document.querySelector('.tab-btn[data-tab="' + lastTab + '"]');
+      var lastEl  = document.getElementById('tab-' + lastTab);
+      if (lastBtn && lastEl) {
+        tabBtns.forEach(function(b) { b.classList.remove('active'); });
+        tabContents.forEach(function(t) { t.classList.remove('active'); });
+        lastBtn.classList.add('active');
+        lastEl.classList.add('active');
+      }
+    }
+  } catch(e) {}
+
   // ── AUTO BUKA PANEL DARI URL HASH ──────────
   // Digunakan tombol "kembali" dari halaman berita (index.html#coming-soon)
   function checkHash() {
