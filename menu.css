@@ -55,10 +55,10 @@ body {
    HAMBURGER BUTTON
 ============================================= */
 .hamburger-btn {
-  position: relative;
-  top: auto;
-  left: auto;
-  z-index: auto;
+  position: fixed;
+  top: 12px;
+  left: 16px;
+  z-index: 950;
   background: none;
   border: none;
   border-radius: 0;
@@ -801,13 +801,9 @@ footer {
   flex-shrink: 0;
 }
 
-.topbar .hamburger-btn {
-  position: relative;
-  top: auto;
-  left: auto;
-  z-index: auto;
-  flex-shrink: 0;
+.hamburger-placeholder {
   width: 44px;
+  flex-shrink: 0;
 }
 
 .topbar .main-title {
