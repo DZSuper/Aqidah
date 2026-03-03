@@ -401,22 +401,10 @@ document.addEventListener('DOMContentLoaded', function () {
   updateFabVisibility();
   renderCatatanGrid();
 
-  // Pulihkan tab catatan jika kembali dari editor
-  try {
-    var returnTab = localStorage.getItem('iai_return_tab');
-    if (returnTab) {
-      localStorage.removeItem('iai_return_tab');
-      var retBtn = document.querySelector('.tab-btn[data-tab="' + returnTab + '"]');
-      var retEl  = document.getElementById('tab-' + returnTab);
-      if (retBtn && retEl) {
-        tabBtns.forEach(function(b) { b.classList.remove('active'); });
-        tabContents.forEach(function(t) { t.classList.remove('active'); });
-        retBtn.classList.add('active');
-        retEl.classList.add('active');
-        updateFabVisibility();
-        renderCatatanGrid();
-      }
-    }
-  } catch(e) {}
+  // Handle bfcache: browser kadang restore halaman dari cache tanpa re-run JS.
+  // Paksa reload agar tab & state selalu benar saat kembali dari halaman lain.
+  window.addEventListener('pageshow', function(e) {
+    if (e.persisted) { window.location.reload(); }
+  });
 
 });
