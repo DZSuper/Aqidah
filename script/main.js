@@ -187,6 +187,18 @@ document.addEventListener('DOMContentLoaded', function () {
   var comingSoonBody   = document.getElementById('comingSoonBody');
   var CS_CACHE_KEY     = 'cs_html_cache';
 
+  // Pre-render dari cache SEGERA saat halaman dimuat
+  // Sehingga saat panel dibuka, konten sudah siap (tidak ada "Memuat...")
+  (function preRender() {
+    try {
+      var cached = localStorage.getItem(CS_CACHE_KEY);
+      if (cached && comingSoonBody) {
+        comingSoonBody.innerHTML = cached;
+        comingSoonLoaded = true;
+      }
+    } catch(e) {}
+  })();
+
   function buildComingSoonHtml(data) {
     var out = '<p class="cs-desc">' + data.deskripsi + '</p>';
     out += '<div class="cs-cards">';
