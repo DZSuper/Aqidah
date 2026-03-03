@@ -10,9 +10,9 @@
        di hasil pencarian
   ============================================= -->
   <!-- Deskripsi singkat yang muncul di bawah judul di Google -->
-  <meta name="description" content="Platform belajar ilmu agama Islam berbasis Manhaj Salaf. Mencakup Aqidah, Fiqih, Nahwu, Shorof, dan Siroh. Sederhana, mudah diakses, dan bermanfaat.">
-  <!-- Kata kunci pencarian (kurang berpengaruh di Google modern, tapi tetap berguna) -->
-  <meta name="keywords" content="ilmu agama islam, manhaj salaf, aqidah, tauhid, fiqih, nahwu, shorof, siroh nabawi, belajar islam">
+  <meta name="description" id="metaDescription" content="">
+  <!-- Kata kunci pencarian -->
+  <meta name="keywords" id="metaKeywords" content="">
   <!-- Nama pembuat website -->
   <meta name="author" content="Dani Surya Anugrah">
   <!-- Izinkan Google mengindeks halaman ini -->
@@ -28,7 +28,7 @@
   <!-- Judul yang muncul di preview link -->
   <meta property="og:title" content="Ilmu Agama Islam — Manhaj Salaf">
   <!-- Deskripsi yang muncul di preview link -->
-  <meta property="og:description" content="Platform belajar ilmu agama Islam berbasis Manhaj Salaf. Aqidah, Fiqih, Nahwu, Shorof, dan Siroh dalam satu website yang sederhana.">
+  <meta property="og:description" id="metaOgDescription" content="">
   <!-- Gambar yang muncul saat link dibagikan (ukuran ideal 1200x630) -->
   <meta property="og:image" content="https://website-aqidah.netlify.app/og-image.svg">
   <!-- URL halaman -->
@@ -49,6 +49,20 @@
   <meta name="twitter:description" content="Platform belajar ilmu agama Islam berbasis Manhaj Salaf. Aqidah, Fiqih, Nahwu, Shorof, dan Siroh.">
   <meta name="twitter:image" content="https://website-aqidah.netlify.app/og-image.svg">
 
+  <!-- Load SEO dari JSON agar bisa diedit di CMS -->
+  <script>
+    fetch('konten/seo.json')
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        var desc = document.getElementById('metaDescription');
+        var keys = document.getElementById('metaKeywords');
+        var ogDesc = document.getElementById('metaOgDescription');
+        if (desc) desc.setAttribute('content', d.description || '');
+        if (keys) keys.setAttribute('content', d.keywords || '');
+        if (ogDesc) ogDesc.setAttribute('content', d.description || '');
+      })
+      .catch(function() {});
+  </script>
   <link rel="stylesheet" href="menu.css">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="apple-touch-icon" href="favicon.svg">

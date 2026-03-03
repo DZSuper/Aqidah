@@ -277,3 +277,19 @@ collections:
                   - {name: "subjudul", label: "Subjudul", widget: "string"}
                   - {name: "deskripsi", label: "Deskripsi", widget: "text"}
                   - {name: "link", label: "Link", widget: "string"}
+
+  - name: "seo"
+    label: "SEO"
+    files:
+      - name: "seo"
+        label: "Deskripsi & Kata Kunci"
+        file: "konten/seo.json"
+        fields:
+          - name: "description"
+            label: "Deskripsi Website"
+            widget: "text"
+            hint: "Teks singkat yang muncul di hasil pencarian Google (ideal 150-160 karakter)"
+          - name: "keywords"
+            label: "Kata Kunci Pencarian"
+            widget: "string"
+            hint: "Pisahkan dengan koma. Contoh: ilmu agama islam, manhaj salaf, tauhid"
