@@ -888,3 +888,155 @@ footer {
   line-height: 1.7;
 }
 
+
+/* =============================================
+   CATATAN — KARTU GRID
+============================================= */
+.catatan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px;
+  padding: 16px;
+}
+
+.catatan-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 13px 12px;
+  cursor: pointer;
+  transition: all var(--transition);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 110px;
+}
+
+.catatan-card:hover,
+.catatan-card:active {
+  border-color: var(--gold);
+  box-shadow: 0 0 14px rgba(255,215,0,0.15);
+}
+
+.catatan-card-judul {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--gold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.catatan-card-preview {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  flex: 1;
+  line-height: 1.5;
+}
+
+.catatan-card-meta {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+/* =============================================
+   CATATAN — FAB SPEED DIAL
+============================================= */
+.catatan-fab-wrap {
+  position: fixed;
+  bottom: 24px;
+  right: 20px;
+  z-index: 800;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.catatan-fab-btn {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: #0b0c0e;
+  border: none;
+  font-size: 1.7rem;
+  font-weight: 300;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(255,215,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+  flex-shrink: 0;
+}
+
+.catatan-fab-btn:hover {
+  box-shadow: 0 6px 22px rgba(255,215,0,0.5);
+  transform: scale(1.07);
+}
+
+.catatan-fab-plus {
+  display: block;
+  transition: transform var(--transition);
+  line-height: 1;
+}
+
+.catatan-fab-btn.open .catatan-fab-plus {
+  transform: rotate(45deg);
+}
+
+.catatan-fab-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.catatan-fab-menu.open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+}
+
+.catatan-fab-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-sidebar);
+  border: 1.5px solid var(--border);
+  border-radius: 24px;
+  padding: 8px 16px 8px 14px;
+  cursor: pointer;
+  color: var(--text-light);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all var(--transition);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.catatan-fab-option:hover:not(:disabled) {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.catatan-fab-option:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.catatan-fab-opt-icon {
+  font-size: 1.1rem;
+}

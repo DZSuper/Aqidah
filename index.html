@@ -341,16 +341,34 @@
 
     <!-- TAB: CATATAN -->
     <main class="tab-content" id="tab-catatan">
-      <div class="tab-empty">
+      <div id="catatanEmptyState" class="tab-empty">
         <div class="tab-empty-icon">✏️</div>
         <div class="tab-empty-title">Catatan Kajian</div>
-        <div class="tab-empty-desc">Fitur catatan pribadi untuk menyimpan<br>hasil kajianmu akan segera tersedia.</div>
+        <div class="tab-empty-desc">Belum ada catatan.<br>Tekan tombol <strong>+</strong> untuk membuat catatan baru.</div>
       </div>
+      <div id="catatanGrid" class="catatan-grid"></div>
     </main>
 
     <footer>
       <p>© 2025 Ilmu Agama Islam · Dani Surya Anugrah</p>
     </footer>
+  </div>
+
+  <!-- FAB CATATAN -->
+  <div id="catatanFab" class="catatan-fab-wrap">
+    <div id="catatanFabMenu" class="catatan-fab-menu">
+      <button class="catatan-fab-option" id="btnMuatCatatan" disabled>
+        <span class="catatan-fab-opt-label">Muat Catatan</span>
+        <span class="catatan-fab-opt-icon">📂</span>
+      </button>
+      <button class="catatan-fab-option" id="btnTambahCatatan">
+        <span class="catatan-fab-opt-label">Tambah Catatan</span>
+        <span class="catatan-fab-opt-icon">📝</span>
+      </button>
+    </div>
+    <button class="catatan-fab-btn" id="catatanFabBtn" aria-label="Tambah Catatan">
+      <span class="catatan-fab-plus">＋</span>
+    </button>
   </div>
 
   <script src="script/main.js"></script>

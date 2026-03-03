@@ -289,4 +289,134 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   }
 
+  // =============================================
+  // CATATAN
+  // =============================================
+  var NOTES_KEY = 'iai_catatan';
+
+  function getNotes() {
+    try { return JSON.parse(localStorage.getItem(NOTES_KEY)) || []; } catch(e) { return []; }
+  }
+
+  function saveNotes(notes) {
+    try { localStorage.setItem(NOTES_KEY, JSON.stringify(notes)); } catch(e) {}
+  }
+
+  function stripHtml(html) {
+    var tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || '';
+  }
+
+  function formatTanggal(ts) {
+    var d = new Date(ts);
+    return d.toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
+  }
+
+  function renderCatatanGrid() {
+    var notes = getNotes();
+    var grid  = document.getElementById('catatanGrid');
+    var empty = document.getElementById('catatanEmptyState');
+    if (!grid || !empty) return;
+
+    if (notes.length === 0) {
+      empty.style.display = '';
+      grid.innerHTML = '';
+      return;
+    }
+    empty.style.display = 'none';
+    grid.innerHTML = notes.map(function(n) {
+      var preview = stripHtml(n.isi).trim().slice(0, 100);
+      if (!preview) preview = '(kosong)';
+      return '<div class="catatan-card" data-id="' + n.id + '">' +
+        '<div class="catatan-card-judul">' + (n.judul || 'Tanpa Judul') + '</div>' +
+        '<div class="catatan-card-preview">' + preview + '</div>' +
+        '<div class="catatan-card-meta">' + formatTanggal(n.diubah) + '</div>' +
+      '</div>';
+    }).join('');
+
+    grid.querySelectorAll('.catatan-card').forEach(function(card) {
+      card.addEventListener('click', function() {
+        window.location.href = 'catatan/editor.html?id=' + card.getAttribute('data-id');
+      });
+    });
+  }
+
+  // FAB: hanya tampil di tab catatan
+  var fabWrap = document.getElementById('catatanFab');
+  var fabBtn  = document.getElementById('catatanFabBtn');
+  var fabMenu = document.getElementById('catatanFabMenu');
+  var fabOpen = false;
+
+  function updateFabVisibility() {
+    var activeTab = document.querySelector('.tab-btn.active');
+    if (fabWrap) {
+      fabWrap.style.display = (activeTab && activeTab.getAttribute('data-tab') === 'catatan') ? '' : 'none';
+    }
+  }
+
+  function closeFabMenu() {
+    fabOpen = false;
+    if (fabMenu) fabMenu.classList.remove('open');
+    if (fabBtn)  fabBtn.classList.remove('open');
+  }
+
+  if (fabBtn) {
+    fabBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      fabOpen = !fabOpen;
+      fabMenu.classList.toggle('open', fabOpen);
+      fabBtn.classList.toggle('open', fabOpen);
+    });
+  }
+
+  document.addEventListener('click', function() { closeFabMenu(); });
+  if (fabMenu) fabMenu.addEventListener('click', function(e) { e.stopPropagation(); });
+
+  var btnTambah = document.getElementById('btnTambahCatatan');
+  if (btnTambah) {
+    btnTambah.addEventListener('click', function() {
+      var id = 'note_' + Date.now();
+      var notes = getNotes();
+      notes.unshift({ id: id, judul: '', isi: '', dibuat: Date.now(), diubah: Date.now() });
+      saveNotes(notes);
+      window.location.href = 'catatan/editor.html?id=' + id;
+    });
+  }
+
+  // Hook tab switching untuk update FAB & render grid
+  tabBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      setTimeout(function() {
+        updateFabVisibility();
+        var active = document.querySelector('.tab-btn.active');
+        if (active && active.getAttribute('data-tab') === 'catatan') {
+          renderCatatanGrid();
+        }
+      }, 10);
+    });
+  });
+
+  // Init
+  updateFabVisibility();
+  renderCatatanGrid();
+
+  // Pulihkan tab catatan jika kembali dari editor
+  try {
+    var returnTab = localStorage.getItem('iai_return_tab');
+    if (returnTab) {
+      localStorage.removeItem('iai_return_tab');
+      var retBtn = document.querySelector('.tab-btn[data-tab="' + returnTab + '"]');
+      var retEl  = document.getElementById('tab-' + returnTab);
+      if (retBtn && retEl) {
+        tabBtns.forEach(function(b) { b.classList.remove('active'); });
+        tabContents.forEach(function(t) { t.classList.remove('active'); });
+        retBtn.classList.add('active');
+        retEl.classList.add('active');
+        updateFabVisibility();
+        renderCatatanGrid();
+      }
+    }
+  } catch(e) {}
+
 });
