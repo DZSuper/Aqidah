@@ -142,6 +142,11 @@
       background: var(--bg-sidebar);
       border-bottom: 1px solid var(--border);
       flex-shrink: 0;
+      overflow: visible;
+      -webkit-overflow-scrolling: touch;
+    }
+    /* Scroll toolbar pakai inner div, bukan wrapper */
+    .toolbar-wrap .toolbar {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
     }
@@ -196,13 +201,84 @@
     .tool-color-bar       { width: 18px; height: 3px; border-radius: 2px; background: var(--gold); }
     .tool-color-input     { position: absolute; width: 1px; height: 1px; opacity: 0; top: 0; left: 0; }
 
-    .tool-select {
-      background: var(--bg-card); border: 1px solid var(--border); border-radius: 7px;
-      color: var(--text-light); font-family: 'Poppins', sans-serif; font-size: 0.78rem;
-      padding: 4px 6px; cursor: pointer; height: 34px; flex-shrink: 0;
-      -webkit-user-select: none; user-select: none;
+    /* ── Custom Format Dropdown ── */
+    .fmt-dropdown {
+      position: relative;
+      flex-shrink: 0;
     }
-    .tool-select option { background: #111318; }
+    .fmt-selected {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 34px;
+      padding: 0 10px 0 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      color: var(--text-light);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.78rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all var(--transition);
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .fmt-selected:hover { border-color: var(--gold); color: var(--gold); }
+    .fmt-dropdown.open .fmt-selected { border-color: var(--gold); color: var(--gold); }
+    .fmt-chevron {
+      width: 14px; height: 14px;
+      fill: currentColor;
+      transition: transform var(--transition);
+      flex-shrink: 0;
+    }
+    .fmt-dropdown.open .fmt-chevron { transform: rotate(180deg); }
+
+    .fmt-menu {
+      position: fixed;
+      top: auto;
+      left: auto;
+      background: var(--bg-sidebar);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 6px;
+      display: none;
+      flex-direction: column;
+      gap: 3px;
+      z-index: 9999;
+      min-width: 160px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .fmt-dropdown.open .fmt-menu { display: flex; }
+
+    .fmt-opt {
+      background: none;
+      border: none;
+      border-radius: 7px;
+      padding: 7px 10px;
+      cursor: pointer;
+      text-align: left;
+      transition: background var(--transition);
+    }
+    .fmt-opt:hover { background: var(--bg-card); }
+    .fmt-opt.active { background: rgba(255,215,0,0.08); }
+
+    .fmt-opt-preview {
+      display: block;
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-light);
+    }
+    .fmt-p  { font-size: 0.85rem; }
+    .fmt-h1 { font-size: 1.15rem; font-weight: 700; color: var(--gold); }
+    .fmt-h2 { font-size: 1rem;    font-weight: 700; color: var(--gold); }
+    .fmt-h3 { font-size: 0.88rem; font-weight: 700; color: var(--gold); }
+    .fmt-quote {
+      font-size: 0.82rem;
+      font-style: italic;
+      color: var(--text-muted);
+      border-left: 3px solid var(--gold);
+      padding-left: 8px;
+    }
 
     /* ─── EDITOR AREA ─────────────────────── */
     .editor-body {
@@ -235,13 +311,17 @@
     #editorContent em     { font-style: italic; }
     #editorContent u      { text-decoration: underline; }
     #editorContent s      { text-decoration: line-through; }
-    #editorContent blockquote {
-      border-left: 3px solid var(--gold); padding: 8px 14px; margin: 10px 0;
-      background: rgba(255,215,0,0.05); border-radius: 0 8px 8px 0;
-      font-style: italic; color: var(--text-muted);
-    }
     #editorContent hr { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
     #editorContent a  { color: var(--green); }
+    #editorContent blockquote {
+      border-left: 3px solid var(--gold);
+      padding: 8px 14px;
+      margin: 10px 0;
+      background: rgba(255,215,0,0.05);
+      border-radius: 0 8px 8px 0;
+      font-style: italic;
+      color: var(--text-muted);
+    }
 
     /* ─── DIALOG ─────────────────────────── */
     .dialog-overlay {
@@ -318,12 +398,30 @@
   <!-- TOOLBAR -->
   <div class="toolbar-wrap">
     <div class="toolbar">
-      <select class="tool-select" id="selHeading">
-        <option value="">Paragraf</option>
-        <option value="h1">Judul 1</option>
-        <option value="h2">Judul 2</option>
-        <option value="h3">Judul 3</option>
-      </select>
+      <!-- Custom Format Dropdown -->
+      <div class="fmt-dropdown" id="fmtDropdown">
+        <button class="fmt-selected" id="fmtSelected">
+          <span id="fmtLabel">¶ Paragraf</span>
+          <svg class="fmt-chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+        </button>
+        <div class="fmt-menu" id="fmtMenu">
+          <button class="fmt-opt" data-val="" data-label="¶ Paragraf">
+            <span class="fmt-opt-preview fmt-p">Paragraf</span>
+          </button>
+          <button class="fmt-opt" data-val="h1" data-label="H1 Judul 1">
+            <span class="fmt-opt-preview fmt-h1">Judul 1</span>
+          </button>
+          <button class="fmt-opt" data-val="h2" data-label="H2 Judul 2">
+            <span class="fmt-opt-preview fmt-h2">Judul 2</span>
+          </button>
+          <button class="fmt-opt" data-val="h3" data-label="H3 Judul 3">
+            <span class="fmt-opt-preview fmt-h3">Judul 3</span>
+          </button>
+          <button class="fmt-opt" data-val="blockquote" data-label="❝ Kutipan">
+            <span class="fmt-opt-preview fmt-quote">Kutipan</span>
+          </button>
+        </div>
+      </div>
       <div class="tool-sep"></div>
       <button class="tool-btn" id="btnBold"      title="Tebal"><b>B</b></button>
       <button class="tool-btn" id="btnItalic"    title="Miring"><i>I</i></button>
@@ -344,9 +442,7 @@
       <button class="tool-btn" id="btnOl" title="Daftar berurut">
         <svg viewBox="0 0 24 24"><path d="M2 17h2v.5H3v1h1v.5H2v1h3v-4H2zm1-9h1V4H2v1h1zm-1 3h1.8L2 13.1v.9h3v-1H3.2L5 10.9V10H2zm5-6v2h14V5zm0 14h14v-2H7zm0-6h14v-2H7z"/></svg>
       </button>
-      <button class="tool-btn" id="btnQuote" title="Kutipan">
-        <svg viewBox="0 0 24 24"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/></svg>
-      </button>
+
       <div class="tool-sep"></div>
       <button class="tool-btn" id="btnHr"   title="Garis pemisah">—</button>
       <button class="tool-btn" id="btnUndo" title="Urungkan">
@@ -455,8 +551,17 @@
   btnSave.addEventListener('click', doSave);
 
   // ── NAVIGASI KELUAR ──────────────────────
+  function isNoteEmpty() {
+    var judulKosong = !judulEl.value.trim();
+    var isiKosong   = !contentEl.innerText.trim() && !contentEl.textContent.trim();
+    return judulKosong && isiKosong;
+  }
+
   function navigateBack() {
-    // Set active tab langsung ke catatan agar index.html tidak perlu logika tambahan
+    // Jika catatan benar-benar kosong (judul & isi), hapus otomatis
+    if (isNoteEmpty()) {
+      saveNotes(getNotes().filter(function(n) { return n.id !== noteId; }));
+    }
     try { localStorage.setItem('iai_active_tab', 'catatan'); } catch(e) {}
     window.location.href = '../index.html';
   }
@@ -468,16 +573,18 @@
   var dialogKeluar = document.getElementById('dialogKeluar');
 
   window.addEventListener('popstate', function() {
-    if (isDirty) {
+    if (isDirty && !isNoteEmpty()) {
       // Dorong kembali state agar user tidak lolos tanpa dialog
       history.pushState({ editor: true }, '');
       dialogKeluar.classList.add('show');
+    } else {
+      // Kosong atau sudah bersih — langsung keluar
+      navigateBack();
     }
-    // Jika tidak dirty, biarkan navigasi berjalan normal
   });
 
   document.getElementById('btnBack').addEventListener('click', function() {
-    if (isDirty) { dialogKeluar.classList.add('show'); }
+    if (isDirty && !isNoteEmpty()) { dialogKeluar.classList.add('show'); }
     else { navigateBack(); }
   });
   document.getElementById('dlgSimpanKeluar').addEventListener('click', function() {
@@ -510,95 +617,131 @@
     if (e.target === dialogHapus) dialogHapus.classList.remove('show');
   });
 
-  // ── TEKAN POPUP SELEKSI ANDROID ──────────
-  // 1. Blok context menu sistem di area editor
-  contentEl.addEventListener('contextmenu', function(e) { e.preventDefault(); });
-
-  // 2. Toolbar pakai mousedown + preventDefault agar editor tidak kehilangan
-  //    fokus/seleksi, sekaligus mencegah browser memunculkan action bar seleksi
-  //    saat jari menyentuh toolbar
-  document.querySelector('.toolbar-wrap').addEventListener('touchstart', function(e) {
-    // Cegah blur editor (penting untuk mobile agar seleksi tetap aktif)
-    e.preventDefault();
-  }, { passive: false });
-
-  // ── SIMPAN & PULIHKAN SELEKSI (MOBILE) ───
-  var savedRange = null;
-  function saveSelection() {
-    var sel = window.getSelection();
-    if (sel && sel.rangeCount > 0) {
-      savedRange = sel.getRangeAt(0).cloneRange();
-    }
-  }
-  function restoreSelection() {
-    if (!savedRange) return;
-    contentEl.focus();
-    var sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(savedRange);
-  }
-
-  contentEl.addEventListener('mouseup',  function() { saveSelection(); updateToolbarState(); });
-  contentEl.addEventListener('keyup',    function() { saveSelection(); updateToolbarState(); });
-  contentEl.addEventListener('touchend', function() { saveSelection(); updateToolbarState(); });
-
   // ── TOOLBAR ──────────────────────────────
-  function cmd(command, val) {
-    restoreSelection();
-    document.execCommand(command, false, val || null);
-    saveSelection();
+  // Pakai click biasa seperti tema.js — simpel dan terbukti bekerja di mobile.
+
+  function applyFormat(command, value) {
+    document.execCommand(command, false, value || null);
+    contentEl.focus();
     updateToolbarState();
     markDirty();
   }
 
   function updateToolbarState() {
-    ['Bold','Italic','Underline','Strikethrough'].forEach(function(c) {
-      var id = 'btn' + (c === 'Strikethrough' ? 'Strike' : c);
-      var el = document.getElementById(id);
-      if (el) el.classList.toggle('active', document.queryCommandState(c));
-    });
-    var block = document.queryCommandValue('formatBlock').toLowerCase();
-    var sel   = document.getElementById('selHeading');
-    if (sel) sel.value = (block === 'h1' || block === 'h2' || block === 'h3') ? block : '';
+    document.getElementById('btnBold')     .classList.toggle('active', document.queryCommandState('bold'));
+    document.getElementById('btnItalic')   .classList.toggle('active', document.queryCommandState('italic'));
+    document.getElementById('btnUnderline').classList.toggle('active', document.queryCommandState('underline'));
+    document.getElementById('btnStrike')   .classList.toggle('active', document.queryCommandState('strikeThrough'));
+    document.getElementById('btnUl')       .classList.toggle('active', document.queryCommandState('insertUnorderedList'));
+    document.getElementById('btnOl')       .classList.toggle('active', document.queryCommandState('insertOrderedList'));
   }
 
-  // mousedown + preventDefault = tidak blur editor, tidak muncul action bar seleksi
-  function toolBtn(id, command, val) {
-    document.getElementById(id).addEventListener('mousedown', function(e) {
-      e.preventDefault(); cmd(command, val);
-    });
-  }
-  toolBtn('btnBold',      'bold');
-  toolBtn('btnItalic',    'italic');
-  toolBtn('btnUnderline', 'underline');
-  toolBtn('btnStrike',    'strikeThrough');
-  toolBtn('btnUl',        'insertUnorderedList');
-  toolBtn('btnOl',        'insertOrderedList');
-  toolBtn('btnUndo',      'undo');
-  toolBtn('btnRedo',      'redo');
-  toolBtn('btnHr',        'insertHorizontalRule');
-  toolBtn('btnQuote',     'formatBlock', 'blockquote');
+  contentEl.addEventListener('mouseup',  updateToolbarState);
+  contentEl.addEventListener('keyup',    updateToolbarState);
+  contentEl.addEventListener('touchend', updateToolbarState);
 
-  document.getElementById('selHeading').addEventListener('mousedown', function() { saveSelection(); });
-  document.getElementById('selHeading').addEventListener('change', function() {
-    restoreSelection();
-    cmd('formatBlock', this.value || 'p');
+  document.getElementById('btnBold')     .addEventListener('click', function() { applyFormat('bold'); });
+  document.getElementById('btnItalic')   .addEventListener('click', function() { applyFormat('italic'); });
+  document.getElementById('btnUnderline').addEventListener('click', function() { applyFormat('underline'); });
+  document.getElementById('btnStrike')   .addEventListener('click', function() { applyFormat('strikeThrough'); });
+  document.getElementById('btnUl')       .addEventListener('click', function() { applyFormat('insertUnorderedList'); });
+  document.getElementById('btnOl')       .addEventListener('click', function() { applyFormat('insertOrderedList'); });
+  document.getElementById('btnHr')       .addEventListener('click', function() { applyFormat('insertHorizontalRule'); });
+  document.getElementById('btnUndo')     .addEventListener('click', function() { applyFormat('undo'); });
+  document.getElementById('btnRedo')     .addEventListener('click', function() { applyFormat('redo'); });
+
+  // ── Custom Format Dropdown ──────────────
+  var fmtDropdown = document.getElementById('fmtDropdown');
+  var fmtMenu     = document.getElementById('fmtMenu');
+  var fmtLabel    = document.getElementById('fmtLabel');
+  var fmtSelected = document.getElementById('fmtSelected');
+
+  fmtSelected.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var isOpen = fmtDropdown.classList.toggle('open');
+    if (isOpen) {
+      // Posisikan menu tepat di bawah tombol
+      var rect = fmtSelected.getBoundingClientRect();
+      fmtMenu.style.top  = (rect.bottom + 6) + 'px';
+      fmtMenu.style.left = rect.left + 'px';
+    }
+  });
+
+  document.addEventListener('click', function() {
+    fmtDropdown.classList.remove('open');
+  });
+
+  fmtMenu.addEventListener('click', function(e) { e.stopPropagation(); });
+
+  // Wrap/unwrap block format secara manual (execCommand formatBlock tidak reliable di mobile)
+  function applyBlockFormat(val) {
+    var sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return;
+
+    var range   = sel.getRangeAt(0);
+    var node    = range.startContainer;
+
+    // Naik ke block-level ancestor di dalam editorContent
+    while (node && node !== contentEl && node.nodeType !== 1) {
+      node = node.parentNode;
+    }
+    while (node && node !== contentEl &&
+           !['P','H1','H2','H3','BLOCKQUOTE','DIV'].includes(node.nodeName)) {
+      node = node.parentNode;
+    }
+    if (!node || node === contentEl) {
+      // Tidak ada block ancestor — buat paragraf baru
+      document.execCommand('formatBlock', false, val || 'p');
+      return;
+    }
+
+    var tag = (val === '' || val === 'p') ? 'P' : val.toUpperCase();
+
+    if (node.nodeName === tag) return; // Sudah format yang sama, tidak perlu ubah
+
+    // Buat elemen baru dengan tag yang diminta
+    var newEl = document.createElement(tag === 'P' ? 'p' : val);
+    newEl.innerHTML = node.innerHTML;
+
+    node.parentNode.replaceChild(newEl, node);
+
+    // Pulihkan kursor ke elemen baru
+    var newRange = document.createRange();
+    newRange.selectNodeContents(newEl);
+    newRange.collapse(false);
+    sel.removeAllRanges();
+    sel.addRange(newRange);
+    contentEl.focus();
+  }
+
+  document.querySelectorAll('.fmt-opt').forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      var val   = opt.getAttribute('data-val');
+      var label = opt.getAttribute('data-label');
+
+      fmtLabel.textContent = label;
+
+      document.querySelectorAll('.fmt-opt').forEach(function(o) { o.classList.remove('active'); });
+      opt.classList.add('active');
+
+      applyBlockFormat(val);
+      markDirty();
+
+      fmtDropdown.classList.remove('open');
+    });
   });
 
   var colorPicker = document.getElementById('colorPicker');
   var colorBar    = document.getElementById('colorBar');
-  document.getElementById('btnColor').addEventListener('mousedown', function(e) {
-    e.preventDefault();
-    saveSelection();
+  document.getElementById('btnColor').addEventListener('click', function() {
     colorPicker.click();
   });
   colorPicker.addEventListener('input', function() {
     colorBar.style.background = this.value;
-    restoreSelection();
-    cmd('foreColor', this.value);
+    applyFormat('foreColor', this.value);
   });
 
-  // ── FOCUS & CURSOR KE AKHIR ──────────────
+    // ── FOCUS & CURSOR KE AKHIR ──────────────
   contentEl.focus();
   if (contentEl.innerHTML) {
     var range = document.createRange();
