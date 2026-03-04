@@ -544,7 +544,7 @@
   if (!note) { navigateBack(); return; }
   judulEl.value       = note.judul || '';
   contentEl.innerHTML = note.isi   || '';
-  document.title      = (note.judul || 'Catatan') + ' — Ilmu Agama Islam';
+  document.title      = (note.judul || 'Catatan') + ' — FathlyWeb';
 
   // isNewNote = true jika catatan belum pernah di-save secara eksplisit
   var isNewNote = !note.pernahDisimpan;
@@ -573,7 +573,7 @@
     notes[idx].pernahDisimpan  = true;
     isNewNote = false;
     saveNotes(notes);
-    document.title = (notes[idx].judul || 'Catatan') + ' — Ilmu Agama Islam';
+    document.title = (notes[idx].judul || 'Catatan') + ' — FathlyWeb';
     isDirty = false;
     btnSave.classList.remove('dirty');
     btnSave.classList.add('saved-flash');
