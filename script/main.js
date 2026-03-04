@@ -245,8 +245,8 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!canSwipe) return;
 
       // Dampen: makin jauh makin lambat
-      var maxShift = 80;
-      var dampened = Math.max(-maxShift, Math.min(maxShift, dx * 0.4));
+      var maxShift = 800;
+      var dampened = Math.max(-maxShift, Math.min(maxShift, dx * 0.7));
       var indicatorShift = -(dx / window.innerWidth) * activeBtn.offsetWidth * 0.5;
       tabIndicator.style.transition = 'none';
       tabIndicator.style.left  = (activeBtn.offsetLeft + indicatorShift) + 'px';
@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (content) {
         content.style.transition = 'none';
         content.style.transform  = 'translateX(' + dampened + 'px)';
-        content.style.opacity    = 1 - Math.min(Math.abs(dx) / 350, 0.25);
+        content.style.opacity    = 1 - Math.min(Math.abs(dx) / 700, 0.95);
       }
     }, { passive: true });
 
@@ -281,7 +281,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!isSwiping) return;
       if (Math.abs(dx) < 30) return;           /* lebih sensitif */
       if (Math.abs(dy) > Math.abs(dx) * 0.9) return; /* lebih toleran diagonal */
-      if (dt > 800) return;                     /* bisa geser pelan */
+      if (dt > 1400) return;                     /* bisa geser pelan */
 
       var current = activeBtn ? activeBtn.getAttribute('data-tab') : null;
       var idx = TAB_ORDER.indexOf(current);
