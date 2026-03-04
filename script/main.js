@@ -316,11 +316,11 @@ document.addEventListener('DOMContentLoaded', function () {
   // Warna background kartu
   var CARD_COLORS = [
     { key: 'default', hex: null,      label: 'Default' },
-    { key: 'green',   hex: '#0d2b1e', label: 'Hijau' },
-    { key: 'navy',    hex: '#0d1b2b', label: 'Biru' },
-    { key: 'purple',  hex: '#1e0d2b', label: 'Ungu' },
-    { key: 'maroon',  hex: '#2b0d0d', label: 'Merah' },
-    { key: 'gold',    hex: '#2b220d', label: 'Emas' },
+    { key: 'green',   hex: '#163d2a', label: 'Hijau' },
+    { key: 'navy',    hex: '#132240', label: 'Biru' },
+    { key: 'purple',  hex: '#2a1040', label: 'Ungu' },
+    { key: 'maroon',  hex: '#3d1212', label: 'Merah' },
+    { key: 'gold',    hex: '#3d2e0e', label: 'Emas' },
   ];
 
   // ── STATE AKSI KARTU ──────────────────────

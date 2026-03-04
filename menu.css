@@ -31,6 +31,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html {
@@ -292,7 +293,7 @@ body {
 
 .panel-title {
   color: var(--gold);
-  font-size: 1.3rem;
+  font-size: 0.85rem;
   font-weight: 600;
 }
 
@@ -570,26 +571,36 @@ body {
   border: 2px solid var(--green);
   border-radius: 12px;
   padding: 32px 20px;
-  transition: all var(--transition);
+  transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.22s ease,
+              background-color 0.15s ease,
+              border-color 0.15s ease;
   box-shadow: 0 0 10px rgba(0,255,136,0.08);
+  will-change: transform;
 }
 
 .card h3 {
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0;
+  transition: text-shadow 0.18s ease;
 }
 
 .card:hover {
-  text-shadow: 0 0 8px var(--green);
-  transform: translateY(-3px);
-  box-shadow: 0 0 18px rgba(0,255,136,0.2);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 6px 22px rgba(0,255,136,0.22);
+  border-color: rgba(0,255,136,0.7);
+}
+
+.card:hover h3 {
+  text-shadow: 0 0 10px rgba(0,255,136,0.5);
 }
 
 .card:active {
-  background-color: var(--green);
-  color: var(--bg-dark);
-  box-shadow: 0 0 24px rgba(0,255,136,0.5);
+  transform: translateY(0px) scale(0.97);
+  background-color: rgba(0,255,136,0.12);
+  box-shadow: 0 0 12px rgba(0,255,136,0.3);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
 }
 
 /* === FOOTER === */
@@ -774,7 +785,7 @@ footer {
 }
 
 .cs-news-arrow {
-  font-size: 1.3rem;
+  font-size: 0.85rem;
   color: var(--green);
   line-height: 1;
 }
@@ -905,20 +916,34 @@ footer {
   border-radius: 14px;
   padding: 16px 14px 12px;
   cursor: pointer;
-  transition: all var(--transition);
+  transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.22s ease,
+              border-color 0.18s ease;
   display: flex;
   flex-direction: column;
   gap: 8px;
   min-height: 160px;
   position: relative;
   overflow: hidden;
+  will-change: transform;
 }
 
-.catatan-card:hover { border-color: var(--gold); box-shadow: 0 0 16px rgba(255,215,0,0.13); }
+.catatan-card:hover {
+  transform: translateY(-3px) scale(1.015);
+  border-color: var(--gold);
+  box-shadow: 0 6px 20px rgba(255,215,0,0.15);
+}
+
+.catatan-card:active {
+  transform: scale(0.97);
+  box-shadow: 0 0 8px rgba(255,215,0,0.1);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
 .catatan-card.favorit { border-color: var(--gold); }
 
 .catatan-card-judul {
-  font-size: 0.92rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: var(--gold);
   white-space: nowrap;
@@ -956,17 +981,20 @@ footer {
   position: absolute;
   top: 12px;
   right: 12px;
-  font-size: 0.85rem;
+  font-size: 1.3rem;
   opacity: 0.25;
-  transition: opacity var(--transition);
+  transition: opacity 0.2s ease, transform 0.18s cubic-bezier(0.34,1.56,0.64,1);
+  cursor: pointer;
 }
+.catatan-star:hover  { transform: scale(1.35); opacity: 0.7; }
+.catatan-star:active { transform: scale(0.85); transition: transform 0.08s ease; }
 .catatan-card.favorit .catatan-star { opacity: 1; }
 
 /* Tombol aksi langsung di kartu */
 .catatan-card-actions {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 6px;
   flex-direction: row-reverse; /* kanan ke kiri: hapus, rename, bg, duplikat */
 }
 
@@ -974,16 +1002,24 @@ footer {
   background: none;
   border: none;
   color: var(--text-muted);
-  font-size: 0.82rem;
+  font-size: 1rem;
   cursor: pointer;
-  padding: 3px 5px;
+  padding: 4px 6px;
   border-radius: 6px;
   line-height: 1;
   transition: all var(--transition);
   -webkit-user-select: none;
   user-select: none;
 }
-.catatan-act-btn:hover { background: rgba(255,255,255,0.08); color: var(--text-light); }
+.catatan-act-btn:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--text-light);
+  transform: scale(1.2);
+}
+.catatan-act-btn:active {
+  transform: scale(0.9);
+  transition: transform 0.08s ease;
+}
 .catatan-act-btn.act-hapus:hover  { color: #ff5050; background: rgba(255,80,80,0.1); }
 .catatan-act-btn.act-rename:hover { color: var(--gold); }
 .catatan-act-btn.act-bg:hover     { color: var(--green); }
