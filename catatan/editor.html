@@ -464,7 +464,7 @@
 
 </div>
 
-<!-- DIALOG: KONFIRMASI KELUAR -->
+<!-- DIALOG: KONFIRMASI KELUAR — catatan LAMA (sudah pernah disimpan) -->
 <div class="dialog-overlay" id="dialogKeluar">
   <div class="dialog-box">
     <div class="dialog-title">Simpan Perubahan?</div>
@@ -473,6 +473,19 @@
       <button class="dialog-btn-save-exit" id="dlgSimpanKeluar">💾 Simpan dan Keluar</button>
       <button class="dialog-btn-stay"      id="dlgBatalKeluar">Batal Keluar</button>
       <button class="dialog-btn-discard"   id="dlgJanganSimpan">Jangan Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- DIALOG: KONFIRMASI KELUAR — catatan BARU (belum pernah disimpan) -->
+<div class="dialog-overlay" id="dialogKeluarBaru">
+  <div class="dialog-box">
+    <div class="dialog-title">Simpan Catatan?</div>
+    <div class="dialog-desc">Catatan ini belum pernah disimpan sebelumnya.</div>
+    <div class="dialog-btns-col">
+      <button class="dialog-btn-save-exit" id="dlgBaruSimpan">💾 Simpan Catatan</button>
+      <button class="dialog-btn-stay"      id="dlgBaruLanjut">✏️ Lanjut Mencatat</button>
+      <button class="dialog-btn-danger"    id="dlgBaruHapus">🗑 Hapus Catatan</button>
     </div>
   </div>
 </div>
@@ -520,6 +533,9 @@
   contentEl.innerHTML = note.isi   || '';
   document.title      = (note.judul || 'Catatan') + ' — Ilmu Agama Islam';
 
+  // isNewNote = true jika catatan belum pernah di-save secara eksplisit
+  var isNewNote = !note.pernahDisimpan;
+
   // ── DIRTY TRACKING ───────────────────────
   function markDirty() {
     if (isDirty) return;
@@ -536,7 +552,9 @@
     if (idx === -1) return;
     notes[idx].judul  = judulEl.value.trim();
     notes[idx].isi    = contentEl.innerHTML;
-    notes[idx].diubah = Date.now();
+    notes[idx].diubah          = Date.now();
+    notes[idx].pernahDisimpan  = true;
+    isNewNote = false;
     saveNotes(notes);
     document.title = (notes[idx].judul || 'Catatan') + ' — Ilmu Agama Islam';
     isDirty = false;
@@ -558,46 +576,80 @@
   }
 
   function navigateBack() {
-    // Jika catatan benar-benar kosong (judul & isi), hapus otomatis
-    if (isNoteEmpty()) {
-      saveNotes(getNotes().filter(function(n) { return n.id !== noteId; }));
-    }
     try { localStorage.setItem('iai_active_tab', 'catatan'); } catch(e) {}
+    // Penghapusan catatan kosong ditangani oleh pagehide
     window.location.href = '../index.html';
   }
+
+  // ── HAPUS CATATAN KOSONG SAAT HALAMAN DITINGGALKAN ─
+  // pagehide terpanggil di SEMUA cara keluar: tombol kembali,
+  // gestur sistem, maupun navigateBack() — paling andal untuk cleanup.
+  window.addEventListener('pagehide', function() {
+    if (isNoteEmpty()) {
+      saveNotes(getNotes().filter(function(n) { return n.id !== noteId; }));
+      try { localStorage.setItem('iai_active_tab', 'catatan'); } catch(e) {}
+    }
+  });
 
   // ── INTERCEPT BACK SISTEM (tombol/gestur) ─
   // Push state dummy agar ada entry history yang bisa kita tangkap
   history.pushState({ editor: true }, '');
 
-  var dialogKeluar = document.getElementById('dialogKeluar');
+  var dialogKeluar     = document.getElementById('dialogKeluar');
+  var dialogKeluarBaru = document.getElementById('dialogKeluarBaru');
+
+  function showExitDialog() {
+    if (isNewNote) {
+      dialogKeluarBaru.classList.add('show');
+    } else {
+      dialogKeluar.classList.add('show');
+    }
+  }
+
+  function closeAllExitDialogs() {
+    dialogKeluar.classList.remove('show');
+    dialogKeluarBaru.classList.remove('show');
+  }
 
   window.addEventListener('popstate', function() {
     if (isDirty && !isNoteEmpty()) {
-      // Dorong kembali state agar user tidak lolos tanpa dialog
       history.pushState({ editor: true }, '');
-      dialogKeluar.classList.add('show');
+      showExitDialog();
     } else {
-      // Kosong atau sudah bersih — langsung keluar
       navigateBack();
     }
   });
 
   document.getElementById('btnBack').addEventListener('click', function() {
-    if (isDirty && !isNoteEmpty()) { dialogKeluar.classList.add('show'); }
+    if (isDirty && !isNoteEmpty()) { showExitDialog(); }
     else { navigateBack(); }
   });
+
+  // Dialog catatan LAMA
   document.getElementById('dlgSimpanKeluar').addEventListener('click', function() {
     doSave(); navigateBack();
   });
-  document.getElementById('dlgBatalKeluar').addEventListener('click', function() {
-    dialogKeluar.classList.remove('show');
-  });
+  document.getElementById('dlgBatalKeluar').addEventListener('click', closeAllExitDialogs);
   document.getElementById('dlgJanganSimpan').addEventListener('click', function() {
     isDirty = false; navigateBack();
   });
   dialogKeluar.addEventListener('click', function(e) {
-    if (e.target === dialogKeluar) dialogKeluar.classList.remove('show');
+    if (e.target === dialogKeluar) closeAllExitDialogs();
+  });
+
+  // Dialog catatan BARU
+  document.getElementById('dlgBaruSimpan').addEventListener('click', function() {
+    doSave(); navigateBack();
+  });
+  document.getElementById('dlgBaruLanjut').addEventListener('click', closeAllExitDialogs);
+  document.getElementById('dlgBaruHapus').addEventListener('click', function() {
+    saveNotes(getNotes().filter(function(n) { return n.id !== noteId; }));
+    isDirty = false;
+    try { localStorage.setItem('iai_active_tab', 'catatan'); } catch(e) {}
+    window.location.href = '../index.html';
+  });
+  dialogKeluarBaru.addEventListener('click', function(e) {
+    if (e.target === dialogKeluarBaru) closeAllExitDialogs();
   });
 
   // ── HAPUS ────────────────────────────────

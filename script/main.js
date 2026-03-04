@@ -378,7 +378,7 @@ document.addEventListener('DOMContentLoaded', function () {
     btnTambah.addEventListener('click', function() {
       var id = 'note_' + Date.now();
       var notes = getNotes();
-      notes.unshift({ id: id, judul: '', isi: '', dibuat: Date.now(), diubah: Date.now() });
+      notes.unshift({ id: id, judul: '', isi: '', dibuat: Date.now(), diubah: Date.now(), pernahDisimpan: false });
       saveNotes(notes);
       window.location.href = 'catatan/editor.html?id=' + id;
     });
