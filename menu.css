@@ -894,7 +894,7 @@ footer {
 ============================================= */
 .catatan-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 14px;
   padding: 16px;
 }
@@ -902,48 +902,175 @@ footer {
 .catatan-card {
   background: var(--bg-card);
   border: 1.5px solid var(--border);
-  border-radius: 12px;
-  padding: 14px 13px 12px;
+  border-radius: 14px;
+  padding: 16px 14px 12px;
   cursor: pointer;
   transition: all var(--transition);
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  min-height: 110px;
+  gap: 8px;
+  min-height: 160px;
+  position: relative;
+  overflow: hidden;
 }
 
-.catatan-card:hover,
-.catatan-card:active {
-  border-color: var(--gold);
-  box-shadow: 0 0 14px rgba(255,215,0,0.15);
-}
+.catatan-card:hover { border-color: var(--gold); box-shadow: 0 0 16px rgba(255,215,0,0.13); }
+.catatan-card.favorit { border-color: var(--gold); }
 
 .catatan-card-judul {
-  font-size: 0.88rem;
+  font-size: 0.92rem;
   font-weight: 600;
   color: var(--gold);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  padding-right: 24px; /* ruang untuk bintang */
 }
 
 .catatan-card-preview {
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   flex: 1;
-  line-height: 1.5;
+  line-height: 1.6;
+}
+
+.catatan-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
 }
 
 .catatan-card-meta {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   color: var(--text-muted);
   opacity: 0.7;
-  margin-top: 2px;
 }
+
+/* Bintang favorit di pojok kanan atas */
+.catatan-star {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 0.85rem;
+  opacity: 0.25;
+  transition: opacity var(--transition);
+}
+.catatan-card.favorit .catatan-star { opacity: 1; }
+
+/* Tombol aksi langsung di kartu */
+.catatan-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-direction: row-reverse; /* kanan ke kiri: hapus, rename, bg, duplikat */
+}
+
+.catatan-act-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  cursor: pointer;
+  padding: 3px 5px;
+  border-radius: 6px;
+  line-height: 1;
+  transition: all var(--transition);
+  -webkit-user-select: none;
+  user-select: none;
+}
+.catatan-act-btn:hover { background: rgba(255,255,255,0.08); color: var(--text-light); }
+.catatan-act-btn.act-hapus:hover  { color: #ff5050; background: rgba(255,80,80,0.1); }
+.catatan-act-btn.act-rename:hover { color: var(--gold); }
+.catatan-act-btn.act-bg:hover     { color: var(--green); }
+.catatan-act-btn.act-duplikat:hover { color: #4dabf7; }
+
+/* Popup color picker */
+.catatan-bg-popup {
+  position: fixed;
+  background: var(--bg-sidebar);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  z-index: 800;
+  display: none;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.45);
+}
+.catatan-bg-popup.show { display: block; }
+.catatan-color-strip {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.catatan-color-dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+}
+.catatan-color-dot:hover { transform: scale(1.2); }
+.catatan-color-dot.active { border-color: var(--text-light); }
+
+/* Dialog rename & hapus */
+.catatan-dialog-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 900;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(3px);
+}
+.catatan-dialog-overlay.show { display: flex; }
+.catatan-dialog-box {
+  background: var(--bg-sidebar);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px 20px 18px;
+  max-width: 300px;
+  width: 90%;
+  text-align: center;
+}
+.catatan-dialog-title { font-weight: 600; font-size: 0.98rem; margin-bottom: 14px; color: var(--text-light); }
+.catatan-dialog-input {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.88rem;
+  color: var(--text-light);
+  outline: none;
+  margin-bottom: 14px;
+  transition: border-color var(--transition);
+}
+.catatan-dialog-input:focus { border-color: var(--green); }
+.catatan-dialog-btns { display: flex; gap: 10px; }
+.catatan-dialog-btn {
+  flex: 1; padding: 9px; border-radius: 8px;
+  font-family: 'Poppins', sans-serif; font-size: 0.85rem;
+  cursor: pointer; transition: all var(--transition);
+}
+.catatan-dialog-btn.cancel {
+  border: 1px solid var(--border); background: none; color: var(--text-light);
+}
+.catatan-dialog-btn.cancel:hover { border-color: var(--green); }
+.catatan-dialog-btn.confirm {
+  border: 1.5px solid var(--green); background: rgba(0,255,136,0.08); color: var(--green); font-weight: 600;
+}
+.catatan-dialog-btn.confirm:hover { background: rgba(0,255,136,0.16); }
+.catatan-dialog-btn.danger {
+  border: 1px solid rgba(255,80,80,0.4); background: rgba(255,80,80,0.08); color: #ff5050; font-weight: 600;
+}
+.catatan-dialog-btn.danger:hover { background: rgba(255,80,80,0.18); }
 
 /* =============================================
    CATATAN — FAB SPEED DIAL

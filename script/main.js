@@ -313,6 +313,141 @@ document.addEventListener('DOMContentLoaded', function () {
     return d.toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
   }
 
+  // Warna background kartu
+  var CARD_COLORS = [
+    { key: 'default', hex: null,      label: 'Default' },
+    { key: 'green',   hex: '#0d2b1e', label: 'Hijau' },
+    { key: 'navy',    hex: '#0d1b2b', label: 'Biru' },
+    { key: 'purple',  hex: '#1e0d2b', label: 'Ungu' },
+    { key: 'maroon',  hex: '#2b0d0d', label: 'Merah' },
+    { key: 'gold',    hex: '#2b220d', label: 'Emas' },
+  ];
+
+  // ── STATE AKSI KARTU ──────────────────────
+  var activeActionId = null;
+
+  // Buat bg-popup (singleton color picker)
+  var bgPopup = document.createElement('div');
+  bgPopup.className = 'catatan-bg-popup';
+  bgPopup.id = 'catatanBgPopup';
+  var colorStrip = document.createElement('div');
+  colorStrip.className = 'catatan-color-strip';
+  CARD_COLORS.forEach(function(c) {
+    var dot = document.createElement('button');
+    dot.className = 'catatan-color-dot';
+    dot.setAttribute('data-color', c.key);
+    dot.style.background = c.hex || 'rgba(255,255,255,0.06)';
+    dot.title = c.label;
+    colorStrip.appendChild(dot);
+  });
+  bgPopup.appendChild(colorStrip);
+  document.body.appendChild(bgPopup);
+
+  function closeBgPopup() { bgPopup.classList.remove('show'); }
+  document.addEventListener('click', closeBgPopup);
+  bgPopup.addEventListener('click', function(e) { e.stopPropagation(); });
+
+  colorStrip.addEventListener('click', function(e) {
+    var dot = e.target.closest('.catatan-color-dot');
+    if (!dot) return;
+    var notes = getNotes();
+    var idx = notes.findIndex(function(n) { return n.id === activeActionId; });
+    if (idx === -1) return;
+    notes[idx].warna = dot.getAttribute('data-color');
+    saveNotes(notes);
+    closeBgPopup();
+    renderCatatanGrid();
+  });
+
+  // Dialog rename
+  var dlgRename = document.createElement('div');
+  dlgRename.className = 'catatan-dialog-overlay';
+  dlgRename.innerHTML =
+    '<div class="catatan-dialog-box">' +
+      '<div class="catatan-dialog-title">Rename Catatan</div>' +
+      '<input class="catatan-dialog-input" id="dlgRenameInput" type="text" maxlength="100" placeholder="Judul baru…">' +
+      '<div class="catatan-dialog-btns">' +
+        '<button class="catatan-dialog-btn cancel" id="dlgRenameCancel">Batal</button>' +
+        '<button class="catatan-dialog-btn confirm" id="dlgRenameOk">Simpan</button>' +
+      '</div>' +
+    '</div>';
+  document.body.appendChild(dlgRename);
+
+  document.getElementById('dlgRenameCancel').addEventListener('click', function() { dlgRename.classList.remove('show'); });
+  document.getElementById('dlgRenameOk').addEventListener('click', function() {
+    var notes = getNotes();
+    var idx = notes.findIndex(function(n) { return n.id === activeActionId; });
+    if (idx !== -1) {
+      notes[idx].judul  = document.getElementById('dlgRenameInput').value.trim();
+      notes[idx].diubah = Date.now();
+      saveNotes(notes);
+    }
+    dlgRename.classList.remove('show');
+    renderCatatanGrid();
+  });
+  document.getElementById('dlgRenameInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') document.getElementById('dlgRenameOk').click();
+  });
+  dlgRename.addEventListener('click', function(e) { if (e.target === dlgRename) dlgRename.classList.remove('show'); });
+
+  // Dialog hapus
+  var dlgHapus = document.createElement('div');
+  dlgHapus.className = 'catatan-dialog-overlay';
+  dlgHapus.innerHTML =
+    '<div class="catatan-dialog-box">' +
+      '<div class="catatan-dialog-title">Hapus Catatan?</div>' +
+      '<div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:18px;line-height:1.5">Catatan ini akan dihapus permanen dan tidak bisa dikembalikan.</div>' +
+      '<div class="catatan-dialog-btns">' +
+        '<button class="catatan-dialog-btn cancel" id="dlgHapusCancel">Batal</button>' +
+        '<button class="catatan-dialog-btn danger" id="dlgHapusOk">Hapus</button>' +
+      '</div>' +
+    '</div>';
+  document.body.appendChild(dlgHapus);
+
+  document.getElementById('dlgHapusCancel').addEventListener('click', function() { dlgHapus.classList.remove('show'); });
+  document.getElementById('dlgHapusOk').addEventListener('click', function() {
+    saveNotes(getNotes().filter(function(n) { return n.id !== activeActionId; }));
+    dlgHapus.classList.remove('show');
+    renderCatatanGrid();
+  });
+  dlgHapus.addEventListener('click', function(e) { if (e.target === dlgHapus) dlgHapus.classList.remove('show'); });
+
+  // Dialog duplikat
+  var dlgDuplikat = document.createElement('div');
+  dlgDuplikat.className = 'catatan-dialog-overlay';
+  dlgDuplikat.innerHTML =
+    '<div class="catatan-dialog-box">' +
+      '<div class="catatan-dialog-title">Duplikat Catatan?</div>' +
+      '<div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:18px;line-height:1.5">Catatan ini akan diduplikat dengan isi yang sama.</div>' +
+      '<div class="catatan-dialog-btns">' +
+        '<button class="catatan-dialog-btn cancel" id="dlgDuplikatCancel">Batal</button>' +
+        '<button class="catatan-dialog-btn confirm" id="dlgDuplikatOk">Duplikat</button>' +
+      '</div>' +
+    '</div>';
+  document.body.appendChild(dlgDuplikat);
+
+  document.getElementById('dlgDuplikatCancel').addEventListener('click', function() { dlgDuplikat.classList.remove('show'); });
+  document.getElementById('dlgDuplikatOk').addEventListener('click', function() {
+    var notes = getNotes();
+    var src = notes.find(function(n) { return n.id === activeActionId; });
+    if (src) {
+      var newNote = {
+        id: 'note_' + Date.now(),
+        judul: src.judul ? src.judul + ' (Salinan)' : 'Salinan',
+        isi: src.isi,
+        warna: src.warna,
+        dibuat: Date.now(),
+        diubah: Date.now(),
+        pernahDisimpan: true
+      };
+      notes.unshift(newNote);
+      saveNotes(notes);
+    }
+    dlgDuplikat.classList.remove('show');
+    renderCatatanGrid();
+  });
+  dlgDuplikat.addEventListener('click', function(e) { if (e.target === dlgDuplikat) dlgDuplikat.classList.remove('show'); });
+
   function renderCatatanGrid() {
     var notes = getNotes();
     var grid  = document.getElementById('catatanGrid');
@@ -325,19 +460,100 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
     empty.style.display = 'none';
+
+    function getBgColor(key) {
+      var c = CARD_COLORS.find(function(x) { return x.key === key; });
+      return (c && c.hex) ? c.hex : null;
+    }
+
     grid.innerHTML = notes.map(function(n) {
-      var preview = stripHtml(n.isi).trim().slice(0, 100);
+      var preview = stripHtml(n.isi).trim().slice(0, 120);
       if (!preview) preview = '(kosong)';
-      return '<div class="catatan-card" data-id="' + n.id + '">' +
+      var bgStyle   = n.warna && n.warna !== 'default' ? getBgColor(n.warna) : null;
+      var styleAttr = bgStyle ? ' style="background:' + bgStyle + '"' : '';
+      var favClass  = n.favorit ? ' favorit' : '';
+      var id = n.id;
+      return '<div class="catatan-card' + favClass + '" data-id="' + id + '"' + styleAttr + '>' +
+        '<span class="catatan-star" title="Favorit">⭐</span>' +
         '<div class="catatan-card-judul">' + (n.judul || 'Tanpa Judul') + '</div>' +
         '<div class="catatan-card-preview">' + preview + '</div>' +
-        '<div class="catatan-card-meta">' + formatTanggal(n.diubah) + '</div>' +
+        '<div class="catatan-card-footer">' +
+          '<span class="catatan-card-meta">' + formatTanggal(n.diubah) + '</span>' +
+          '<div class="catatan-card-actions">' +
+            '<button class="catatan-act-btn act-hapus"    data-id="' + id + '" title="Hapus">🗑</button>' +
+            '<button class="catatan-act-btn act-rename"   data-id="' + id + '" title="Rename">✏️</button>' +
+            '<button class="catatan-act-btn act-bg"       data-id="' + id + '" title="Warna">🎨</button>' +
+            '<button class="catatan-act-btn act-duplikat" data-id="' + id + '" title="Duplikat">⧉</button>' +
+          '</div>' +
+        '</div>' +
       '</div>';
     }).join('');
 
     grid.querySelectorAll('.catatan-card').forEach(function(card) {
-      card.addEventListener('click', function() {
+      card.addEventListener('click', function(e) {
+        if (e.target.closest('.catatan-card-actions') || e.target.closest('.catatan-star')) return;
         window.location.href = 'catatan/editor.html?id=' + card.getAttribute('data-id');
+      });
+    });
+
+    grid.querySelectorAll('.catatan-star').forEach(function(star) {
+      star.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var id = star.closest('.catatan-card').getAttribute('data-id');
+        var notes = getNotes();
+        var idx = notes.findIndex(function(n) { return n.id === id; });
+        if (idx === -1) return;
+        notes[idx].favorit = !notes[idx].favorit;
+        notes.sort(function(a, b) { return (b.favorit ? 1 : 0) - (a.favorit ? 1 : 0); });
+        saveNotes(notes);
+        renderCatatanGrid();
+      });
+    });
+
+    grid.querySelectorAll('.act-hapus').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        activeActionId = btn.getAttribute('data-id');
+        dlgHapus.classList.add('show');
+      });
+    });
+
+    grid.querySelectorAll('.act-rename').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        activeActionId = btn.getAttribute('data-id');
+        var note = getNotes().find(function(n) { return n.id === activeActionId; });
+        var input = document.getElementById('dlgRenameInput');
+        input.value = note ? (note.judul || '') : '';
+        dlgRename.classList.add('show');
+        setTimeout(function() { input.focus(); input.select(); }, 100);
+      });
+    });
+
+    grid.querySelectorAll('.act-bg').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        activeActionId = btn.getAttribute('data-id');
+        var note = getNotes().find(function(n) { return n.id === activeActionId; });
+        colorStrip.querySelectorAll('.catatan-color-dot').forEach(function(dot) {
+          dot.classList.toggle('active', dot.getAttribute('data-color') === (note && note.warna || 'default'));
+        });
+        var rect = btn.getBoundingClientRect();
+        bgPopup.classList.add('show');
+        var popW = bgPopup.offsetWidth || 220;
+        var left = Math.min(rect.left, window.innerWidth - popW - 8);
+        var top  = rect.bottom + 6;
+        if (top + 80 > window.innerHeight) top = rect.top - 70;
+        bgPopup.style.left = left + 'px';
+        bgPopup.style.top  = top  + 'px';
+      });
+    });
+
+    grid.querySelectorAll('.act-duplikat').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        activeActionId = btn.getAttribute('data-id');
+        dlgDuplikat.classList.add('show');
       });
     });
   }
@@ -401,10 +617,26 @@ document.addEventListener('DOMContentLoaded', function () {
   updateFabVisibility();
   renderCatatanGrid();
 
-  // Handle bfcache: browser kadang restore halaman dari cache tanpa re-run JS.
-  // Paksa reload agar tab & state selalu benar saat kembali dari halaman lain.
+  // Handle bfcache: re-run tab restoration & grid render tanpa reload.
+  // Reload loop di WebView (SPCK) bisa terjadi jika pakai window.location.reload().
   window.addEventListener('pageshow', function(e) {
-    if (e.persisted) { window.location.reload(); }
+    if (!e.persisted) return;
+    // Restore tab aktif
+    try {
+      var t = localStorage.getItem('iai_active_tab');
+      if (t) {
+        var tBtn = document.querySelector('.tab-btn[data-tab="' + t + '"]');
+        var tEl  = document.getElementById('tab-' + t);
+        if (tBtn && tEl) {
+          tabBtns.forEach(function(b) { b.classList.remove('active'); });
+          tabContents.forEach(function(c) { c.classList.remove('active'); });
+          tBtn.classList.add('active');
+          tEl.classList.add('active');
+        }
+      }
+    } catch(e) {}
+    updateFabVisibility();
+    renderCatatanGrid();
   });
 
 });
