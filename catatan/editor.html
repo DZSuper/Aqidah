@@ -490,6 +490,19 @@
   </div>
 </div>
 
+<!-- DIALOG: CATATAN LAMA DIKOSONGKAN -->
+<div class="dialog-overlay" id="dialogKosongLama">
+  <div class="dialog-box">
+    <div class="dialog-title">Catatan Kosong</div>
+    <div class="dialog-desc">Judul dan isi catatan ini kosong. Apa yang ingin kamu lakukan?</div>
+    <div class="dialog-btns-col">
+      <button class="dialog-btn-save-exit" id="dlgKosongKembalikan">↩️ Kembalikan Catatan</button>
+      <button class="dialog-btn-stay"      id="dlgKosongLanjut">✏️ Lanjut Mencatat</button>
+      <button class="dialog-btn-danger"    id="dlgKosongBuang">🗑 Buang Catatan</button>
+    </div>
+  </div>
+</div>
+
 <!-- DIALOG: HAPUS CATATAN -->
 <div class="dialog-overlay" id="dialogHapus">
   <div class="dialog-box">
@@ -535,6 +548,10 @@
 
   // isNewNote = true jika catatan belum pernah di-save secara eksplisit
   var isNewNote = !note.pernahDisimpan;
+
+  // Simpan konten asli untuk fitur "Kembalikan"
+  var originalJudul = note.judul || '';
+  var originalIsi   = note.isi   || '';
 
   // ── DIRTY TRACKING ───────────────────────
   function markDirty() {
@@ -585,7 +602,10 @@
   // pagehide terpanggil di SEMUA cara keluar: tombol kembali,
   // gestur sistem, maupun navigateBack() — paling andal untuk cleanup.
   window.addEventListener('pagehide', function() {
-    if (isNoteEmpty()) {
+    // Hapus otomatis hanya untuk catatan BARU yang kosong.
+    // Catatan lama yang dikosongkan tidak dihapus dari sini
+    // (ditangani lewat popup konfirmasi saat exit).
+    if (isNoteEmpty() && isNewNote) {
       saveNotes(getNotes().filter(function(n) { return n.id !== noteId; }));
       try { localStorage.setItem('iai_active_tab', 'catatan'); } catch(e) {}
     }
@@ -598,8 +618,13 @@
   var dialogKeluar     = document.getElementById('dialogKeluar');
   var dialogKeluarBaru = document.getElementById('dialogKeluarBaru');
 
+  var dialogKosongLama = document.getElementById('dialogKosongLama');
+
   function showExitDialog() {
-    if (isNewNote) {
+    if (!isNewNote && isNoteEmpty()) {
+      // Catatan lama yang dikosongkan — popup khusus
+      dialogKosongLama.classList.add('show');
+    } else if (isNewNote) {
       dialogKeluarBaru.classList.add('show');
     } else {
       dialogKeluar.classList.add('show');
@@ -609,10 +634,12 @@
   function closeAllExitDialogs() {
     dialogKeluar.classList.remove('show');
     dialogKeluarBaru.classList.remove('show');
+    dialogKosongLama.classList.remove('show');
   }
 
   window.addEventListener('popstate', function() {
-    if (isDirty && !isNoteEmpty()) {
+    var needsDialog = isDirty && (!isNoteEmpty() || (!isNewNote && isNoteEmpty()));
+    if (needsDialog) {
       history.pushState({ editor: true }, '');
       showExitDialog();
     } else {
@@ -621,7 +648,8 @@
   });
 
   document.getElementById('btnBack').addEventListener('click', function() {
-    if (isDirty && !isNoteEmpty()) { showExitDialog(); }
+    var needsDialog = isDirty && (!isNoteEmpty() || (!isNewNote && isNoteEmpty()));
+    if (needsDialog) { showExitDialog(); }
     else { navigateBack(); }
   });
 
@@ -650,6 +678,26 @@
   });
   dialogKeluarBaru.addEventListener('click', function(e) {
     if (e.target === dialogKeluarBaru) closeAllExitDialogs();
+  });
+
+  // Dialog catatan LAMA DIKOSONGKAN
+  document.getElementById('dlgKosongKembalikan').addEventListener('click', function() {
+    // Pulihkan konten asli
+    judulEl.value       = originalJudul;
+    contentEl.innerHTML = originalIsi;
+    isDirty = false;
+    btnSave.classList.remove('dirty');
+    closeAllExitDialogs();
+  });
+  document.getElementById('dlgKosongLanjut').addEventListener('click', closeAllExitDialogs);
+  document.getElementById('dlgKosongBuang').addEventListener('click', function() {
+    saveNotes(getNotes().filter(function(n) { return n.id !== noteId; }));
+    isDirty = false;
+    try { localStorage.setItem('iai_active_tab', 'catatan'); } catch(e) {}
+    window.location.href = '../index.html';
+  });
+  dialogKosongLama.addEventListener('click', function(e) {
+    if (e.target === dialogKosongLama) closeAllExitDialogs();
   });
 
   // ── HAPUS ────────────────────────────────

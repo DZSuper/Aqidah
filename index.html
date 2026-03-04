@@ -356,6 +356,7 @@
 
   <!-- FAB CATATAN -->
   <div id="catatanFab" class="catatan-fab-wrap">
+    <!-- Menu normal (tambah) -->
     <div id="catatanFabMenu" class="catatan-fab-menu">
       <button class="catatan-fab-option" id="btnMuatCatatan" disabled>
         <span class="catatan-fab-opt-label">Muat Catatan</span>
@@ -366,9 +367,40 @@
         <span class="catatan-fab-opt-icon">📝</span>
       </button>
     </div>
-    <button class="catatan-fab-btn" id="catatanFabBtn" aria-label="Tambah Catatan">
-      <span class="catatan-fab-plus">＋</span>
+    <!-- Menu edit (multi-select) -->
+    <div id="catatanFabEditMenu" class="catatan-fab-menu">
+      <button class="catatan-fab-option fab-edit-opt fab-edit-cancel" id="selBatal">
+        <span class="catatan-fab-opt-label">Batal</span>
+        <span class="catatan-fab-opt-icon">✕</span>
+      </button>
+      <button class="catatan-fab-option fab-edit-opt" id="selHapus">
+        <span class="catatan-fab-opt-label">Hapus</span>
+        <span class="catatan-fab-opt-icon">🗑</span>
+      </button>
+      <button class="catatan-fab-option fab-edit-opt" id="selBg">
+        <span class="catatan-fab-opt-label">Background</span>
+        <span class="catatan-fab-opt-icon">🎨</span>
+      </button>
+      <button class="catatan-fab-option fab-edit-opt" id="selBintang">
+        <span class="catatan-fab-opt-label">Bintang</span>
+        <span class="catatan-fab-opt-icon">⭐</span>
+      </button>
+    </div>
+    <button class="catatan-fab-btn" id="catatanFabBtn" aria-label="Aksi">
+      <span class="catatan-fab-plus" id="fabIcon">＋</span>
     </button>
+  </div>
+
+  <!-- Dialog konfirmasi hapus multi -->
+  <div class="catatan-dialog-overlay" id="dlgSelHapus">
+    <div class="catatan-dialog-box">
+      <div class="catatan-dialog-title" id="dlgSelHapusTitle">Hapus Catatan?</div>
+      <div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:18px;line-height:1.5">Catatan yang dipilih akan dihapus permanen.</div>
+      <div class="catatan-dialog-btns">
+        <button class="catatan-dialog-btn cancel" id="dlgSelHapusCancel">Batal</button>
+        <button class="catatan-dialog-btn danger" id="dlgSelHapusOk">Hapus</button>
+      </div>
+    </div>
   </div>
 
   <script src="script/main.js"></script>

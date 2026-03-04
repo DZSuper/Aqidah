@@ -510,8 +510,9 @@ body {
    MAIN VIEW
 ============================================= */
 .main-view {
-  display: block;
-  min-height: calc(100vh - 110px);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   padding-top: 0;
 }
 
@@ -609,6 +610,8 @@ footer {
   padding: 24px 0;
   color: var(--text-muted);
   font-size: 0.85rem;
+  margin-top: auto;
+  flex-shrink: 0;
 }
 
 /* =============================================
@@ -867,7 +870,11 @@ footer {
   display: none;
   animation: tabFadeIn 0.25s ease;
 }
-.tab-content.active { display: block; }
+.tab-content.active {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
 
 @keyframes tabFadeIn {
   from { opacity: 0; transform: translateY(6px); }
@@ -877,9 +884,9 @@ footer {
 /* Placeholder tab yang belum ada konten */
 .tab-empty {
   text-align: center;
-  padding: 64px 24px;
+  padding: 24px;
   max-width: 320px;
-  margin: 0 auto;
+  margin: auto; /* auto di semua sisi = tengah vertikal & horizontal */
 }
 .tab-empty-icon {
   font-size: 3rem;
@@ -906,23 +913,23 @@ footer {
 .catatan-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-  padding: 16px;
+  gap: clamp(8px, 2vw, 14px);
+  padding: clamp(10px, 3vw, 16px);
 }
 
 .catatan-card {
   background: var(--bg-card);
   border: 1.5px solid var(--border);
   border-radius: 14px;
-  padding: 16px 14px 12px;
+  padding: clamp(10px, 3vw, 16px) clamp(8px, 2.5vw, 14px) clamp(8px, 2vw, 12px);
   cursor: pointer;
   transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1),
               box-shadow 0.22s ease,
               border-color 0.18s ease;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  min-height: 160px;
+  gap: clamp(4px, 1.5vw, 8px);
+  min-height: clamp(120px, 30vw, 160px);
   position: relative;
   overflow: hidden;
   will-change: transform;
@@ -943,45 +950,50 @@ footer {
 .catatan-card.favorit { border-color: var(--gold); }
 
 .catatan-card-judul {
-  font-size: 1.5rem;
+  font-size: clamp(0.78rem, 2.8vw, 1.05rem);
   font-weight: 600;
   color: var(--gold);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding-right: 24px; /* ruang untuk bintang */
+  padding-right: clamp(20px, 5vw, 28px);
 }
 
 .catatan-card-preview {
-  font-size: 0.78rem;
+  font-size: clamp(0.65rem, 2vw, 0.78rem);
   color: var(--text-muted);
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   flex: 1;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .catatan-card-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 4px;
+  margin-top: 2px;
+  gap: 4px;
 }
 
 .catatan-card-meta {
-  font-size: 0.68rem;
+  font-size: clamp(0.55rem, 1.5vw, 0.68rem);
   color: var(--text-muted);
   opacity: 0.7;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 0;
 }
 
 /* Bintang favorit di pojok kanan atas */
 .catatan-star {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  font-size: 1.3rem;
+  top: clamp(8px, 2vw, 12px);
+  right: clamp(8px, 2vw, 12px);
+  font-size: clamp(0.9rem, 2.8vw, 1.3rem);
+  line-height: 1;
   opacity: 0.25;
   transition: opacity 0.2s ease, transform 0.18s cubic-bezier(0.34,1.56,0.64,1);
   cursor: pointer;
@@ -994,17 +1006,18 @@ footer {
 .catatan-card-actions {
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-direction: row-reverse; /* kanan ke kiri: hapus, rename, bg, duplikat */
+  gap: clamp(2px, 1vw, 6px);
+  flex-direction: row-reverse;
+  flex-shrink: 0;
 }
 
 .catatan-act-btn {
   background: none;
   border: none;
   color: var(--text-muted);
-  font-size: 1rem;
+  font-size: clamp(0.72rem, 2.2vw, 1rem);
   cursor: pointer;
-  padding: 4px 6px;
+  padding: clamp(2px, 0.8vw, 4px) clamp(2px, 1vw, 6px);
   border-radius: 6px;
   line-height: 1;
   transition: all var(--transition);
@@ -1024,6 +1037,48 @@ footer {
 .catatan-act-btn.act-rename:hover { color: var(--gold); }
 .catatan-act-btn.act-bg:hover     { color: var(--green); }
 .catatan-act-btn.act-duplikat:hover { color: #4dabf7; }
+
+
+/* ── Layar kecil < 400px ── */
+@media (max-width: 400px) {
+  .catatan-grid {
+    gap: 8px;
+    padding: 10px;
+  }
+  .catatan-card {
+    padding: 10px 8px 8px;
+    min-height: 110px;
+    gap: 4px;
+    border-radius: 10px;
+  }
+  .catatan-card-judul {
+    font-size: 0.78rem;
+    padding-right: 22px;
+  }
+  .catatan-card-preview {
+    font-size: 0.63rem;
+    -webkit-line-clamp: 2;
+  }
+  .catatan-star {
+    font-size: 0.88rem;
+    top: 8px;
+    right: 8px;
+  }
+  .catatan-card-footer {
+    margin-top: 0;
+    gap: 2px;
+  }
+  .catatan-card-meta {
+    font-size: 0.55rem;
+  }
+  .catatan-card-actions {
+    gap: 0px;
+  }
+  .catatan-act-btn {
+    font-size: 0.7rem;
+    padding: 2px 3px;
+  }
+}
 
 /* Popup color picker */
 .catatan-bg-popup {
@@ -1116,10 +1171,6 @@ footer {
   bottom: 24px;
   right: 20px;
   z-index: 800;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 10px;
 }
 
 .catatan-fab-btn {
@@ -1138,6 +1189,7 @@ footer {
   justify-content: center;
   transition: all var(--transition);
   flex-shrink: 0;
+  position: relative;
 }
 
 .catatan-fab-btn:hover {
@@ -1156,13 +1208,16 @@ footer {
 }
 
 .catatan-fab-menu {
+  position: absolute;
+  bottom: 64px; /* tepat di atas tombol FAB */
+  right: 0;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 8px;
   opacity: 0;
   pointer-events: none;
-  transform: translateY(12px);
+  transform: translateY(10px);
   transition: opacity 0.22s ease, transform 0.22s ease;
 }
 
@@ -1203,3 +1258,88 @@ footer {
 .catatan-fab-opt-icon {
   font-size: 1.1rem;
 }
+
+/* ── Multi-select ── */
+.catatan-card.selected {
+  border-color: #4dabf7 !important;
+  box-shadow: 0 0 0 2px rgba(77,171,247,0.35), 0 4px 16px rgba(77,171,247,0.2);
+}
+
+/* Lingkaran select di sebelah kiri bintang */
+.catatan-card .catatan-check {
+  position: absolute;
+  top: clamp(8px, 2vw, 12px);
+  right: clamp(34px, 8.5vw, 48px);
+  width: clamp(14px, 3.5vw, 20px);
+  height: clamp(14px, 3.5vw, 20px);
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.25);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.18s ease, opacity 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0;
+  z-index: 2;
+  flex-shrink: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+/* Tampilkan lingkaran hanya saat select mode aktif (via class di grid) */
+.catatan-grid.select-mode .catatan-check {
+  opacity: 1;
+  pointer-events: auto;
+}
+.catatan-card .catatan-check:hover {
+  border-color: #4dabf7;
+  background: rgba(77,171,247,0.15);
+}
+.catatan-card.selected .catatan-check {
+  background: #4dabf7;
+  border-color: #4dabf7;
+  font-size: 0.6rem;
+  color: #fff;
+  font-weight: 700;
+}
+.catatan-card.selected .catatan-check::after {
+  content: '✓';
+}
+
+/* FAB mode edit */
+.catatan-fab-btn.edit-mode {
+  background: #4dabf7;
+  box-shadow: 0 4px 16px rgba(77,171,247,0.4);
+}
+.catatan-fab-btn.edit-mode:hover {
+  box-shadow: 0 6px 22px rgba(77,171,247,0.6);
+}
+
+/* Badge jumlah terpilih di FAB */
+.fab-select-count {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  background: #ff5050;
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  border-radius: 50%;
+  width: 19px;
+  height: 19px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  pointer-events: none;
+  z-index: 10;
+}
+.fab-select-count.show { display: flex; }
+
+/* Edit FAB options warna biru */
+.fab-edit-opt { border-color: rgba(77,171,247,0.3); }
+.fab-edit-opt:hover:not(:disabled) { border-color: #4dabf7; color: #4dabf7; }
+.fab-edit-cancel { border-color: rgba(255,255,255,0.15); }
+.fab-edit-cancel:hover:not(:disabled) { border-color: rgba(255,255,255,0.5); color: var(--text-light); }
+
+/* Seleksi bg-popup - pakai yang sudah ada */

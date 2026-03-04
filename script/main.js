@@ -310,7 +310,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function formatTanggal(ts) {
     var d = new Date(ts);
-    return d.toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
+    // Format pendek: "4 Mar 26" agar tidak wrap di kartu sempit
+    var day  = d.getDate();
+    var mon  = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agt','Sep','Okt','Nov','Des'][d.getMonth()];
+    var year = String(d.getFullYear()).slice(2);
+    return day + ' ' + mon + ' ' + year;
   }
 
   // Warna background kartu
@@ -450,6 +454,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function renderCatatanGrid() {
     var notes = getNotes();
+    // Urutkan berdasarkan judul A-Z (tanpa judul di akhir)
+    notes.sort(function(a, b) {
+      var ja = (a.judul || '').toLowerCase();
+      var jb = (b.judul || '').toLowerCase();
+      if (!ja && !jb) return 0;
+      if (!ja) return 1;
+      if (!jb) return -1;
+      return ja.localeCompare(jb, 'id');
+    });
     var grid  = document.getElementById('catatanGrid');
     var empty = document.getElementById('catatanEmptyState');
     if (!grid || !empty) return;
@@ -474,6 +487,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var favClass  = n.favorit ? ' favorit' : '';
       var id = n.id;
       return '<div class="catatan-card' + favClass + '" data-id="' + id + '"' + styleAttr + '>' +
+        '<span class="catatan-check"></span>' +
         '<span class="catatan-star" title="Favorit">⭐</span>' +
         '<div class="catatan-card-judul">' + (n.judul || 'Tanpa Judul') + '</div>' +
         '<div class="catatan-card-preview">' + preview + '</div>' +
@@ -490,9 +504,51 @@ document.addEventListener('DOMContentLoaded', function () {
     }).join('');
 
     grid.querySelectorAll('.catatan-card').forEach(function(card) {
+      // Long press untuk masuk select mode
+      var longPressTimer = null;
+
+      function startLongPress(e) {
+        if (e.target.closest('.catatan-card-actions') || e.target.closest('.catatan-star')) return;
+        longPressTimer = setTimeout(function() {
+          longPressTimer = null;
+          if (!selectMode) enterSelectMode();
+          toggleCardSelect(card);
+        }, 500);
+      }
+
+      function cancelLongPress() {
+        if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
+      }
+
+      card.addEventListener('touchstart',  startLongPress,  { passive: true });
+      card.addEventListener('touchend',    cancelLongPress);
+      card.addEventListener('touchmove',   cancelLongPress);
+      card.addEventListener('mousedown',   startLongPress);
+      card.addEventListener('mouseup',     cancelLongPress);
+      card.addEventListener('mouseleave',  cancelLongPress);
+
       card.addEventListener('click', function(e) {
         if (e.target.closest('.catatan-card-actions') || e.target.closest('.catatan-star')) return;
+        if (selectMode) {
+          toggleCardSelect(card);
+          return;
+        }
         window.location.href = 'catatan/editor.html?id=' + card.getAttribute('data-id');
+      });
+
+        // Tandai kartu yang sudah selected (saat re-render)
+      if (selectedIds.indexOf(card.getAttribute('data-id')) !== -1) {
+        card.classList.add('selected');
+      }
+    });
+
+    // Lingkaran select — bisa diklik langsung tanpa long press
+    grid.querySelectorAll('.catatan-check').forEach(function(circle) {
+      circle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var card = circle.closest('.catatan-card');
+        if (!selectMode) enterSelectMode();
+        toggleCardSelect(card);
       });
     });
 
@@ -504,7 +560,6 @@ document.addEventListener('DOMContentLoaded', function () {
         var idx = notes.findIndex(function(n) { return n.id === id; });
         if (idx === -1) return;
         notes[idx].favorit = !notes[idx].favorit;
-        notes.sort(function(a, b) { return (b.favorit ? 1 : 0) - (a.favorit ? 1 : 0); });
         saveNotes(notes);
         renderCatatanGrid();
       });
@@ -558,11 +613,105 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  // ── MULTI-SELECT STATE ────────────────────
+  var selectedIds  = [];
+  var selectMode   = false;
+
+  var actionDone = false; // apakah sudah ada aksi yang dilakukan dalam sesi ini
+
+  function markActionDone() {
+    if (actionDone) return;
+    actionDone = true;
+    var btn = document.getElementById('selBatal');
+    if (btn) {
+      btn.querySelector('.catatan-fab-opt-label').textContent = 'Selesai';
+      btn.querySelector('.catatan-fab-opt-icon').textContent = '✔';
+    }
+  }
+
+  function resetActionDone() {
+    if (!actionDone) return;
+    actionDone = false;
+    var btn = document.getElementById('selBatal');
+    if (btn) {
+      btn.querySelector('.catatan-fab-opt-label').textContent = 'Batal';
+      btn.querySelector('.catatan-fab-opt-icon').textContent = '✕';
+    }
+  }
+
+  function enterSelectMode() {
+    selectMode = true;
+    actionDone = false;
+    fabBtn.classList.add('edit-mode');
+    fabIcon.textContent = '✎';
+    document.getElementById('catatanFabMenu').classList.remove('open');
+    updateSelectBadge();
+    var grid = document.getElementById('catatanGrid');
+    if (grid) grid.classList.add('select-mode');
+    history.pushState({ selectMode: true }, '');
+  }
+
+  function exitSelectMode() {
+    selectMode  = false;
+    selectedIds = [];
+    actionDone  = false;
+    fabBtn.classList.remove('edit-mode');
+    fabIcon.textContent = '＋';
+    fabOpen = false;
+    document.getElementById('catatanFabEditMenu').classList.remove('open');
+    document.getElementById('catatanFabMenu').classList.remove('open');
+    fabBtn.classList.remove('open');
+    updateSelectBadge();
+    document.querySelectorAll('.catatan-card.selected').forEach(function(c) {
+      c.classList.remove('selected');
+    });
+    var grid = document.getElementById('catatanGrid');
+    if (grid) grid.classList.remove('select-mode');
+    resetActionDone();
+  }
+
+  function updateSelectBadge() {
+    var badge = document.getElementById('fabSelectCount');
+    if (!badge) return;
+    if (selectedIds.length > 0) {
+      badge.textContent = selectedIds.length;
+      badge.classList.add('show');
+    } else {
+      badge.classList.remove('show');
+    }
+  }
+
+  function toggleCardSelect(card) {
+    var id = card.getAttribute('data-id');
+    var idx = selectedIds.indexOf(id);
+    if (idx === -1) {
+      selectedIds.push(id);
+      card.classList.add('selected');
+    } else {
+      selectedIds.splice(idx, 1);
+      card.classList.remove('selected');
+    }
+    if (selectedIds.length === 0) {
+      exitSelectMode();
+    } else {
+      resetActionDone(); // pilihan berubah → kembali ke "Batal"
+      updateSelectBadge();
+    }
+  }
+
   // FAB: hanya tampil di tab catatan
   var fabWrap = document.getElementById('catatanFab');
   var fabBtn  = document.getElementById('catatanFabBtn');
   var fabMenu = document.getElementById('catatanFabMenu');
+  var fabEditMenu = document.getElementById('catatanFabEditMenu');
+  var fabIcon = document.getElementById('fabIcon');
   var fabOpen = false;
+
+  // Tambah badge count ke FAB
+  var fabSelectCount = document.createElement('span');
+  fabSelectCount.className = 'fab-select-count';
+  fabSelectCount.id = 'fabSelectCount';
+  fabBtn.appendChild(fabSelectCount);
 
   function updateFabVisibility() {
     var activeTab = document.querySelector('.tab-btn.active');
@@ -574,20 +723,126 @@ document.addEventListener('DOMContentLoaded', function () {
   function closeFabMenu() {
     fabOpen = false;
     if (fabMenu) fabMenu.classList.remove('open');
+    if (fabEditMenu) fabEditMenu.classList.remove('open');
     if (fabBtn)  fabBtn.classList.remove('open');
   }
 
   if (fabBtn) {
     fabBtn.addEventListener('click', function(e) {
       e.stopPropagation();
-      fabOpen = !fabOpen;
-      fabMenu.classList.toggle('open', fabOpen);
-      fabBtn.classList.toggle('open', fabOpen);
+      if (selectMode) {
+        // Mode edit: toggle edit menu
+        fabOpen = !fabOpen;
+        fabEditMenu.classList.toggle('open', fabOpen);
+        fabBtn.classList.toggle('open', fabOpen);
+      } else {
+        fabOpen = !fabOpen;
+        fabMenu.classList.toggle('open', fabOpen);
+        fabBtn.classList.toggle('open', fabOpen);
+      }
     });
   }
 
-  document.addEventListener('click', function() { closeFabMenu(); });
+  document.addEventListener('click', function() {
+    closeFabMenu();
+    // Tap di luar kartu saat select mode → keluar select
+    // (tidak dilakukan di sini karena bisa konflik)
+  });
   if (fabMenu) fabMenu.addEventListener('click', function(e) { e.stopPropagation(); });
+  if (fabEditMenu) fabEditMenu.addEventListener('click', function(e) { e.stopPropagation(); });
+
+  // ── AKSI EDIT FAB ────────────────────────
+  // Bg popup pakai yang sudah ada (bgPopup singleton)
+  document.getElementById('selBg').addEventListener('click', function() {
+    if (selectedIds.length === 0) return;
+    closeFabMenu();
+    // Posisi popup di atas FAB
+    var rect = fabBtn.getBoundingClientRect();
+    bgPopup.classList.add('show');
+    var popW = bgPopup.offsetWidth || 220;
+    bgPopup.style.left = Math.max(8, rect.right - popW) + 'px';
+    bgPopup.style.top  = (rect.top - 70) + 'px';
+
+    // Saat warna dipilih, terapkan ke semua selected
+    bgPopup._multiSelect = true;
+  });
+
+  // Override colorStrip handler untuk multi-select
+  colorStrip.addEventListener('click', function(e) {
+    if (!bgPopup._multiSelect) return; // handler biasa sudah handle non-multi
+    var dot = e.target.closest('.catatan-color-dot');
+    if (!dot) return;
+    var notes = getNotes();
+    selectedIds.forEach(function(id) {
+      var idx = notes.findIndex(function(n) { return n.id === id; });
+      if (idx !== -1) notes[idx].warna = dot.getAttribute('data-color');
+    });
+    saveNotes(notes);
+    bgPopup._multiSelect = false;
+    closeBgPopup();
+    markActionDone();
+    renderCatatanGrid();
+  }, true); // capture phase agar prioritas lebih tinggi
+
+  document.getElementById('selBintang').addEventListener('click', function() {
+    if (selectedIds.length === 0) return;
+    closeFabMenu();
+    var notes = getNotes();
+    // Toggle: jika semua sudah bintang → cabut semua, jika tidak → beri semua
+    var allFav = selectedIds.every(function(id) {
+      var n = notes.find(function(n) { return n.id === id; });
+      return n && n.favorit;
+    });
+    selectedIds.forEach(function(id) {
+      var idx = notes.findIndex(function(n) { return n.id === id; });
+      if (idx !== -1) notes[idx].favorit = !allFav;
+    });
+    saveNotes(notes);
+    markActionDone();
+    renderCatatanGrid();
+  });
+
+  // Tombol Batal/Selesai — unselect semua dan keluar mode select
+  document.getElementById('selBatal').addEventListener('click', function() {
+    closeFabMenu();
+    exitSelectMode();
+  });
+
+  var dlgSelHapus = document.getElementById('dlgSelHapus');
+  document.getElementById('selHapus').addEventListener('click', function() {
+    if (selectedIds.length === 0) return;
+    closeFabMenu();
+    document.getElementById('dlgSelHapusTitle').textContent =
+      'Hapus ' + selectedIds.length + ' Catatan?';
+    dlgSelHapus.classList.add('show');
+  });
+  document.getElementById('dlgSelHapusCancel').addEventListener('click', function() {
+    dlgSelHapus.classList.remove('show');
+  });
+  document.getElementById('dlgSelHapusOk').addEventListener('click', function() {
+    var ids = selectedIds.slice();
+    saveNotes(getNotes().filter(function(n) { return ids.indexOf(n.id) === -1; }));
+    dlgSelHapus.classList.remove('show');
+    exitSelectMode();
+    renderCatatanGrid();
+  });
+  dlgSelHapus.addEventListener('click', function(e) {
+    if (e.target === dlgSelHapus) dlgSelHapus.classList.remove('show');
+  });
+
+  // Back sistem saat select mode aktif → unselect semua (tidak navigasi)
+  window.addEventListener('popstate', function(e) {
+    if (selectMode) {
+      exitSelectMode();
+      // Push lagi agar halaman tidak benar-benar back
+      history.pushState({ catatan: true }, '');
+    }
+  });
+
+  // Keluar select mode saat tab berganti
+  tabBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() { if (selectMode) exitSelectMode(); });
+  });
 
   var btnTambah = document.getElementById('btnTambahCatatan');
   if (btnTambah) {
