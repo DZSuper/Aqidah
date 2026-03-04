@@ -140,17 +140,162 @@ document.addEventListener('DOMContentLoaded', function () {
   var tabBtns = document.querySelectorAll('.tab-btn');
   var tabContents = document.querySelectorAll('.tab-content');
 
+  // ── TAB INDICATOR (garis bawah yang bisa bergeser) ───
+  var tabIndicator = document.getElementById('tabIndicator');
+
+  function positionIndicator(btn, animate) {
+    if (!tabIndicator || !btn) return;
+    if (!animate) tabIndicator.style.transition = 'none';
+    else tabIndicator.style.transition = 'left 0.3s cubic-bezier(0.4,0,0.2,1), width 0.3s cubic-bezier(0.4,0,0.2,1)';
+    tabIndicator.style.left  = btn.offsetLeft + 'px';
+    tabIndicator.style.width = btn.offsetWidth + 'px';
+  }
+
+  // ── FUNGSI UTAMA PINDAH TAB ──────────────
+  var TAB_ORDER = ['materi', 'ceramah', 'dalil', 'kutipan', 'catatan'];
+
+  function switchTab(target, direction) {
+    var prevContent = document.querySelector('.tab-content.active');
+
+    tabBtns.forEach(function(b) { b.classList.remove('active'); });
+    var targetBtn = document.querySelector('.tab-btn[data-tab="' + target + '"]');
+    if (targetBtn) targetBtn.classList.add('active');
+
+    // Sembunyikan content lama
+    if (prevContent) {
+      prevContent.classList.remove('active', 'slide-in-left', 'slide-in-right');
+    }
+
+    // Tampilkan content baru dengan animasi arah yang tepat
+    var el = document.getElementById('tab-' + target);
+    if (el) {
+      el.classList.add('active');
+      if (direction === 'left') {
+        el.classList.remove('slide-in-right');
+        void el.offsetWidth; // reflow trigger
+        el.classList.add('slide-in-left');
+      } else if (direction === 'right') {
+        el.classList.remove('slide-in-left');
+        void el.offsetWidth;
+        el.classList.add('slide-in-right');
+      }
+      // Bersihkan class animasi setelah selesai
+      el.addEventListener('animationend', function clean() {
+        el.classList.remove('slide-in-left', 'slide-in-right');
+        el.removeEventListener('animationend', clean);
+      });
+    }
+
+    try { localStorage.setItem('iai_active_tab', target); } catch(e) {}
+    if (targetBtn) {
+      targetBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      positionIndicator(targetBtn, true);
+    }
+  }
+
   tabBtns.forEach(function(btn) {
     btn.addEventListener('click', function() {
-      var target = btn.getAttribute('data-tab');
-      tabBtns.forEach(function(b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      tabContents.forEach(function(t) { t.classList.remove('active'); });
-      var el = document.getElementById('tab-' + target);
-      if (el) el.classList.add('active');
-      try { localStorage.setItem('iai_active_tab', target); } catch(e) {}
+      var cur = document.querySelector('.tab-btn.active');
+      var curIdx = cur ? TAB_ORDER.indexOf(cur.getAttribute('data-tab')) : -1;
+      var newIdx = TAB_ORDER.indexOf(btn.getAttribute('data-tab'));
+      var dir = newIdx > curIdx ? 'left' : (newIdx < curIdx ? 'right' : null);
+      switchTab(btn.getAttribute('data-tab'), dir);
     });
   });
+
+  // Posisi awal indicator
+  requestAnimationFrame(function() {
+    var activeBtn = document.querySelector('.tab-btn.active');
+    positionIndicator(activeBtn, false);
+  });
+
+  // ── SWIPE GESTURE ─────────────────────────
+  var swipeStartX = 0, swipeStartY = 0, swipeStartTime = 0;
+  var isSwiping = false;
+
+  var mainView = document.getElementById('mainView');
+  if (mainView) {
+    mainView.addEventListener('touchstart', function(e) {
+      if (typeof selectMode !== 'undefined' && selectMode) return;
+      var t = e.touches[0];
+      swipeStartX    = t.clientX;
+      swipeStartY    = t.clientY;
+      swipeStartTime = Date.now();
+      isSwiping = false;
+    }, { passive: true });
+
+    mainView.addEventListener('touchmove', function(e) {
+      if (typeof selectMode !== 'undefined' && selectMode) return;
+      var t = e.touches[0];
+      var dx = t.clientX - swipeStartX;
+      var dy = t.clientY - swipeStartY;
+
+      // Tentukan awal swipe: lebih horizontal dari vertikal
+      if (!isSwiping && Math.abs(dx) > 8) {
+        isSwiping = Math.abs(dx) > Math.abs(dy);
+      }
+      if (!isSwiping) return;
+
+      // Gerakkan indicator proporsional
+      if (!tabIndicator) return;
+      var activeBtn = document.querySelector('.tab-btn.active');
+      if (!activeBtn) return;
+      var idx = TAB_ORDER.indexOf(activeBtn.getAttribute('data-tab'));
+      var canSwipe = (dx < 0 && idx < TAB_ORDER.length - 1) || (dx > 0 && idx > 0);
+      if (!canSwipe) return;
+
+      // Dampen: makin jauh makin lambat
+      var maxShift = 80;
+      var dampened = Math.max(-maxShift, Math.min(maxShift, dx * 0.4));
+      var indicatorShift = -(dx / window.innerWidth) * activeBtn.offsetWidth * 0.5;
+      tabIndicator.style.transition = 'none';
+      tabIndicator.style.left  = (activeBtn.offsetLeft + indicatorShift) + 'px';
+      // Konten aktif ikut sedikit, dibatasi maxShift
+      var content = document.querySelector('.tab-content.active');
+      if (content) {
+        content.style.transition = 'none';
+        content.style.transform  = 'translateX(' + dampened + 'px)';
+        content.style.opacity    = 1 - Math.min(Math.abs(dx) / 350, 0.25);
+      }
+    }, { passive: true });
+
+    mainView.addEventListener('touchend', function(e) {
+      if (typeof selectMode !== 'undefined' && selectMode) return;
+
+      // Reset transform pada content
+      var content = document.querySelector('.tab-content.active');
+      if (content) {
+        content.style.transition = '';
+        content.style.transform  = '';
+        content.style.opacity    = '';
+      }
+
+      var t = e.changedTouches[0];
+      var dx = t.clientX - swipeStartX;
+      var dy = t.clientY - swipeStartY;
+      var dt = Date.now() - swipeStartTime;
+
+      var activeBtn = document.querySelector('.tab-btn.active');
+      positionIndicator(activeBtn, true);
+
+      if (!isSwiping) return;
+      if (Math.abs(dx) < 30) return;           /* lebih sensitif */
+      if (Math.abs(dy) > Math.abs(dx) * 0.9) return; /* lebih toleran diagonal */
+      if (dt > 800) return;                     /* bisa geser pelan */
+
+      var current = activeBtn ? activeBtn.getAttribute('data-tab') : null;
+      var idx = TAB_ORDER.indexOf(current);
+      if (idx === -1) return;
+
+      if (dx < 0 && idx < TAB_ORDER.length - 1) {
+        switchTab(TAB_ORDER[idx + 1], 'left');
+      } else if (dx > 0 && idx > 0) {
+        switchTab(TAB_ORDER[idx - 1], 'right');
+      }
+
+      isSwiping = false;
+    }, { passive: true });
+  }
 
   // Pulihkan tab terakhir
   try {
@@ -163,6 +308,7 @@ document.addEventListener('DOMContentLoaded', function () {
         tabContents.forEach(function(t) { t.classList.remove('active'); });
         lastBtn.classList.add('active');
         lastEl.classList.add('active');
+        requestAnimationFrame(function() { positionIndicator(lastBtn, false); });
       }
     }
   } catch(e) {}

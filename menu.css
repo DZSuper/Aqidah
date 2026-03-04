@@ -514,6 +514,7 @@ body {
   flex-direction: column;
   flex: 1;
   padding-top: 0;
+  overflow-x: hidden; /* cegah halaman melebar saat swipe */
 }
 
 /* === JUDUL UTAMA === */
@@ -541,7 +542,7 @@ body {
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  margin-top: 10px;
+  margin-top: 25px;
   margin-bottom: 4px;
   text-shadow: 0 0 8px rgba(0,255,136,0.25);
 }
@@ -806,7 +807,7 @@ footer {
 .topbar {
   display: flex;
   align-items: center;
-  padding: 12px 16px 8px;
+  padding: 25px 16px 18px;
 }
 
 /* Spacer kanan = lebar hamburger kiri, supaya judul tepat di tengah */
@@ -836,6 +837,17 @@ footer {
   scrollbar-width: none;
   border-bottom: 1px solid var(--border);
   padding: 0 12px;
+  position: relative;
+}
+/* Garis indikator tab aktif yang bisa bergeser */
+#tabIndicator {
+  position: absolute;
+  bottom: -1px;
+  height: 2px;
+  background: var(--green);
+  transition: left 0.3s cubic-bezier(0.4,0,0.2,1), width 0.3s cubic-bezier(0.4,0,0.2,1);
+  pointer-events: none;
+  border-radius: 2px 2px 0 0;
 }
 .tab-bar::-webkit-scrollbar { display: none; }
 
@@ -859,7 +871,7 @@ footer {
 .tab-btn:hover { color: var(--text-light); }
 .tab-btn.active {
   color: var(--green);
-  border-bottom-color: var(--green);
+  border-bottom-color: transparent; /* digantikan #tabIndicator */
 }
 .tab-icon { font-size: 1rem; line-height: 1; }
 
@@ -868,17 +880,34 @@ footer {
    ============================================= */
 .tab-content {
   display: none;
-  animation: tabFadeIn 0.25s ease;
 }
 .tab-content.active {
   display: flex;
   flex-direction: column;
   flex: 1;
+  will-change: transform, opacity;
 }
 
-@keyframes tabFadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* Animasi masuk dari kiri/kanan saat ganti tab */
+.tab-content.slide-in-left {
+  animation: slideInLeft 0.28s cubic-bezier(0.4,0,0.2,1) both;
+}
+.tab-content.slide-in-right {
+  animation: slideInRight 0.28s cubic-bezier(0.4,0,0.2,1) both;
+}
+/* Saat digeser manual, matikan animasi */
+.tab-content.swiping {
+  transition: none !important;
+  animation: none !important;
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(-40px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 
 /* Placeholder tab yang belum ada konten */
