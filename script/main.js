@@ -191,6 +191,7 @@ document.addEventListener('DOMContentLoaded', function () {
       targetBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
       positionIndicator(targetBtn, true);
     }
+    updateFabVisibility();
   }
 
   tabBtns.forEach(function(btn) {

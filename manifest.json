@@ -1,17 +1,31 @@
 {
   "name": "FathlyWeb",
-  "short_name": "Ilmu Agama",
+  "short_name": "FathlyWeb",
   "description": "Platform belajar ilmu agama Islam berbasis Manhaj Salaf",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#0b0c0e",
   "theme_color": "#0b0c0e",
+  "lang": "id",
   "icons": [
     {
       "src": "favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
     }
+  ],
+  "screenshots": [],
+  "categories": [
+    "education",
+    "lifestyle"
   ]
 }
