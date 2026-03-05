@@ -1287,6 +1287,111 @@ footer {
 .catatan-fab-opt-icon {
   font-size: 1.1rem;
 }
+/* Ceramah FAB — lebar sama untuk kedua tombol */
+.ceramah-fab-option-full {
+  width: 180px;
+  justify-content: flex-start;
+}
+
+/* =============================================
+   TAB CERAMAH — GRID TERSIMPAN
+   ============================================= */
+.ceramah-saved-wrap {
+  padding: 14px 16px 80px;
+  flex: 1;
+}
+.ceramah-saved-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 560px) {
+  .ceramah-saved-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 900px) {
+  .ceramah-saved-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.ceramah-saved-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.22s ease,
+              border-color 0.18s ease;
+  position: relative;
+  user-select: none;
+}
+.ceramah-saved-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,255,136,0.15);
+  border-color: rgba(0,255,136,0.5);
+}
+.ceramah-saved-card:active {
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
+}
+.ceramah-card-jenis {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(0,255,136,0.1);
+  border: 1px solid rgba(0,255,136,0.2);
+  border-radius: 8px;
+  padding: 3px 8px;
+  font-size: 0.7rem;
+  color: var(--green);
+  font-weight: 500;
+  margin-bottom: 7px;
+}
+.ceramah-card-judul {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-light);
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+.ceramah-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ceramah-card-pembahasan {
+  font-size: 0.68rem;
+  color: var(--gold);
+  background: rgba(255,215,0,0.08);
+  border: 1px solid rgba(255,215,0,0.2);
+  border-radius: 6px;
+  padding: 2px 7px;
+}
+.ceramah-card-durasi {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+.ceramah-card-remove {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+.ceramah-saved-card:hover .ceramah-card-remove {
+  opacity: 1;
+}
+.ceramah-card-remove:hover {
+  background: rgba(255,80,80,0.15);
+  color: #ff5050;
+}
 
 /* ── Multi-select ── */
 .catatan-card.selected {

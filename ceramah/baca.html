@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ceramah | FathlyWeb</title>
+  <link rel="manifest" href="../manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0c0e;
+      --bg-card: #111318;
+      --gold: #ffd700;
+      --green: #00ff88;
+      --blue: #4dabf7;
+      --text: #f2f2f2;
+      --muted: rgba(242,242,242,0.5);
+      --border: rgba(0,255,136,0.18);
+      --radius: 12px;
+      --transition: 0.25s ease;
+    }
+    [data-theme="light"] {
+      --bg: #f4f4f0;
+      --bg-card: #ffffff;
+      --gold: #b8860b;
+      --green: #1a7a4a;
+      --blue: #1a6fc4;
+      --text: #1a1a1a;
+      --muted: rgba(30,30,30,0.5);
+      --border: rgba(26,122,74,0.2);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+    }
+    .back-btn {
+      background: none;
+      border: none;
+      color: var(--green);
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 8px;
+      transition: background var(--transition);
+      flex-shrink: 0;
+    }
+    .back-btn:hover { background: rgba(0,255,136,0.1); }
+    .topbar-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    /* ── KONTEN ── */
+    .content-wrap {
+      flex: 1;
+      padding: 20px 16px 100px;
+      max-width: 720px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* Header info ceramah */
+    .ceramah-header {
+      margin-bottom: 24px;
+    }
+    .header-badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .badge-jenis {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(0,255,136,0.1);
+      border: 1px solid rgba(0,255,136,0.3);
+      border-radius: 8px;
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      color: var(--green);
+      font-weight: 500;
+    }
+    .badge-pembahasan {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255,215,0,0.08);
+      border: 1px solid rgba(255,215,0,0.25);
+      border-radius: 8px;
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      color: var(--gold);
+    }
+    .badge-durasi {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      padding: 4px 0;
+    }
+    .ceramah-judul {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+    .ceramah-ringkasan {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+      background: var(--bg-card);
+      border-left: 3px solid var(--green);
+      border-radius: 0 8px 8px 0;
+      padding: 10px 14px;
+    }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 20px 0;
+    }
+
+    /* Bagian teks */
+    .bagian {
+      margin-bottom: 28px;
+    }
+    .bagian-judul {
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--green);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .bagian-judul::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .bagian-isi {
+      font-size: 0.92rem;
+      line-height: 1.9;
+      color: var(--text);
+      white-space: pre-line;
+    }
+
+    /* ── TOMBOL SIMPAN (sticky bawah) ── */
+    .save-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 12px 16px;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      z-index: 200;
+      display: flex;
+      gap: 10px;
+      max-width: 720px;
+      margin: 0 auto;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .save-btn {
+      flex: 1;
+      background: var(--green);
+      color: #0b0c0e;
+      border: none;
+      border-radius: 10px;
+      padding: 13px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .save-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+    .save-btn:active { transform: scale(0.97); }
+    .save-btn.saved {
+      background: rgba(77,171,247,0.15);
+      color: var(--blue);
+      border: 1.5px solid var(--blue);
+    }
+    .save-btn.saved:hover { background: rgba(77,171,247,0.25); }
+    .unsave-btn {
+      background: none;
+      border: 1.5px solid rgba(255,80,80,0.4);
+      border-radius: 10px;
+      padding: 13px 16px;
+      color: #ff5050;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all var(--transition);
+      display: none;
+    }
+    .unsave-btn.show { display: block; }
+    .unsave-btn:hover { background: rgba(255,80,80,0.1); }
+
+    /* ── LOADING ── */
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid var(--border);
+      border-top-color: var(--green);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <button class="back-btn" onclick="history.back()">←</button>
+    <span class="topbar-title" id="topbarTitle">Memuat...</span>
+  </div>
+
+  <div class="content-wrap" id="contentWrap">
+    <div class="loading">
+      <div class="spinner"></div>
+      Memuat ceramah...
+    </div>
+  </div>
+
+  <div class="save-bar" id="saveBar" style="display:none">
+    <button class="save-btn" id="saveBtn" onclick="toggleSave()">
+      <span id="saveBtnIcon">📥</span>
+      <span id="saveBtnText">Simpan ke Ceramahku</span>
+    </button>
+    <button class="unsave-btn" id="unsaveBtn" onclick="toggleSave()" title="Hapus dari simpanan">🗑</button>
+  </div>
+
+  <script>
+    var ceramah = null;
+    var savedIds = [];
+    var ceramahId = '';
+
+    // Sync tema
+    try {
+      var t = localStorage.getItem('iai_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch(e) {}
+
+    // Load saved IDs
+    try {
+      savedIds = JSON.parse(localStorage.getItem('fw_ceramah_saved') || '[]');
+    } catch(e) { savedIds = []; }
+
+    // Ambil ID dari sessionStorage
+    ceramahId = sessionStorage.getItem('fw_ceramah_id') || '';
+    if (!ceramahId) {
+      document.getElementById('contentWrap').innerHTML = '<div class="loading">Ceramah tidak ditemukan.</div>';
+    } else {
+      fetch('../konten/ceramah.json')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          ceramah = data.find(function(c) { return c.id === ceramahId; });
+          if (!ceramah) {
+            document.getElementById('contentWrap').innerHTML = '<div class="loading">Ceramah tidak ditemukan.</div>';
+            return;
+          }
+          render();
+        })
+        .catch(function() {
+          document.getElementById('contentWrap').innerHTML = '<div class="loading">Gagal memuat data.</div>';
+        });
+    }
+
+    function jenisBadge(jenis) {
+      var map = { 'khutbah-jumat':'🕌','kultum-subuh':'🌅','ceramah-tarawih':'🌙','kajian-biasa':'📖' };
+      return (map[jenis] || '🎤') + ' ' ;
+    }
+
+    function render() {
+      document.title = ceramah.judul + ' | FathlyWeb';
+      document.getElementById('topbarTitle').textContent = ceramah.judul;
+
+      var html = '<div class="ceramah-header">' +
+        '<div class="header-badges">' +
+          '<span class="badge-jenis">' + jenisBadge(ceramah.jenis) + ceramah.jenis_label + '</span>' +
+          '<span class="badge-pembahasan">📌 ' + ceramah.pembahasan_label + '</span>' +
+          '<span class="badge-durasi">⏱ ' + ceramah.durasi + '</span>' +
+        '</div>' +
+        '<div class="ceramah-judul">' + ceramah.judul + '</div>' +
+        '<div class="ceramah-ringkasan">' + ceramah.ringkasan + '</div>' +
+      '</div>' +
+      '<hr class="divider">';
+
+      ceramah.teks.forEach(function(bag) {
+        html += '<div class="bagian">' +
+          '<div class="bagian-judul">' + bag.bagian + '</div>' +
+          '<div class="bagian-isi">' + bag.isi + '</div>' +
+        '</div>';
+      });
+
+      document.getElementById('contentWrap').innerHTML = html;
+      document.getElementById('saveBar').style.display = '';
+      updateSaveBtn();
+    }
+
+    function updateSaveBtn() {
+      var isSaved = savedIds.includes(ceramahId);
+      var btn = document.getElementById('saveBtn');
+      var icon = document.getElementById('saveBtnIcon');
+      var text = document.getElementById('saveBtnText');
+      var unsave = document.getElementById('unsaveBtn');
+
+      if (isSaved) {
+        btn.classList.add('saved');
+        icon.textContent = '✓';
+        text.textContent = 'Sudah Disimpan';
+        unsave.classList.add('show');
+      } else {
+        btn.classList.remove('saved');
+        icon.textContent = '📥';
+        text.textContent = 'Simpan ke Ceramahku';
+        unsave.classList.remove('show');
+      }
+    }
+
+    function toggleSave() {
+      var idx = savedIds.indexOf(ceramahId);
+      if (idx === -1) {
+        // Simpan
+        savedIds.push(ceramahId);
+        // Simpan juga data ceramah lengkap untuk tab utama
+        var allSaved = {};
+        try { allSaved = JSON.parse(localStorage.getItem('fw_ceramah_data') || '{}'); } catch(e) {}
+        allSaved[ceramahId] = ceramah;
+        try {
+          localStorage.setItem('fw_ceramah_saved', JSON.stringify(savedIds));
+          localStorage.setItem('fw_ceramah_data', JSON.stringify(allSaved));
+        } catch(e) {}
+        showToast('✓ Disimpan ke Ceramahku');
+      } else {
+        // Hapus simpanan
+        savedIds.splice(idx, 1);
+        var allSaved = {};
+        try { allSaved = JSON.parse(localStorage.getItem('fw_ceramah_data') || '{}'); } catch(e) {}
+        delete allSaved[ceramahId];
+        try {
+          localStorage.setItem('fw_ceramah_saved', JSON.stringify(savedIds));
+          localStorage.setItem('fw_ceramah_data', JSON.stringify(allSaved));
+        } catch(e) {}
+        showToast('🗑 Dihapus dari simpanan');
+      }
+      updateSaveBtn();
+    }
+
+    function showToast(msg) {
+      var t = document.createElement('div');
+      t.textContent = msg;
+      Object.assign(t.style, {
+        position:'fixed', bottom:'80px', left:'50%', transform:'translateX(-50%)',
+        background:'#1a1a1a', color:'#f2f2f2', padding:'10px 20px',
+        borderRadius:'20px', fontSize:'0.85rem', zIndex:'999',
+        boxShadow:'0 4px 16px rgba(0,0,0,0.4)',
+        transition:'opacity 0.3s ease', opacity:'1'
+      });
+      document.body.appendChild(t);
+      setTimeout(function() { t.style.opacity = '0'; setTimeout(function() { t.remove(); }, 300); }, 2000);
+    }
+  </script>
+</body>
+</html>
