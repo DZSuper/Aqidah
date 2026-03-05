@@ -99,7 +99,7 @@
     .dd-arrow { font-size: 0.65rem; color: var(--muted); display: inline-block; transition: transform var(--tr); }
     .dd-btn.open .dd-arrow { transform: rotate(180deg); }
     .dd-menu {
-      position: absolute; top: calc(100% + 5px); left: 0;
+      position: absolute; top: calc(100% + 5px); right: 0;
       min-width: 190px; background: var(--bg-input);
       border: 1.5px solid var(--border); border-radius: 10px;
       overflow: hidden; box-shadow: 0 10px 28px rgba(0,0,0,0.5);
@@ -209,6 +209,22 @@
               <button class="dd-item" data-v="ilmu">Ilmu</button>
             </div>
           </div>
+          <div class="dd-wrap">
+            <button class="dd-btn" id="btnWaktu">
+              <span id="lblWaktu">Waktu</span>
+              <span class="dd-arrow">&#9662;</span>
+            </button>
+            <div class="dd-menu" id="menuWaktu">
+              <button class="dd-item active" data-v="all">Semua Waktu</button>
+              <button class="dd-item" data-v="±5 menit">±5 menit</button>
+              <button class="dd-item" data-v="±7 menit">±7 menit</button>
+              <button class="dd-item" data-v="±10 menit">±10 menit</button>
+              <button class="dd-item" data-v="±15 menit">±15 menit</button>
+              <button class="dd-item" data-v="±20 menit">±20 menit</button>
+              <button class="dd-item" data-v="±25 menit">±25 menit</button>
+              <button class="dd-item" data-v="±30 menit">±30 menit</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -229,6 +245,7 @@
     var q      = '';
     var fJenis = 'all';
     var fPemb  = 'all';
+    var fWaktu = 'all';
 
     var ICON = {
       'khutbah-jumat':   'Khutbah Jum\'at',
@@ -249,7 +266,8 @@
         var ok1 = !ql || c.judul.toLowerCase().indexOf(ql) > -1 || c.pembahasan_label.toLowerCase().indexOf(ql) > -1 || c.ringkasan.toLowerCase().indexOf(ql) > -1;
         var ok2 = fJenis === 'all' || c.jenis === fJenis;
         var ok3 = fPemb  === 'all' || c.pembahasan === fPemb;
-        return ok1 && ok2 && ok3;
+        var ok4 = fWaktu === 'all' || c.durasi === fWaktu;
+        return ok1 && ok2 && ok3 && ok4;
       });
 
       document.getElementById('resultCount').textContent = list.length + ' ceramah';
@@ -314,6 +332,7 @@
 
     initDD('btnJenis', 'menuJenis', 'lblJenis', 'Jenis', function(v) { fJenis = v; render(); });
     initDD('btnPemb',  'menuPemb',  'lblPemb',  'Pembahasan', function(v) { fPemb = v; render(); });
+    initDD('btnWaktu', 'menuWaktu', 'lblWaktu', 'Waktu', function(v) { fWaktu = v; render(); });
 
     document.getElementById('searchInput').addEventListener('input', function() {
       q = this.value; render();
