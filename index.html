@@ -319,12 +319,33 @@
 
     <!-- TAB: CERAMAH -->
     <main class="tab-content" id="tab-ceramah">
-      <div class="tab-empty">
+      <!-- Empty state: belum ada ceramah tersimpan -->
+      <div id="ceramahEmptyState" class="tab-empty">
         <div class="tab-empty-icon">🎤</div>
-        <div class="tab-empty-title">Ceramah</div>
-        <div class="tab-empty-desc">Outline dan materi ceramah akan segera tersedia.<br>Pantau terus di Coming Soon!</div>
+        <div class="tab-empty-title">Belum ada ceramah tersimpan</div>
+        <div class="tab-empty-desc">Tekan tombol + untuk mencari dan menyimpan ceramah yang ingin kamu gunakan.</div>
+      </div>
+      <!-- Grid ceramah tersimpan -->
+      <div id="ceramahGrid" class="ceramah-saved-wrap" style="display:none">
+        <div class="ceramah-saved-grid" id="ceramahSavedGrid"></div>
       </div>
     </main>
+
+    <!-- FAB Ceramah -->
+    <div class="catatan-fab-wrap" id="ceramahFab" style="display:none">
+      <div class="catatan-fab-menu" id="ceramahFabMenu">
+        <button class="catatan-fab-option ceramah-fab-option-full" disabled>
+          <span class="catatan-fab-opt-icon">✏️</span> Buat Ceramah
+          <span style="font-size:0.65rem;color:rgba(255,255,255,0.3);margin-left:4px">(segera)</span>
+        </button>
+        <button class="catatan-fab-option ceramah-fab-option-full" id="btnCariCeramah">
+          <span class="catatan-fab-opt-icon">🔍</span> Cari Ceramah
+        </button>
+      </div>
+      <button class="catatan-fab-btn" id="ceramahFabBtn">
+        <span class="catatan-fab-plus">＋</span>
+      </button>
+    </div>
 
     <!-- TAB: DALIL -->
     <main class="tab-content" id="tab-dalil">

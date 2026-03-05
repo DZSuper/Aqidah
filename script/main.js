@@ -862,8 +862,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function updateFabVisibility() {
     var activeTab = document.querySelector('.tab-btn.active');
+    var tab = activeTab ? activeTab.getAttribute('data-tab') : '';
     if (fabWrap) {
-      fabWrap.style.display = (activeTab && activeTab.getAttribute('data-tab') === 'catatan') ? '' : 'none';
+      fabWrap.style.display = (tab === 'catatan') ? '' : 'none';
+    }
+    var ceramahFab = document.getElementById('ceramahFab');
+    if (ceramahFab) {
+      ceramahFab.style.display = (tab === 'ceramah') ? '' : 'none';
     }
   }
 
@@ -1015,9 +1020,112 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  // ── CERAMAH FAB & GRID ────────────────────────
+  var ceramahFabBtn  = document.getElementById('ceramahFabBtn');
+  var ceramahFabMenu = document.getElementById('ceramahFabMenu');
+  var ceramahFabOpen = false;
+
+  function closeCeramahFab() {
+    ceramahFabOpen = false;
+    if (ceramahFabMenu) ceramahFabMenu.classList.remove('open');
+    if (ceramahFabBtn)  ceramahFabBtn.classList.remove('open');
+  }
+
+  if (ceramahFabBtn) {
+    ceramahFabBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      ceramahFabOpen = !ceramahFabOpen;
+      ceramahFabMenu.classList.toggle('open', ceramahFabOpen);
+      ceramahFabBtn.classList.toggle('open', ceramahFabOpen);
+    });
+  }
+
+  document.addEventListener('click', function(e) {
+    if (ceramahFabOpen && !e.target.closest('#ceramahFab')) closeCeramahFab();
+  });
+
+  var btnCariCeramah = document.getElementById('btnCariCeramah');
+  if (btnCariCeramah) {
+    btnCariCeramah.addEventListener('click', function() {
+      window.location.href = 'ceramah/index-ceramah.html';
+    });
+  }
+
+  function renderCeramahGrid() {
+    var savedIds = [];
+    var savedData = {};
+    try {
+      savedIds  = JSON.parse(localStorage.getItem('fw_ceramah_saved') || '[]');
+      savedData = JSON.parse(localStorage.getItem('fw_ceramah_data')  || '{}');
+    } catch(e) {}
+
+    var emptyState = document.getElementById('ceramahEmptyState');
+    var gridWrap   = document.getElementById('ceramahGrid');
+    var grid       = document.getElementById('ceramahSavedGrid');
+    if (!grid) return;
+
+    if (savedIds.length === 0) {
+      if (emptyState) emptyState.style.display = '';
+      if (gridWrap)   gridWrap.style.display = 'none';
+      return;
+    }
+
+    if (emptyState) emptyState.style.display = 'none';
+    if (gridWrap)   gridWrap.style.display = '';
+
+    var jenisIcon = {'khutbah-jumat':'🕌','kultum-subuh':'🌅','ceramah-tarawih':'🌙','kajian-biasa':'📖'};
+
+    grid.innerHTML = savedIds.map(function(id) {
+      var c = savedData[id];
+      if (!c) return '';
+      var icon = jenisIcon[c.jenis] || '🎤';
+      return '<div class="ceramah-saved-card" data-id="' + id + '">' +
+        '<button class="ceramah-card-remove" data-id="' + id + '" title="Hapus">✕</button>' +
+        '<div class="ceramah-card-jenis">' + icon + ' ' + c.jenis_label + '</div>' +
+        '<div class="ceramah-card-judul">' + c.judul + '</div>' +
+        '<div class="ceramah-card-meta">' +
+          '<span class="ceramah-card-pembahasan">📌 ' + c.pembahasan_label + '</span>' +
+          '<span class="ceramah-card-durasi">⏱ ' + c.durasi + '</span>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    // Klik kartu → buka baca.html
+    grid.querySelectorAll('.ceramah-saved-card').forEach(function(card) {
+      card.addEventListener('click', function(e) {
+        if (e.target.closest('.ceramah-card-remove')) return;
+        var id = card.getAttribute('data-id');
+        sessionStorage.setItem('fw_ceramah_id', id);
+        window.location.href = 'ceramah/baca.html';
+      });
+    });
+
+    // Tombol hapus dari simpanan
+    grid.querySelectorAll('.ceramah-card-remove').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var id = btn.getAttribute('data-id');
+        var ids = [];
+        var data = {};
+        try {
+          ids  = JSON.parse(localStorage.getItem('fw_ceramah_saved') || '[]');
+          data = JSON.parse(localStorage.getItem('fw_ceramah_data')  || '{}');
+        } catch(err) {}
+        ids = ids.filter(function(i) { return i !== id; });
+        delete data[id];
+        try {
+          localStorage.setItem('fw_ceramah_saved', JSON.stringify(ids));
+          localStorage.setItem('fw_ceramah_data',  JSON.stringify(data));
+        } catch(err) {}
+        renderCeramahGrid();
+      });
+    });
+  }
+
   // Init
   updateFabVisibility();
   renderCatatanGrid();
+  renderCeramahGrid();
 
   // Handle bfcache: re-run tab restoration & grid render tanpa reload.
   // Reload loop di WebView (SPCK) bisa terjadi jika pakai window.location.reload().
@@ -1039,6 +1147,7 @@ document.addEventListener('DOMContentLoaded', function () {
     } catch(e) {}
     updateFabVisibility();
     renderCatatanGrid();
+    renderCeramahGrid();
   });
 
 });
