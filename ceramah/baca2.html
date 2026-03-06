@@ -84,23 +84,6 @@
       width: 100%;
       margin: 0 auto;
     }
-    /* Mode edit: padding kiri-kanan lebih lebar agar teks tidak terpotong border */
-    body.edit-active .content-wrap {
-      padding-left: 20px;
-      padding-right: 20px;
-    }
-    /* Bagian teks saat edit: border lebih lebar dari sebelumnya */
-    body.edit-active .bagian-isi {
-      border: 1.5px solid rgba(255,215,0,0.25);
-      border-radius: 8px;
-      padding: 10px 12px;
-      margin: 0 -2px;
-      outline: none;
-    }
-    body.edit-active .bagian-isi:focus {
-      border-color: rgba(255,215,0,0.5);
-      background: rgba(255,215,0,0.03);
-    }
 
     /* Header info ceramah */
     .ceramah-header {
@@ -262,49 +245,38 @@
     }
     .saved-mode-badge.show { display: inline-flex; }
 
-    /* ══ STYLE 1: PILL FLOATING ══ */
+    /* ══ STYLE 2: CARD RAISED ══ */
 
-    /* Wrapper bawah layar — background fade + pill di tengah */
     .saved-action-bar {
       position: fixed;
       bottom: 0; left: 0; right: 0;
       z-index: 200;
       display: none;
       flex-direction: column;
-      align-items: center;
-      padding-bottom: 18px;
-      pointer-events: none;
-      background: linear-gradient(to top, rgba(11,12,14,0.92) 0%, rgba(11,12,14,0.5) 50%, transparent 100%);
+      background: #13151b;
+      border-radius: 20px 20px 0 0;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 -12px 48px rgba(0,0,0,0.55), 0 -1px 0 rgba(0,255,136,0.06);
+      padding: 6px 0 18px;
     }
     [data-theme="light"] .saved-action-bar {
-      background: linear-gradient(to top, rgba(244,244,240,0.95) 0%, rgba(244,244,240,0.5) 50%, transparent 100%);
+      background: #ffffff;
+      border-top-color: rgba(0,0,0,0.06);
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.12);
     }
     .saved-action-bar.show { display: flex; }
-    .saved-action-label { display: none; }
 
-    /* Pill container */
-    .saved-action-row {
-      pointer-events: all;
-      display: flex;
-      align-items: stretch;
-      gap: 0;
-      background: rgba(18,20,26,0.93);
-      border: 1px solid rgba(255,255,255,0.14);
-      border-radius: 50px;
-      padding: 0;
-      overflow: hidden;
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      box-shadow:
-        0 8px 32px rgba(0,0,0,0.55),
-        0 0 0 1px rgba(0,255,136,0.07) inset;
-      width: 75%;
+    /* Handle drag */
+    .saved-action-label {
+      display: block;
+      width: 36px; height: 3px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      margin: 0 auto 10px;
     }
-    [data-theme="light"] .saved-action-row {
-      background: rgba(255,255,255,0.94);
-      border-color: rgba(0,0,0,0.14);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-    }
+    [data-theme="light"] .saved-action-label { background: rgba(0,0,0,0.1); }
+
+    .saved-action-row { display: flex; }
 
     .sab-btn {
       flex: 1;
@@ -312,226 +284,246 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 3px;
+      gap: 5px;
       background: none;
       border: none;
-      border-right: 1px solid rgba(255,255,255,0.1);
-      border-radius: 0;
-      padding: 10px 4px 12px;
+      padding: 6px 4px 4px;
       cursor: pointer;
       font-family: 'Poppins', sans-serif;
-      font-size: 0.58rem;
+      font-size: 0.62rem;
       font-weight: 500;
-      color: rgba(242,242,242,0.35);
+      color: rgba(242,242,242,0.3);
       transition: all var(--transition);
       user-select: none;
-      letter-spacing: 0.03em;
     }
-    .sab-btn:last-child { border-right: none; }
-    [data-theme="light"] .sab-btn { color: rgba(26,26,26,0.4); border-right-color: rgba(0,0,0,0.1); }
+    [data-theme="light"] .sab-btn { color: rgba(26,26,26,0.35); }
 
-    .sab-btn:hover { color: var(--green); background: rgba(0,255,136,0.07); }
-    .sab-btn:active { transform: scale(0.93); }
-    .sab-btn.danger:hover { color: #ff5050; background: rgba(255,80,80,0.07); }
-
+    /* Kotak icon pip */
     .sab-ico {
-      font-size: 1.1rem;
-      line-height: 1;
-      transition: transform var(--transition);
-      filter: grayscale(0.2) opacity(0.65);
+      width: 36px; height: 36px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; line-height: 1;
+      transition: all var(--transition);
     }
-    .sab-btn:hover .sab-ico { filter: none; transform: translateY(-1px) scale(1.05); }
+    [data-theme="light"] .sab-ico {
+      background: rgba(0,0,0,0.04);
+      border-color: rgba(0,0,0,0.06);
+    }
+    .sab-btn:hover .sab-ico {
+      background: rgba(0,255,136,0.1);
+      border-color: rgba(0,255,136,0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0,255,136,0.12);
+    }
+    .sab-btn:hover { color: var(--green); }
+    .sab-btn:active .sab-ico { transform: scale(0.93); }
+    .sab-btn.danger:hover .sab-ico {
+      background: rgba(255,80,80,0.1);
+      border-color: rgba(255,80,80,0.2);
+      box-shadow: 0 6px 16px rgba(255,80,80,0.1);
+    }
+    .sab-btn.danger:hover { color: #ff5050; }
 
-    /* ── HIGHLIGHT TOOLBAR — juga berbentuk pill ── */
+    /* ── HIGHLIGHT TOOLBAR — card raised ── */
     .hl-toolbar {
       position: fixed;
       bottom: 0; left: 0; right: 0;
       z-index: 200;
       display: none;
       flex-direction: column;
-      align-items: center;
-      padding-bottom: 18px;
-      pointer-events: none;
-      background: linear-gradient(to top, rgba(11,12,14,0.92) 0%, rgba(11,12,14,0.5) 50%, transparent 100%);
+      background: #13151b;
+      border-radius: 20px 20px 0 0;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 -12px 48px rgba(0,0,0,0.55);
+      padding: 6px 0 18px;
     }
     [data-theme="light"] .hl-toolbar {
-      background: linear-gradient(to top, rgba(244,244,240,0.95) 0%, rgba(244,244,240,0.5) 50%, transparent 100%);
+      background: #ffffff;
+      border-top-color: rgba(0,0,0,0.06);
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.12);
     }
     .hl-toolbar.show { display: flex; }
 
     .hl-toolbar-label {
-      font-size: 0.55rem;
+      font-size: 0.58rem;
       color: rgba(242,242,242,0.2);
       text-transform: uppercase;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.1em;
+      text-align: center;
       font-weight: 500;
-      margin-bottom: 6px;
-      pointer-events: none;
+      padding: 2px 0 10px;
+    }
+    /* Handle */
+    .hl-toolbar-label::before {
+      content: '';
+      display: block;
+      width: 36px; height: 3px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      margin: 0 auto 8px;
     }
     [data-theme="light"] .hl-toolbar-label { color: rgba(26,26,26,0.25); }
+    [data-theme="light"] .hl-toolbar-label::before { background: rgba(0,0,0,0.1); }
 
-    .hl-toolbar-row {
-      pointer-events: all;
-      display: flex;
-      align-items: stretch;
-      gap: 0;
-      background: rgba(18,20,26,0.93);
-      border: 1px solid rgba(255,255,255,0.14);
-      border-radius: 50px;
-      padding: 0;
-      overflow: hidden;
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      box-shadow:
-        0 8px 32px rgba(0,0,0,0.55),
-        0 0 0 1px rgba(0,255,136,0.07) inset;
-      width: 75%;
-    }
-    [data-theme="light"] .hl-toolbar-row {
-      background: rgba(255,255,255,0.94);
-      border-color: rgba(0,0,0,0.14);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-    }
+    .hl-toolbar-row { display: flex; }
 
     .hl-color-btn {
-      flex: 1;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 3px;
-      border: none;
-      border-right: 1px solid rgba(255,255,255,0.1);
-      border-radius: 0;
-      padding: 10px 4px 12px;
+      flex: 1; border: none;
+      padding: 4px 4px;
       font-family: 'Poppins', sans-serif;
-      font-size: 0.58rem; font-weight: 500;
+      font-size: 0.62rem; font-weight: 500;
       cursor: pointer; transition: all var(--transition);
       background: transparent;
-      color: rgba(242,242,242,0.35);
+      display: flex; flex-direction: column;
+      align-items: center; gap: 5px;
+      color: rgba(242,242,242,0.3);
     }
-    [data-theme="light"] .hl-color-btn { color: rgba(26,26,26,0.4); border-right-color: rgba(0,0,0,0.1); }
-    .hl-color-btn:active { transform: scale(0.93); }
-    .hl-color-btn.yellow:hover { background: rgba(255,215,0,0.08); color: var(--gold); }
-    .hl-color-btn.green:hover  { background: rgba(0,255,136,0.07); color: var(--green); }
-    .hl-color-btn.red:hover    { background: rgba(255,80,80,0.08); color: #ff5050; }
-    .hl-color-btn.blue:hover   { background: rgba(77,171,247,0.08); color: var(--blue); }
+    [data-theme="light"] .hl-color-btn { color: rgba(26,26,26,0.35); }
+    .hl-color-btn:active .hl-color-ico { transform: scale(0.91); }
+    .hl-color-btn.yellow:hover { color: var(--gold); }
+    .hl-color-btn.green:hover  { color: var(--green); }
+    .hl-color-btn.red:hover    { color: #ff5050; }
+    .hl-color-btn.blue:hover   { color: var(--blue); }
 
-    /* Icon SVG — ukuran seragam 20x20 */
     .hl-color-ico {
-      width: 20px; height: 20px;
+      width: 36px; height: 36px; border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      transition: transform var(--transition);
-      background: none; border-radius: 0;
+      font-size: 1rem; transition: all var(--transition);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
     }
-    .hl-color-ico svg { width: 20px; height: 20px; display: block; }
-    .hl-color-btn:hover .hl-color-ico { transform: scale(1.12); }
+    [data-theme="light"] .hl-color-ico { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.06); }
+    .hl-color-btn.yellow:hover .hl-color-ico { background: rgba(255,215,0,0.14); border-color: rgba(255,215,0,0.25); transform: translateY(-3px); box-shadow: 0 6px 14px rgba(255,215,0,0.12); }
+    .hl-color-btn.green:hover  .hl-color-ico { background: rgba(0,255,136,0.12); border-color: rgba(0,255,136,0.22); transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,255,136,0.1); }
+    .hl-color-btn.red:hover    .hl-color-ico { background: rgba(255,80,80,0.14); border-color: rgba(255,80,80,0.25); transform: translateY(-3px); box-shadow: 0 6px 14px rgba(255,80,80,0.1); }
+    .hl-color-btn.blue:hover   .hl-color-ico { background: rgba(77,171,247,0.14); border-color: rgba(77,171,247,0.25); transform: translateY(-3px); box-shadow: 0 6px 14px rgba(77,171,247,0.1); }
 
     .hl-remove-btn {
-      flex: 1;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 3px;
-      background: transparent; border: none;
-      border-right: 1px solid rgba(255,255,255,0.1);
-      border-radius: 0;
-      padding: 10px 4px 12px;
-      font-family: 'Poppins', sans-serif; font-size: 0.58rem; font-weight: 500;
-      color: rgba(242,242,242,0.35); cursor: pointer; transition: all var(--transition);
+      flex: 1; background: transparent; border: none;
+      padding: 4px 4px;
+      font-family: 'Poppins', sans-serif; font-size: 0.62rem; font-weight: 500;
+      color: rgba(242,242,242,0.3); cursor: pointer; transition: all var(--transition);
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
     }
-    [data-theme="light"] .hl-remove-btn { color: rgba(26,26,26,0.4); border-right-color: rgba(0,0,0,0.1); }
-    .hl-remove-btn:hover { background: rgba(255,80,80,0.08); color: #ff5050; }
-    .hl-remove-btn:active { transform: scale(0.93); }
+    [data-theme="light"] .hl-remove-btn { color: rgba(26,26,26,0.35); }
+    .hl-remove-btn:hover { color: #ff5050; }
+    .hl-remove-btn:active .hl-btn-ico { transform: scale(0.91); }
 
     .hl-close-btn {
-      flex: 1;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 3px;
-      background: transparent; border: none;
-      border-radius: 0;
-      padding: 10px 4px 12px;
-      font-size: 0.58rem; font-weight: 500;
-      color: rgba(242,242,242,0.35); cursor: pointer;
+      flex: 1; background: transparent; border: none;
+      padding: 4px 4px;
+      font-size: 0.62rem; font-weight: 500;
+      color: rgba(242,242,242,0.3); cursor: pointer;
       transition: all var(--transition); font-family: 'Poppins', sans-serif;
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
     }
-    [data-theme="light"] .hl-close-btn { color: rgba(26,26,26,0.4); }
-    .hl-close-btn:hover { color: var(--green); background: rgba(0,255,136,0.07); }
-    .hl-close-btn:active { transform: scale(0.93); }
+    [data-theme="light"] .hl-close-btn { color: rgba(26,26,26,0.35); }
+    .hl-close-btn:hover { color: var(--green); }
+    .hl-close-btn:active .hl-btn-ico { transform: scale(0.91); }
 
     .hl-btn-ico {
-      width: 20px; height: 20px;
+      width: 36px; height: 36px; border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      transition: transform var(--transition);
+      font-size: 1rem; line-height: 1;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: all var(--transition);
     }
-    .hl-btn-ico svg { width: 20px; height: 20px; display: block; }
-    .hl-remove-btn:hover .hl-btn-ico,
-    .hl-close-btn:hover .hl-btn-ico { transform: scale(1.12); }
+    [data-theme="light"] .hl-btn-ico { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.06); }
+    .hl-remove-btn:hover .hl-btn-ico { background: rgba(255,80,80,0.12); border-color: rgba(255,80,80,0.22); transform: translateY(-3px); box-shadow: 0 6px 14px rgba(255,80,80,0.1); }
+    .hl-close-btn:hover .hl-btn-ico { background: rgba(0,255,136,0.1); border-color: rgba(0,255,136,0.2); transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,255,136,0.08); }
 
-    /* ── EDIT MODE BAR — juga pill, warna emas ── */
+    /* ── EDIT MODE BAR — card raised, emas ── */
     .edit-mode-bar {
       display: none;
       position: fixed;
       bottom: 0; left: 0; right: 0;
       z-index: 200;
       flex-direction: column;
-      align-items: center;
-      padding-bottom: 18px;
-      pointer-events: none;
-      background: linear-gradient(to top, rgba(11,12,14,0.92) 0%, rgba(11,12,14,0.5) 50%, transparent 100%);
+      background: #14130f;
+      border-radius: 20px 20px 0 0;
+      border-top: 1px solid rgba(255,215,0,0.08);
+      box-shadow: 0 -12px 48px rgba(0,0,0,0.55), 0 -1px 0 rgba(255,215,0,0.05);
+      padding: 6px 0 18px;
     }
     [data-theme="light"] .edit-mode-bar {
-      background: linear-gradient(to top, rgba(244,244,240,0.95) 0%, rgba(244,244,240,0.5) 50%, transparent 100%);
+      background: #fffdf5;
+      border-top-color: rgba(184,134,11,0.15);
     }
     .edit-mode-bar.show { display: flex; }
 
     .edit-mode-label {
-      font-size: 0.55rem;
-      color: rgba(255,215,0,0.3);
+      font-size: 0.58rem;
+      color: rgba(255,215,0,0.25);
       text-transform: uppercase;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.1em;
+      text-align: center;
       font-weight: 500;
-      margin-bottom: 6px;
-      pointer-events: none;
+      padding: 2px 0 10px;
     }
-    .edit-mode-row {
-      pointer-events: all;
-      display: flex;
-      align-items: stretch;
-      gap: 0;
-      background: rgba(18,20,26,0.93);
-      border: 1px solid rgba(255,215,0,0.18);
-      border-radius: 50px;
-      padding: 0;
-      overflow: hidden;
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      box-shadow:
-        0 8px 32px rgba(0,0,0,0.55),
-        0 0 0 1px rgba(255,215,0,0.06) inset;
-      width: 75%;
+    .edit-mode-label::before {
+      content: '';
+      display: block;
+      width: 36px; height: 3px;
+      background: rgba(255,215,0,0.12);
+      border-radius: 2px;
+      margin: 0 auto 8px;
     }
+
+    .edit-mode-row { display: flex; }
+
     .edit-mode-btn {
       flex: 1;
       display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 3px;
-      border: none; border-radius: 0;
-      padding: 10px 8px 12px;
+      align-items: center; gap: 5px;
+      border: none;
+      padding: 4px 4px;
       font-family: 'Poppins', sans-serif;
       font-size: 0.62rem; font-weight: 500;
       cursor: pointer; transition: all var(--transition);
     }
-    .edit-mode-btn-ico { font-size: 1rem; line-height: 1; transition: transform var(--transition); }
-    .edit-mode-btn:hover .edit-mode-btn-ico { transform: scale(1.1) translateY(-1px); }
-
+    .edit-mode-btn-ico {
+      width: 36px; height: 36px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; line-height: 1;
+      transition: all var(--transition);
+      border: 1px solid transparent;
+    }
     .edit-mode-btn.cancel-btn {
       background: transparent;
-      color: rgba(242,242,242,0.3);
-      border-right: 1px solid rgba(255,215,0,0.15);
+      color: rgba(242,242,242,0.28);
     }
-    [data-theme="light"] .edit-mode-btn.cancel-btn { color: rgba(26,26,26,0.35); border-right-color: rgba(184,134,11,0.18); }
-    .edit-mode-btn.cancel-btn:hover { color: #ff5050; background: rgba(255,80,80,0.07); }
+    [data-theme="light"] .edit-mode-btn.cancel-btn { color: rgba(26,26,26,0.3); }
+    .edit-mode-btn.cancel-btn .edit-mode-btn-ico {
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(255,255,255,0.06);
+    }
+    .edit-mode-btn.cancel-btn:hover { color: #ff5050; }
+    .edit-mode-btn.cancel-btn:hover .edit-mode-btn-ico {
+      background: rgba(255,80,80,0.1);
+      border-color: rgba(255,80,80,0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 14px rgba(255,80,80,0.1);
+    }
     .edit-mode-btn.save-btn {
       background: transparent;
-      color: rgba(255,215,0,0.55);
+      color: rgba(255,215,0,0.45);
     }
-    .edit-mode-btn.save-btn:hover { color: var(--gold); background: rgba(255,215,0,0.07); }
-    .edit-mode-btn:active { transform: scale(0.93); }
+    .edit-mode-btn.save-btn .edit-mode-btn-ico {
+      background: rgba(255,215,0,0.07);
+      border-color: rgba(255,215,0,0.12);
+    }
+    .edit-mode-btn.save-btn:hover { color: var(--gold); }
+    .edit-mode-btn.save-btn:hover .edit-mode-btn-ico {
+      background: rgba(255,215,0,0.14);
+      border-color: rgba(255,215,0,0.25);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 14px rgba(255,215,0,0.1);
+    }
+    .edit-mode-btn:active .edit-mode-btn-ico { transform: scale(0.91) !important; }
 
     /* ── SWIPE NAVIGATION ── */
     .swipe-hint {
@@ -662,6 +654,7 @@
 
   <!-- Action bar khusus mode TERSIMPAN -->
   <div class="saved-action-bar" id="savedActionBar">
+    <div class="saved-action-label"></div>
     <div class="saved-action-row">
       <button class="sab-btn" id="sabEdit" onclick="toggleEditMode()">
         <span class="sab-ico">✏️</span>
@@ -673,7 +666,7 @@
       </button>
       <button class="sab-btn" id="sabTandai" onclick="toggleHighlightMode()">
         <span class="sab-ico">🖊️</span>
-        <span>Penanda</span>
+        <span>Tandai</span>
       </button>
       <button class="sab-btn" id="sabDefault" onclick="showDefaultDialog()">
         <span class="sab-ico">↺</span>
@@ -682,75 +675,27 @@
     </div>
   </div>
 
-  <!-- Toolbar penanda (menggantikan action bar) -->
+  <!-- Toolbar tandai (menggantikan action bar) -->
   <div class="hl-toolbar" id="hlToolbar">
-    <div class="hl-toolbar-label">pilih warna penanda</div>
+    <div class="hl-toolbar-label">pilih warna tandai</div>
     <div class="hl-toolbar-row">
-      <!-- Hapus di kiri -->
-      <button class="hl-remove-btn" onclick="removeHighlight()">
-        <span class="hl-btn-ico hl-erase-ico">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Penghapus miring: seperti gambar referensi -->
-            <!-- Bagian pink (kiri bawah) -->
-            <path d="M3.5 17.5 L9 8.5 L15 12.5 L9.5 21.5 Z"
-              fill="#f0a0a0" stroke="#2a2a2a" stroke-width="1.4" stroke-linejoin="round"/>
-            <!-- Bagian abu (kanan atas) -->
-            <path d="M9 8.5 L14.5 4.5 Q16 3.5 17 4.5 L20.5 9 Q21.5 10.5 20 11.5 L15 12.5 Z"
-              fill="#d0d0d0" stroke="#2a2a2a" stroke-width="1.4" stroke-linejoin="round"/>
-            <!-- Garis pemisah diagonal -->
-            <line x1="9" y1="8.5" x2="15" y2="12.5" stroke="#2a2a2a" stroke-width="1.2" stroke-linecap="round"/>
-            <!-- Garis bawah (permukaan meja) -->
-            <line x1="1.5" y1="22" x2="22.5" y2="22" stroke="rgba(242,242,242,0.3)" stroke-width="1.4" stroke-linecap="round"/>
-          </svg>
-        </span>
-        <span>Hapus</span>
-      </button>
-      <!-- Kuning: bulatan -->
       <button class="hl-color-btn yellow" onclick="applyHighlight('yellow')">
-        <span class="hl-color-ico yellow">
-          <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="10" cy="10" r="7" fill="#ffd700" opacity="0.9"/>
-          </svg>
-        </span>
-        <span>Mark Kuning</span>
+        <span class="hl-color-ico yellow">⭐</span><span>Kuning</span>
       </button>
-      <!-- Hijau: bulatan -->
       <button class="hl-color-btn green" onclick="applyHighlight('green')">
-        <span class="hl-color-ico green">
-          <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="10" cy="10" r="7" fill="#00ff88" opacity="0.85"/>
-          </svg>
-        </span>
-        <span>Mark Hijau</span>
+        <span class="hl-color-ico green">🟢</span><span>Hijau</span>
       </button>
-      <!-- Merah: huruf A bergaris bawah merah -->
       <button class="hl-color-btn red" onclick="applyHighlight('red')">
-        <span class="hl-color-ico red">
-          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <text x="10" y="13" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-weight="700" fill="#ff5050">A</text>
-            <line x1="3" y1="17" x2="17" y2="17" stroke="#ff5050" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </span>
-        <span>Garis Merah</span>
+        <span class="hl-color-ico red">🔴</span><span>Merah</span>
       </button>
-      <!-- Biru: huruf A bergaris bawah biru -->
       <button class="hl-color-btn blue" onclick="applyHighlight('blue')">
-        <span class="hl-color-ico blue">
-          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <text x="10" y="13" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-weight="700" fill="#4dabf7">A</text>
-            <line x1="3" y1="17" x2="17" y2="17" stroke="#4dabf7" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </span>
-        <span>Garis Biru</span>
+        <span class="hl-color-ico blue">🔵</span><span>Biru</span>
       </button>
-      <!-- Selesai: centang hijau -->
+      <button class="hl-remove-btn" onclick="removeHighlight()">
+        <span class="hl-btn-ico">✕</span><span>Hapus</span>
+      </button>
       <button class="hl-close-btn" onclick="closeHighlightMode()">
-        <span class="hl-btn-ico hl-done-ico">
-          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 10.5L8.5 15L16 6" stroke="#00ff88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </span>
-        <span>Selesai</span>
+        <span class="hl-btn-ico">✓</span><span>Selesai</span>
       </button>
     </div>
   </div>
@@ -1137,7 +1082,6 @@
     function toggleEditMode() {
       if (hlMode) closeHighlightMode();
       editMode = true;
-      document.body.classList.add('edit-active');
       document.getElementById('savedActionBar').classList.remove('show');
       document.getElementById('editModeBar').classList.add('show');
       document.getElementById('editModeBanner').classList.add('show');
@@ -1151,7 +1095,6 @@
 
     function exitEditMode() {
       editMode = false;
-      document.body.classList.remove('edit-active');
       document.querySelectorAll('.bagian-isi').forEach(function(el) {
         el.removeAttribute('contenteditable');
       });

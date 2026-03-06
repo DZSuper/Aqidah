@@ -1042,6 +1042,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.addEventListener('click', function(e) {
     if (ceramahFabOpen && !e.target.closest('#ceramahFab')) closeCeramahFab();
+    if (!e.target.closest('.ceramah-card-menu-btn') && !e.target.closest('.ceramah-card-popup')) {
+      document.querySelectorAll('.ceramah-card-popup.open').forEach(function(p) { p.classList.remove('open'); });
+    }
   });
 
   var btnCariCeramah = document.getElementById('btnCariCeramah');
@@ -1049,6 +1052,300 @@ document.addEventListener('DOMContentLoaded', function () {
     btnCariCeramah.addEventListener('click', function() {
       window.location.href = 'ceramah/index-ceramah.html';
     });
+  }
+
+  // ── Dialog hapus ceramah ──
+  var dlgHapusCeramah       = document.getElementById('dlgHapusCeramah');
+  var dlgHapusCeramahCancel = document.getElementById('dlgHapusCeramahCancel');
+  var dlgHapusCeramahOk     = document.getElementById('dlgHapusCeramahOk');
+  var _pendingHapusId       = null;
+
+  function showHapusCeramahDialog(id) {
+    _pendingHapusId = id;
+    if (dlgHapusCeramah) dlgHapusCeramah.classList.add('show');
+  }
+
+  if (dlgHapusCeramahCancel) {
+    dlgHapusCeramahCancel.addEventListener('click', function() {
+      _pendingHapusId = null;
+      dlgHapusCeramah.classList.remove('show');
+    });
+  }
+  if (dlgHapusCeramahOk) {
+    dlgHapusCeramahOk.addEventListener('click', function() {
+      if (_pendingHapusId) {
+        hapusCeramahById(_pendingHapusId);
+        _pendingHapusId = null;
+      }
+      dlgHapusCeramah.classList.remove('show');
+    });
+  }
+  if (dlgHapusCeramah) {
+    dlgHapusCeramah.addEventListener('click', function(e) {
+      if (e.target === dlgHapusCeramah) {
+        _pendingHapusId = null;
+        dlgHapusCeramah.classList.remove('show');
+      }
+    });
+  }
+
+  function hapusCeramahById(id) {
+    var ids = [], data = {};
+    try {
+      ids  = JSON.parse(localStorage.getItem('fw_ceramah_saved') || '[]');
+      data = JSON.parse(localStorage.getItem('fw_ceramah_data')  || '{}');
+    } catch(e) {}
+    ids = ids.filter(function(i) { return i !== id; });
+    delete data[id];
+    try {
+      localStorage.setItem('fw_ceramah_saved', JSON.stringify(ids));
+      localStorage.setItem('fw_ceramah_data',  JSON.stringify(data));
+      localStorage.removeItem('fw_ceramah_edit_' + id);
+      localStorage.removeItem('fw_hl_' + id);
+    } catch(e) {}
+    renderCeramahGrid();
+  }
+
+  // ── Drag state ──
+  var dragMode   = false;
+  var dragEl     = null;
+  var dragOverEl = null;
+
+  var ceramahDragBanner = document.getElementById('ceramahDragBanner');
+  var ceramahDragDone   = document.getElementById('ceramahDragDone');
+
+  function enterDragMode() {
+    dragMode = true;
+    var grid = document.getElementById('ceramahSavedGrid');
+    if (grid) grid.classList.add('drag-mode');
+    if (ceramahDragBanner) ceramahDragBanner.classList.add('show');
+    document.querySelectorAll('.ceramah-card-popup.open').forEach(function(p) { p.classList.remove('open'); });
+    document.querySelectorAll('.ceramah-saved-card').forEach(function(card) {
+      card.setAttribute('draggable', 'true');
+    });
+  }
+
+  function exitDragMode() {
+    dragMode = false;
+    var grid = document.getElementById('ceramahSavedGrid');
+    if (grid) grid.classList.remove('drag-mode');
+    if (ceramahDragBanner) ceramahDragBanner.classList.remove('show');
+    document.querySelectorAll('.ceramah-saved-card').forEach(function(card) {
+      card.removeAttribute('draggable');
+      card.classList.remove('dragging', 'drag-over');
+    });
+  }
+
+  if (ceramahDragDone) {
+    ceramahDragDone.addEventListener('click', exitDragMode);
+  }
+
+  function saveCeramahOrder(newIds) {
+    try {
+      localStorage.setItem('fw_ceramah_saved', JSON.stringify(newIds));
+    } catch(e) {}
+  }
+
+  // ── Desktop drag events (delegated pada grid) ──
+  function setupDragEvents(grid) {
+    grid.addEventListener('dragstart', function(e) {
+      if (!dragMode) return;
+      dragEl = e.target.closest('.ceramah-saved-card');
+      if (!dragEl) return;
+      // Set data agar drag valid di semua browser
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', dragEl.getAttribute('data-id'));
+      // Tunda tambah class agar ghost screenshot tidak kosong
+      setTimeout(function() {
+        if (dragEl) dragEl.classList.add('dragging');
+      }, 0);
+    });
+
+    grid.addEventListener('dragend', function() {
+      if (dragEl) dragEl.classList.remove('dragging');
+      document.querySelectorAll('.ceramah-saved-card.drag-over').forEach(function(c) { c.classList.remove('drag-over'); });
+      dragEl = null; dragOverEl = null;
+    });
+
+    grid.addEventListener('dragover', function(e) {
+      if (!dragMode || !dragEl) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      var target = e.target.closest('.ceramah-saved-card');
+      if (!target || target === dragEl) {
+        if (dragOverEl) { dragOverEl.classList.remove('drag-over'); dragOverEl = null; }
+        return;
+      }
+      if (dragOverEl && dragOverEl !== target) dragOverEl.classList.remove('drag-over');
+      dragOverEl = target;
+      target.classList.add('drag-over');
+    });
+
+    grid.addEventListener('dragleave', function(e) {
+      // Hanya hapus jika benar-benar keluar dari grid
+      if (!grid.contains(e.relatedTarget)) {
+        document.querySelectorAll('.ceramah-saved-card.drag-over').forEach(function(c) { c.classList.remove('drag-over'); });
+        dragOverEl = null;
+      }
+    });
+
+    grid.addEventListener('drop', function(e) {
+      if (!dragMode || !dragEl) return;
+      e.preventDefault();
+      var target = e.target.closest('.ceramah-saved-card');
+      if (dragOverEl) { dragOverEl.classList.remove('drag-over'); dragOverEl = null; }
+      if (!target || target === dragEl) return;
+
+      // Tentukan posisi insert
+      var rect = target.getBoundingClientRect();
+      var midY = rect.top + rect.height / 2;
+      if (e.clientY < midY) {
+        grid.insertBefore(dragEl, target);
+      } else {
+        grid.insertBefore(dragEl, target.nextSibling);
+      }
+
+      // Simpan urutan baru
+      var newIds = Array.from(grid.querySelectorAll('.ceramah-saved-card')).map(function(c) {
+        return c.getAttribute('data-id');
+      });
+      saveCeramahOrder(newIds);
+    });
+
+    // ── Touch drag (mobile) ──
+    var touchCard    = null; // kartu yang sedang di-drag
+    var touchGhost   = null; // elemen ghost mengikuti jari
+    var touchOverCard = null; // kartu target saat ini
+    var touchTimer   = null;
+    var touchStartX  = 0, touchStartY  = 0;
+    var touchOffX    = 0, touchOffY    = 0;
+    var touchDragging = false;
+
+    function cleanupTouch() {
+      if (touchGhost) { touchGhost.remove(); touchGhost = null; }
+      if (touchCard)  { touchCard.classList.remove('dragging'); }
+      if (touchOverCard) { touchOverCard.classList.remove('drag-over'); touchOverCard = null; }
+      clearTimeout(touchTimer);
+      touchCard = null; touchDragging = false;
+    }
+
+    grid.addEventListener('touchstart', function(e) {
+      if (!dragMode) return;
+      var card = e.target.closest('.ceramah-saved-card');
+      if (!card) return;
+      var touch = e.touches[0];
+      touchStartX = touch.clientX; touchStartY = touch.clientY;
+
+      clearTimeout(touchTimer);
+      touchTimer = setTimeout(function() {
+        touchCard = card;
+        touchDragging = true;
+        card.classList.add('dragging');
+
+        var rect = card.getBoundingClientRect();
+        touchOffX = touch.clientX - rect.left;
+        touchOffY = touch.clientY - rect.top;
+
+        // Buat ghost dari nol (bukan clone) agar tidak bergantung CSS theme
+        var isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+        var bgCard  = isDark ? '#111318' : '#ffffff';
+        var textCol = isDark ? '#f2f2f2' : '#1a1a1a';
+        var greenCol = isDark ? '#00ff88' : '#1a7a4a';
+        var goldCol  = isDark ? '#ffd700' : '#b8860b';
+        var mutedCol = isDark ? 'rgba(242,242,242,0.5)' : 'rgba(30,30,30,0.5)';
+        var borderCol = isDark ? 'rgba(0,255,136,0.18)' : 'rgba(26,122,74,0.2)';
+
+        // Baca data dari kartu asli
+        var jenisEl = card.querySelector('.ceramah-card-jenis');
+        var judulEl = card.querySelector('.ceramah-card-judul');
+        var pembEl  = card.querySelector('.ceramah-card-pembahasan');
+        var durEl   = card.querySelector('.ceramah-card-durasi');
+        var jenisText = jenisEl ? jenisEl.textContent : '';
+        var judulText = judulEl ? judulEl.textContent : '';
+        var pembText  = pembEl  ? pembEl.textContent  : '';
+        var durText   = durEl   ? durEl.textContent   : '';
+
+        touchGhost = document.createElement('div');
+        touchGhost.innerHTML =
+          '<div style="display:inline-flex;align-items:center;gap:5px;background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.25);border-radius:8px;padding:3px 8px;font-size:0.7rem;color:' + greenCol + ';font-weight:500;margin-bottom:7px">' + jenisText + '</div>' +
+          '<div style="font-size:0.9rem;font-weight:600;color:' + textCol + ';line-height:1.4;margin-bottom:6px">' + judulText + '</div>' +
+          '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">' +
+            '<span style="font-size:0.68rem;color:' + goldCol + ';background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2);border-radius:6px;padding:2px 7px">' + pembText + '</span>' +
+            '<span style="font-size:0.68rem;color:' + mutedCol + '">' + durText + '</span>' +
+          '</div>';
+
+        Object.assign(touchGhost.style, {
+          position: 'fixed',
+          zIndex: '9999',
+          pointerEvents: 'none',
+          width: rect.width + 'px',
+          background: bgCard,
+          border: '1.5px solid ' + greenCol,
+          borderRadius: '12px',
+          padding: '14px 16px',
+          boxShadow: '0 12px 32px rgba(0,0,0,0.6)',
+          fontFamily: 'Poppins, sans-serif',
+          opacity: '0.9',
+          left: (touch.clientX - touchOffX) + 'px',
+          top:  (touch.clientY - touchOffY) + 'px',
+          transition: 'none',
+          boxSizing: 'border-box'
+        });
+        document.body.appendChild(touchGhost);
+      }, 380);
+    }, { passive: true });
+
+    grid.addEventListener('touchmove', function(e) {
+      var touch = e.touches[0];
+      // Jika belum jadi drag tapi bergerak jauh → batalkan timer
+      if (!touchDragging) {
+        var dx = Math.abs(touch.clientX - touchStartX);
+        var dy = Math.abs(touch.clientY - touchStartY);
+        if (dx > 8 || dy > 8) { clearTimeout(touchTimer); }
+        return;
+      }
+      e.preventDefault();
+
+      // Gerakkan ghost
+      if (touchGhost) {
+        touchGhost.style.left = (touch.clientX - touchOffX) + 'px';
+        touchGhost.style.top  = (touch.clientY - touchOffY) + 'px';
+      }
+
+      // Cari kartu di bawah jari (sembunyikan ghost sementara)
+      if (touchGhost) touchGhost.style.display = 'none';
+      var elBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (touchGhost) touchGhost.style.display = '';
+
+      var over = elBelow ? elBelow.closest('.ceramah-saved-card') : null;
+      if (over === touchCard) over = null;
+
+      if (touchOverCard && touchOverCard !== over) touchOverCard.classList.remove('drag-over');
+      touchOverCard = over;
+      if (over) over.classList.add('drag-over');
+    }, { passive: false });
+
+    grid.addEventListener('touchend', function() {
+      clearTimeout(touchTimer);
+      if (!touchDragging || !touchCard) { cleanupTouch(); return; }
+
+      if (touchOverCard && touchOverCard !== touchCard) {
+        touchOverCard.classList.remove('drag-over');
+        // Insert ke posisi touchOverCard
+        grid.insertBefore(touchCard, touchOverCard);
+        // Simpan urutan baru
+        var newIds = Array.from(grid.querySelectorAll('.ceramah-saved-card')).map(function(c) {
+          return c.getAttribute('data-id');
+        });
+        saveCeramahOrder(newIds);
+      }
+      cleanupTouch();
+    }, { passive: true });
+
+    grid.addEventListener('touchcancel', function() {
+      clearTimeout(touchTimer);
+      cleanupTouch();
+    }, { passive: true });
   }
 
   function renderCeramahGrid() {
@@ -1067,6 +1364,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (savedIds.length === 0) {
       if (emptyState) emptyState.style.display = '';
       if (gridWrap)   gridWrap.style.display = 'none';
+      exitDragMode();
       return;
     }
 
@@ -1080,7 +1378,12 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!c) return '';
       var icon = jenisIcon[c.jenis] || '🎤';
       return '<div class="ceramah-saved-card" data-id="' + id + '">' +
-        '<button class="ceramah-card-remove" data-id="' + id + '" title="Hapus">✕</button>' +
+        '<button class="ceramah-card-menu-btn" data-id="' + id + '" title="Opsi">⋮</button>' +
+        '<div class="ceramah-card-popup" id="ccp-' + id + '">' +
+          '<button class="cc-popup-item" data-action="edit" data-id="' + id + '"><span class="cc-popup-ico">✏️</span>Edit</button>' +
+          '<button class="cc-popup-item danger" data-action="hapus" data-id="' + id + '"><span class="cc-popup-ico">🗑️</span>Hapus</button>' +
+          '<button class="cc-popup-item" data-action="pindah" data-id="' + id + '"><span class="cc-popup-ico">✥</span>Pindahkan</button>' +
+        '</div>' +
         '<div class="ceramah-card-jenis">' + icon + ' ' + c.jenis_label + '</div>' +
         '<div class="ceramah-card-judul">' + c.judul + '</div>' +
         '<div class="ceramah-card-meta">' +
@@ -1090,37 +1393,63 @@ document.addEventListener('DOMContentLoaded', function () {
       '</div>';
     }).join('');
 
+    // Tombol ⋮ buka/tutup popup
+    grid.querySelectorAll('.ceramah-card-menu-btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (dragMode) return;
+        var id     = btn.getAttribute('data-id');
+        var popup  = document.getElementById('ccp-' + id);
+        var isOpen = popup.classList.contains('open');
+        document.querySelectorAll('.ceramah-card-popup.open').forEach(function(p) { p.classList.remove('open'); });
+        if (!isOpen) popup.classList.add('open');
+      });
+    });
+
+    // Aksi dari popup
+    grid.querySelectorAll('.cc-popup-item').forEach(function(item) {
+      item.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var action = item.getAttribute('data-action');
+        var id     = item.getAttribute('data-id');
+        document.querySelectorAll('.ceramah-card-popup.open').forEach(function(p) { p.classList.remove('open'); });
+
+        if (action === 'edit') {
+          sessionStorage.setItem('fw_ceramah_id', id);
+          sessionStorage.setItem('fw_ceramah_source', 'saved');
+          sessionStorage.setItem('fw_ceramah_open_edit', '1');
+          window.location.href = 'ceramah/baca.html';
+        } else if (action === 'hapus') {
+          showHapusCeramahDialog(id);
+        } else if (action === 'pindah') {
+          enterDragMode();
+        }
+      });
+    });
+
     // Klik kartu → buka baca.html
     grid.querySelectorAll('.ceramah-saved-card').forEach(function(card) {
       card.addEventListener('click', function(e) {
-        if (e.target.closest('.ceramah-card-remove')) return;
+        if (dragMode) return;
+        if (e.target.closest('.ceramah-card-menu-btn') || e.target.closest('.ceramah-card-popup')) return;
         var id = card.getAttribute('data-id');
         sessionStorage.setItem('fw_ceramah_id', id);
+        sessionStorage.setItem('fw_ceramah_source', 'saved');
         window.location.href = 'ceramah/baca.html';
       });
     });
 
-    // Tombol hapus dari simpanan
-    grid.querySelectorAll('.ceramah-card-remove').forEach(function(btn) {
-      btn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        var id = btn.getAttribute('data-id');
-        var ids = [];
-        var data = {};
-        try {
-          ids  = JSON.parse(localStorage.getItem('fw_ceramah_saved') || '[]');
-          data = JSON.parse(localStorage.getItem('fw_ceramah_data')  || '{}');
-        } catch(err) {}
-        ids = ids.filter(function(i) { return i !== id; });
-        delete data[id];
-        try {
-          localStorage.setItem('fw_ceramah_saved', JSON.stringify(ids));
-          localStorage.setItem('fw_ceramah_data',  JSON.stringify(data));
-        } catch(err) {}
-        renderCeramahGrid();
+    // Pasang drag events
+    setupDragEvents(grid);
+    // Pertahankan mode drag jika sudah aktif sebelumnya
+    if (dragMode) {
+      grid.classList.add('drag-mode');
+      grid.querySelectorAll('.ceramah-saved-card').forEach(function(card) {
+        card.setAttribute('draggable', 'true');
       });
-    });
+    }
   }
+
 
   // Init
   updateFabVisibility();

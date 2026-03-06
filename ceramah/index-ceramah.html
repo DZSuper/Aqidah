@@ -169,7 +169,7 @@
 
   <div class="topbar">
     <div class="topbar-row">
-      <button class="back-btn" onclick="history.back()">&#8592;</button>
+      <button class="back-btn" onclick="sessionStorage.removeItem('fw_ceramah_filter'); history.back()">&#8592;</button>
       <span class="topbar-title">&#127908; Cari Ceramah</span>
       <span class="result-count" id="resultCount">Memuat...</span>
     </div>
@@ -247,6 +247,8 @@
     var fPemb  = 'all';
     var fWaktu = 'all';
 
+    var FILTER_KEY = 'fw_ceramah_filter';
+
     var ICON = {
       'khutbah-jumat':   'Khutbah Jum\'at',
       'kultum-subuh':    'Kultum Subuh',
@@ -260,15 +262,57 @@
 
     try { saved = JSON.parse(localStorage.getItem('fw_ceramah_saved') || '[]'); } catch(e) {}
 
-    function render() {
+    // Restore filter dari sessionStorage (persist saat kembali dari baca.html)
+    function restoreFilter() {
+      try {
+        var saved_f = JSON.parse(sessionStorage.getItem(FILTER_KEY) || 'null');
+        if (!saved_f) return;
+        q = saved_f.q || ''; fJenis = saved_f.fJenis || 'all';
+        fPemb = saved_f.fPemb || 'all'; fWaktu = saved_f.fWaktu || 'all';
+        // Terapkan ke UI
+        if (q) {
+          var si = document.getElementById('searchInput');
+          if (si) si.value = q;
+        }
+        applyFilterUI('btnJenis', 'menuJenis', 'lblJenis', 'Jenis', fJenis);
+        applyFilterUI('btnPemb',  'menuPemb',  'lblPemb',  'Pembahasan', fPemb);
+        applyFilterUI('btnWaktu', 'menuWaktu', 'lblWaktu', 'Waktu', fWaktu);
+      } catch(e) {}
+    }
+
+    function applyFilterUI(btnId, menuId, lblId, defaultLbl, val) {
+      var btn  = document.getElementById(btnId);
+      var menu = document.getElementById(menuId);
+      if (!btn || !menu) return;
+      menu.querySelectorAll('.dd-item').forEach(function(item) {
+        var active = item.getAttribute('data-v') === val;
+        item.classList.toggle('active', active);
+        if (active && val !== 'all') {
+          document.getElementById(lblId).textContent = item.textContent.trim();
+          btn.classList.add('filtered');
+        }
+      });
+    }
+
+    function saveFilter() {
+      try {
+        sessionStorage.setItem(FILTER_KEY, JSON.stringify({ q: q, fJenis: fJenis, fPemb: fPemb, fWaktu: fWaktu }));
+      } catch(e) {}
+    }
+
+    function getFilteredList() {
       var ql = q.toLowerCase();
-      var list = DATA.filter(function(c) {
+      return DATA.filter(function(c) {
         var ok1 = !ql || c.judul.toLowerCase().indexOf(ql) > -1 || c.pembahasan_label.toLowerCase().indexOf(ql) > -1 || c.ringkasan.toLowerCase().indexOf(ql) > -1;
         var ok2 = fJenis === 'all' || c.jenis === fJenis;
         var ok3 = fPemb  === 'all' || c.pembahasan === fPemb;
         var ok4 = fWaktu === 'all' || c.durasi === fWaktu;
         return ok1 && ok2 && ok3 && ok4;
       });
+    }
+
+    function render() {
+      var list = getFilteredList();
 
       document.getElementById('resultCount').textContent = list.length + ' ceramah';
       var grid  = document.getElementById('cGrid');
@@ -296,7 +340,12 @@
     }
 
     function buka(id) {
+      var list = getFilteredList();
+      var ids = list.map(function(c) { return c.id; });
       sessionStorage.setItem('fw_ceramah_id', id);
+      sessionStorage.setItem('fw_ceramah_source', 'search');
+      sessionStorage.setItem('fw_ceramah_list', JSON.stringify(ids));
+      saveFilter(); // simpan filter sebelum navigasi
       location.href = 'baca.html';
     }
 
@@ -330,17 +379,17 @@
 
     document.addEventListener('click', closeAllDD);
 
-    initDD('btnJenis', 'menuJenis', 'lblJenis', 'Jenis', function(v) { fJenis = v; render(); });
-    initDD('btnPemb',  'menuPemb',  'lblPemb',  'Pembahasan', function(v) { fPemb = v; render(); });
-    initDD('btnWaktu', 'menuWaktu', 'lblWaktu', 'Waktu', function(v) { fWaktu = v; render(); });
+    initDD('btnJenis', 'menuJenis', 'lblJenis', 'Jenis', function(v) { fJenis = v; saveFilter(); render(); });
+    initDD('btnPemb',  'menuPemb',  'lblPemb',  'Pembahasan', function(v) { fPemb = v; saveFilter(); render(); });
+    initDD('btnWaktu', 'menuWaktu', 'lblWaktu', 'Waktu', function(v) { fWaktu = v; saveFilter(); render(); });
 
     document.getElementById('searchInput').addEventListener('input', function() {
-      q = this.value; render();
+      q = this.value; saveFilter(); render();
     });
 
     fetch('../konten/ceramah.json')
       .then(function(r) { return r.json(); })
-      .then(function(d) { DATA = d; render(); })
+      .then(function(d) { DATA = d; restoreFilter(); render(); })
       .catch(function() {
         document.getElementById('resultCount').textContent = 'Gagal memuat';
         document.getElementById('emptyState').classList.add('show');

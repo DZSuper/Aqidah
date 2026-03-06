@@ -18,7 +18,7 @@
   <!-- Izinkan Google mengindeks halaman ini -->
   <meta name="robots" content="index, follow">
   <!-- URL resmi website (ganti jika domain berubah) -->
-  <link rel="canonical" href="https://website-aqidah.netlify.app/">
+  <link rel="canonical" href="https://fathly.netlify.app/">
 
   <!-- =============================================
        OPEN GRAPH — TAMPILAN SAAT DIBAGIKAN
@@ -30,9 +30,9 @@
   <!-- Deskripsi yang muncul di preview link -->
   <meta property="og:description" id="metaOgDescription" content="">
   <!-- Gambar yang muncul saat link dibagikan (ukuran ideal 1200x630) -->
-  <meta property="og:image" content="https://website-aqidah.netlify.app/og-image.svg">
+  <meta property="og:image" content="https://fathly.netlify.app/og-image.svg">
   <!-- URL halaman -->
-  <meta property="og:url" content="https://website-aqidah.netlify.app/">
+  <meta property="og:url" content="https://fathly.netlify.app/">
   <!-- Tipe konten -->
   <meta property="og:type" content="website">
   <!-- Nama website -->
@@ -47,7 +47,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="FathlyWeb — Platform Belajar Islam">
   <meta name="twitter:description" content="Platform belajar ilmu agama Islam berbasis Manhaj Salaf. Aqidah, Fiqih, Nahwu, Shorof, dan Siroh.">
-  <meta name="twitter:image" content="https://website-aqidah.netlify.app/og-image.svg">
+  <meta name="twitter:image" content="https://fathly.netlify.app/og-image.svg">
 
   <!-- Load SEO dari JSON agar bisa diedit di CMS -->
   <script>
@@ -319,6 +319,11 @@
 
     <!-- TAB: CERAMAH -->
     <main class="tab-content" id="tab-ceramah">
+      <!-- Banner mode susun -->
+      <div class="ceramah-drag-banner" id="ceramahDragBanner">
+        <span>✥ Tahan &amp; seret kartu untuk mengubah urutan</span>
+        <button class="ceramah-drag-done-btn" id="ceramahDragDone">✓ Selesai</button>
+      </div>
       <!-- Empty state: belum ada ceramah tersimpan -->
       <div id="ceramahEmptyState" class="tab-empty">
         <div class="tab-empty-icon">🎤</div>
@@ -424,6 +429,18 @@
       <div class="catatan-dialog-btns">
         <button class="catatan-dialog-btn cancel" id="dlgSelHapusCancel">Batal</button>
         <button class="catatan-dialog-btn danger" id="dlgSelHapusOk">Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dialog konfirmasi hapus ceramah -->
+  <div class="catatan-dialog-overlay" id="dlgHapusCeramah">
+    <div class="catatan-dialog-box">
+      <div class="catatan-dialog-title">Hapus dari Ceramahku?</div>
+      <div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:18px;line-height:1.5">Ceramah ini akan dihapus dari daftar tersimpan. Editan dan tandai juga akan hilang.</div>
+      <div class="catatan-dialog-btns">
+        <button class="catatan-dialog-btn cancel" id="dlgHapusCeramahCancel">Batal</button>
+        <button class="catatan-dialog-btn danger" id="dlgHapusCeramahOk">Hapus</button>
       </div>
     </div>
   </div>
