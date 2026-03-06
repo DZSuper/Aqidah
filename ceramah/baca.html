@@ -232,13 +232,36 @@
     .save-btn:hover { background: rgba(0,255,136,0.15); border-color: rgba(0,255,136,0.4); box-shadow: 0 4px 20px rgba(0,255,136,0.12); }
     .save-btn:active { transform: scale(0.97); }
     .save-btn.saved {
-      background: rgba(242,242,242,0.04);
-      color: rgba(242,242,242,0.35);
-      border-color: rgba(242,242,242,0.08);
-      box-shadow: none;
+      background: rgba(255,80,80,0.09);
+      color: #ff5050;
+      border-color: rgba(255,80,80,0.28);
+      box-shadow: 0 2px 16px rgba(255,80,80,0.07);
     }
-    .save-btn.saved:hover { color: #ff5050; background: rgba(255,80,80,0.08); border-color: rgba(255,80,80,0.25); }
+    .save-btn.saved:hover { background: rgba(255,80,80,0.16); border-color: rgba(255,80,80,0.45); box-shadow: 0 4px 20px rgba(255,80,80,0.13); }
     .unsave-btn { display: none !important; }
+
+    .btn-buka-tersimpan {
+      width: 100%;
+      background: rgba(255,215,0,0.08);
+      color: var(--gold);
+      border: 1px solid rgba(255,215,0,0.25);
+      border-radius: 14px;
+      padding: 13px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 2px 16px rgba(255,215,0,0.06);
+    }
+    .btn-buka-tersimpan:hover { background: rgba(255,215,0,0.15); border-color: rgba(255,215,0,0.45); }
+    .btn-buka-tersimpan:active { transform: scale(0.97); }
 
     /* ── HIGHLIGHT / TANDAI ── */
     .hl-yellow { background: rgba(255,215,0,0.30); border-radius: 3px; }
@@ -657,6 +680,9 @@
       <span id="saveBtnIcon">📥</span>
       <span id="saveBtnText">Simpan ke Ceramahku</span>
     </button>
+    <button class="btn-buka-tersimpan" id="bukaTersimpanBtn" onclick="masukModeTersimpan()" style="display:none">
+      🗂️ Buka Mode Tersimpan
+    </button>
     <button class="unsave-btn" id="unsaveBtn" onclick="toggleSave()" title="Hapus dari simpanan">🗑</button>
   </div>
 
@@ -1022,6 +1048,10 @@
       if (editMode) return;
       hlMode = !hlMode;
       if (hlMode) {
+        // Wrap semua paragraf sekaligus saat masuk mode penanda
+        document.querySelectorAll('.bagian-isi').forEach(function(el) {
+          if (!el.querySelector('.hl-word')) wrapWords(el);
+        });
         document.getElementById('savedActionBar').classList.remove('show');
         document.getElementById('hlToolbar').classList.add('show');
         showToast('🖊️ Seleksi teks lalu pilih warna');
@@ -1038,7 +1068,6 @@
 
     // Pecah teks menjadi span per-kata agar highlight granular
     function wrapWords(el) {
-      // Kumpulkan teks node langsung (bukan dari span highlight)
       var nodes = Array.from(el.childNodes);
       nodes.forEach(function(node) {
         if (node.nodeType === 3) { // text node
@@ -1059,44 +1088,50 @@
       });
     }
 
-    function applyHighlight(color) {
-      var sel = window.getSelection();
-      if (!sel || sel.isCollapsed) { showToast('Pilih teks terlebih dulu'); return; }
-      var range = sel.getRangeAt(0);
-      var container = range.commonAncestorContainer;
-      var bagianEl = container.nodeType === 1
-        ? container.closest('.bagian-isi')
-        : container.parentElement.closest('.bagian-isi');
-      if (!bagianEl) { showToast('Pilih teks pada isi ceramah'); sel.removeAllRanges(); return; }
-
-      // Pastikan kata-kata sudah dibungkus .hl-word
-      if (!bagianEl.querySelector('.hl-word')) wrapWords(bagianEl);
-
-      // Cari semua .hl-word yang termasuk dalam seleksi
-      var words = Array.from(bagianEl.querySelectorAll('.hl-word'));
-      var inRange = false;
+    // Cari semua .hl-word dalam range, lintas paragraf
+    function getAffectedWords(range) {
       var affected = [];
-      words.forEach(function(w) {
+      var allWords = Array.from(document.querySelectorAll('.bagian-isi .hl-word'));
+      allWords.forEach(function(w) {
         var wRange = document.createRange();
         wRange.selectNode(w);
         var cmp_start = range.compareBoundaryPoints(Range.END_TO_START, wRange);
         var cmp_end   = range.compareBoundaryPoints(Range.START_TO_END, wRange);
         if (cmp_start <= 0 && cmp_end >= 0) affected.push(w);
       });
+      return affected;
+    }
 
-      if (!affected.length) { showToast('Pilih teks terlebih dulu'); sel.removeAllRanges(); return; }
+    // Simpan highlight untuk semua bagian yang terpengaruh
+    function saveAffectedSections(affected) {
+      var sections = new Set();
+      affected.forEach(function(w) {
+        var bagianEl = w.closest('.bagian-isi');
+        if (bagianEl) sections.add(bagianEl);
+      });
+      var hls = getHighlights();
+      sections.forEach(function(bagianEl) {
+        var idx = parseInt(bagianEl.getAttribute('data-idx'));
+        hls[idx] = bagianEl.innerHTML;
+        if (ceramah.teks[idx]) ceramah.teks[idx].isi = bagianEl.innerHTML;
+      });
+      saveHighlights(hls);
+    }
+
+    function applyHighlight(color) {
+      var sel = window.getSelection();
+      if (!sel || sel.isCollapsed) { showToast('Pilih teks terlebih dulu'); return; }
+      var range = sel.getRangeAt(0);
+
+      var affected = getAffectedWords(range);
+      if (!affected.length) { showToast('Pilih teks pada isi ceramah'); sel.removeAllRanges(); return; }
 
       affected.forEach(function(w) {
-        // Hapus tanda sebelumnya (tidak bisa tumpuk)
         w.className = 'hl-word hl-' + color;
       });
 
       sel.removeAllRanges();
-      var idx = parseInt(bagianEl.getAttribute('data-idx'));
-      var hls = getHighlights();
-      hls[idx] = bagianEl.innerHTML;
-      saveHighlights(hls);
-      if (ceramah.teks[idx]) ceramah.teks[idx].isi = bagianEl.innerHTML;
+      saveAffectedSections(affected);
       showToast('✓ Ditandai');
     }
 
@@ -1104,32 +1139,16 @@
       var sel = window.getSelection();
       if (!sel || sel.isCollapsed) { showToast('Pilih teks yang ditandai'); return; }
       var range = sel.getRangeAt(0);
-      var container = range.commonAncestorContainer;
-      var bagianEl = container.nodeType === 1
-        ? container.closest('.bagian-isi')
-        : container.parentElement.closest('.bagian-isi');
-      if (!bagianEl) { sel.removeAllRanges(); return; }
 
-      var words = Array.from(bagianEl.querySelectorAll('.hl-word'));
-      var affected = [];
-      words.forEach(function(w) {
-        var wRange = document.createRange();
-        wRange.selectNode(w);
-        var cmp_start = range.compareBoundaryPoints(Range.END_TO_START, wRange);
-        var cmp_end   = range.compareBoundaryPoints(Range.START_TO_END, wRange);
-        if (cmp_start <= 0 && cmp_end >= 0) affected.push(w);
-      });
+      var affected = getAffectedWords(range);
+      if (!affected.length) { sel.removeAllRanges(); return; }
 
       affected.forEach(function(w) {
-        w.className = 'hl-word'; // hapus class warna
+        w.className = 'hl-word';
       });
 
       sel.removeAllRanges();
-      var idx = parseInt(bagianEl.getAttribute('data-idx'));
-      var hls = getHighlights();
-      hls[idx] = bagianEl.innerHTML;
-      saveHighlights(hls);
-      if (ceramah.teks[idx]) ceramah.teks[idx].isi = bagianEl.innerHTML;
+      saveAffectedSections(affected);
       showToast('✓ Tandai dihapus');
     }
 
@@ -1268,16 +1287,32 @@
     // ── SAVE BAR (mode search) ───────────────────
     function updateSaveBtn() {
       var isSaved = savedIds.includes(ceramahId);
-      var btn = document.getElementById('saveBtn');
+      var btn  = document.getElementById('saveBtn');
       var icon = document.getElementById('saveBtnIcon');
       var text = document.getElementById('saveBtnText');
+      var bukaTersimpanBtn = document.getElementById('bukaTersimpanBtn');
       if (isSaved) {
-        btn.classList.add('saved'); icon.textContent = '✕';
+        btn.classList.add('saved');
+        icon.textContent = '✕';
         text.textContent = 'Batal Simpan';
+        bukaTersimpanBtn.style.display = '';
       } else {
-        btn.classList.remove('saved'); icon.textContent = '📥';
+        btn.classList.remove('saved');
+        icon.textContent = '📥';
         text.textContent = 'Simpan ke Ceramahku';
+        bukaTersimpanBtn.style.display = 'none';
       }
+    }
+
+    function masukModeTersimpan() {
+      // Pindah ke mode tersimpan tanpa reload halaman
+      sourceMode = 'saved';
+      document.getElementById('saveBar').style.display = 'none';
+      document.getElementById('swipeHint').classList.remove('show');
+      document.getElementById('savedActionBar').classList.add('show');
+      document.getElementById('savedModeBadge').classList.add('show');
+      sessionStorage.setItem('fw_ceramah_source', 'saved');
+      showToast('🗂️ Mode Tersimpan aktif');
     }
 
     function toggleSave() {
