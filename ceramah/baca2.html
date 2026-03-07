@@ -176,38 +176,6 @@
       line-height: 1.9;
       color: var(--text);
       white-space: pre-line;
-      padding: 6px 10px;
-      margin: 0 -10px;
-      border: 1.5px solid rgba(255,255,255,0.07);
-      border-radius: 6px;
-    }
-    .bagian-isi-wrapper {
-      border: 1.5px dashed rgba(255,215,0,0.45);
-      border-radius: 6px;
-      padding: 6px 10px;
-      margin: 0 -10px;
-      transition: border-color 0.2s, background 0.2s;
-    }
-    .bagian-isi-wrapper:focus-within {
-      border-color: rgba(255,215,0,0.75);
-      background: rgba(255,215,0,0.03);
-    }
-    .bagian-isi-edit {
-      display: block;
-      width: 100%;
-      box-sizing: border-box;
-      font-size: 0.92rem;
-      line-height: 1.9;
-      color: var(--text);
-      background: transparent;
-      border: none;
-      padding: 0;
-      margin: 0;
-      font-family: inherit;
-      resize: none;
-      overflow: hidden;
-      outline: none;
-      white-space: pre-wrap;
     }
 
     /* ── TOMBOL SIMPAN (sticky bawah) ── */
@@ -216,23 +184,21 @@
       bottom: 0;
       left: 50%;
       transform: translateX(-50%);
-      padding: 10px 0 18px;
+      padding: 10px 16px 18px;
       background: none;
       z-index: 200;
       display: flex;
-      flex-direction: column;
-      gap: 8px;
-      width: 75%;
+      gap: 10px;
       max-width: 720px;
-    }
-    /* Baris 1 — tombol simpan */
-    .save-btn {
       width: 100%;
+    }
+    .save-btn {
+      flex: 1;
       background: rgba(0,255,136,0.09);
       color: var(--green);
       border: 1px solid rgba(0,255,136,0.22);
       border-radius: 14px;
-      padding: 15px;
+      padding: 13px;
       font-family: 'Poppins', sans-serif;
       font-size: 0.88rem;
       font-weight: 600;
@@ -245,66 +211,17 @@
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       box-shadow: 0 2px 16px rgba(0,255,136,0.07), inset 0 1px 0 rgba(0,255,136,0.08);
-      white-space: nowrap;
     }
-    .save-btn:hover { background: rgba(0,255,136,0.15); border-color: rgba(0,255,136,0.4); }
+    .save-btn:hover { background: rgba(0,255,136,0.15); border-color: rgba(0,255,136,0.4); box-shadow: 0 4px 20px rgba(0,255,136,0.12); }
     .save-btn:active { transform: scale(0.97); }
+    .save-btn.saved {
+      background: rgba(242,242,242,0.04);
+      color: rgba(242,242,242,0.35);
+      border-color: rgba(242,242,242,0.08);
+      box-shadow: none;
+    }
+    .save-btn.saved:hover { color: #ff5050; background: rgba(255,80,80,0.08); border-color: rgba(255,80,80,0.25); }
     .unsave-btn { display: none !important; }
-
-    /* Baris 2 — batal simpan + buka mode tersimpan */
-    .save-bar-row2 {
-      display: flex;
-      gap: 8px;
-      align-items: stretch;
-    }
-    .save-btn-batal {
-      flex: 0 0 auto;
-      min-width: 140px;
-      background: rgba(255,80,80,0.09);
-      color: #ff5050;
-      border: 1px solid rgba(255,80,80,0.28);
-      border-radius: 14px;
-      padding: 15px 16px;
-      font-family: 'Poppins', sans-serif;
-      font-size: 0.88rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all var(--transition);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      white-space: nowrap;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      box-shadow: 0 2px 16px rgba(255,80,80,0.07);
-    }
-    .save-btn-batal:hover { background: rgba(255,80,80,0.16); border-color: rgba(255,80,80,0.45); }
-    .save-btn-batal:active { transform: scale(0.97); }
-
-    .btn-buka-tersimpan {
-      flex: 1;
-      background: rgba(255,215,0,0.08);
-      color: var(--gold);
-      border: 1px solid rgba(255,215,0,0.25);
-      border-radius: 14px;
-      padding: 15px;
-      font-family: 'Poppins', sans-serif;
-      font-size: 0.88rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all var(--transition);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      box-shadow: 0 2px 16px rgba(255,215,0,0.06);
-      white-space: nowrap;
-    }
-    .btn-buka-tersimpan:hover { background: rgba(255,215,0,0.15); border-color: rgba(255,215,0,0.45); }
-    .btn-buka-tersimpan:active { transform: scale(0.97); }
 
     /* ── HIGHLIGHT / TANDAI ── */
     .hl-yellow { background: rgba(255,215,0,0.30); border-radius: 3px; }
@@ -328,49 +245,38 @@
     }
     .saved-mode-badge.show { display: inline-flex; }
 
-    /* ══ STYLE 1: PILL FLOATING ══ */
+    /* ══ STYLE 2: CARD RAISED ══ */
 
-    /* Wrapper bawah layar — background fade + pill di tengah */
     .saved-action-bar {
       position: fixed;
       bottom: 0; left: 0; right: 0;
       z-index: 200;
       display: none;
       flex-direction: column;
-      align-items: center;
-      padding-bottom: 18px;
-      pointer-events: none;
-      background: linear-gradient(to top, rgba(11,12,14,0.92) 0%, rgba(11,12,14,0.5) 50%, transparent 100%);
+      background: #13151b;
+      border-radius: 20px 20px 0 0;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 -12px 48px rgba(0,0,0,0.55), 0 -1px 0 rgba(0,255,136,0.06);
+      padding: 6px 0 18px;
     }
     [data-theme="light"] .saved-action-bar {
-      background: linear-gradient(to top, rgba(244,244,240,0.95) 0%, rgba(244,244,240,0.5) 50%, transparent 100%);
+      background: #ffffff;
+      border-top-color: rgba(0,0,0,0.06);
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.12);
     }
     .saved-action-bar.show { display: flex; }
-    .saved-action-label { display: none; }
 
-    /* Pill container */
-    .saved-action-row {
-      pointer-events: all;
-      display: flex;
-      align-items: stretch;
-      gap: 0;
-      background: rgba(18,20,26,0.93);
-      border: 1px solid rgba(255,255,255,0.14);
-      border-radius: 50px;
-      padding: 0;
-      overflow: hidden;
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      box-shadow:
-        0 8px 32px rgba(0,0,0,0.55),
-        0 0 0 1px rgba(0,255,136,0.07) inset;
-      width: 75%;
+    /* Handle drag */
+    .saved-action-label {
+      display: block;
+      width: 36px; height: 3px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      margin: 0 auto 10px;
     }
-    [data-theme="light"] .saved-action-row {
-      background: rgba(255,255,255,0.94);
-      border-color: rgba(0,0,0,0.14);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-    }
+    [data-theme="light"] .saved-action-label { background: rgba(0,0,0,0.1); }
+
+    .saved-action-row { display: flex; }
 
     .sab-btn {
       flex: 1;
@@ -378,231 +284,246 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 3px;
+      gap: 5px;
       background: none;
       border: none;
-      border-right: 1px solid rgba(255,255,255,0.1);
-      border-radius: 0;
-      padding: 10px 4px 12px;
+      padding: 6px 4px 4px;
       cursor: pointer;
       font-family: 'Poppins', sans-serif;
-      font-size: 0.58rem;
+      font-size: 0.62rem;
       font-weight: 500;
-      color: rgba(242,242,242,0.35);
+      color: rgba(242,242,242,0.3);
       transition: all var(--transition);
       user-select: none;
-      letter-spacing: 0.03em;
     }
-    .sab-btn:last-child { border-right: none; }
-    [data-theme="light"] .sab-btn { color: rgba(26,26,26,0.4); border-right-color: rgba(0,0,0,0.1); }
+    [data-theme="light"] .sab-btn { color: rgba(26,26,26,0.35); }
 
-    .sab-btn:hover { color: var(--green); background: rgba(0,255,136,0.07); }
-    .sab-btn:active { transform: scale(0.93); }
-    .sab-btn.danger:hover { color: #ff5050; background: rgba(255,80,80,0.07); }
-
+    /* Kotak icon pip */
     .sab-ico {
-      font-size: 1.1rem;
-      line-height: 1;
-      transition: transform var(--transition);
-      filter: grayscale(0.2) opacity(0.65);
+      width: 36px; height: 36px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; line-height: 1;
+      transition: all var(--transition);
     }
-    .sab-btn:hover .sab-ico { filter: none; transform: translateY(-1px) scale(1.05); }
+    [data-theme="light"] .sab-ico {
+      background: rgba(0,0,0,0.04);
+      border-color: rgba(0,0,0,0.06);
+    }
+    .sab-btn:hover .sab-ico {
+      background: rgba(0,255,136,0.1);
+      border-color: rgba(0,255,136,0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0,255,136,0.12);
+    }
+    .sab-btn:hover { color: var(--green); }
+    .sab-btn:active .sab-ico { transform: scale(0.93); }
+    .sab-btn.danger:hover .sab-ico {
+      background: rgba(255,80,80,0.1);
+      border-color: rgba(255,80,80,0.2);
+      box-shadow: 0 6px 16px rgba(255,80,80,0.1);
+    }
+    .sab-btn.danger:hover { color: #ff5050; }
 
-    /* ── HIGHLIGHT TOOLBAR — juga berbentuk pill ── */
+    /* ── HIGHLIGHT TOOLBAR — card raised ── */
     .hl-toolbar {
       position: fixed;
       bottom: 0; left: 0; right: 0;
       z-index: 200;
       display: none;
       flex-direction: column;
-      align-items: center;
-      padding-bottom: 18px;
-      pointer-events: none;
-      background: linear-gradient(to top, rgba(11,12,14,0.92) 0%, rgba(11,12,14,0.5) 50%, transparent 100%);
+      background: #13151b;
+      border-radius: 20px 20px 0 0;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 -12px 48px rgba(0,0,0,0.55);
+      padding: 6px 0 18px;
     }
     [data-theme="light"] .hl-toolbar {
-      background: linear-gradient(to top, rgba(244,244,240,0.95) 0%, rgba(244,244,240,0.5) 50%, transparent 100%);
+      background: #ffffff;
+      border-top-color: rgba(0,0,0,0.06);
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.12);
     }
     .hl-toolbar.show { display: flex; }
 
     .hl-toolbar-label {
-      font-size: 0.55rem;
+      font-size: 0.58rem;
       color: rgba(242,242,242,0.2);
       text-transform: uppercase;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.1em;
+      text-align: center;
       font-weight: 500;
-      margin-bottom: 6px;
-      pointer-events: none;
+      padding: 2px 0 10px;
+    }
+    /* Handle */
+    .hl-toolbar-label::before {
+      content: '';
+      display: block;
+      width: 36px; height: 3px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      margin: 0 auto 8px;
     }
     [data-theme="light"] .hl-toolbar-label { color: rgba(26,26,26,0.25); }
+    [data-theme="light"] .hl-toolbar-label::before { background: rgba(0,0,0,0.1); }
 
-    .hl-toolbar-row {
-      pointer-events: all;
-      display: flex;
-      align-items: stretch;
-      gap: 0;
-      background: rgba(18,20,26,0.93);
-      border: 1px solid rgba(255,255,255,0.14);
-      border-radius: 50px;
-      padding: 0;
-      overflow: hidden;
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      box-shadow:
-        0 8px 32px rgba(0,0,0,0.55),
-        0 0 0 1px rgba(0,255,136,0.07) inset;
-      width: 75%;
-    }
-    [data-theme="light"] .hl-toolbar-row {
-      background: rgba(255,255,255,0.94);
-      border-color: rgba(0,0,0,0.14);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-    }
+    .hl-toolbar-row { display: flex; }
 
     .hl-color-btn {
-      flex: 1;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 3px;
-      border: none;
-      border-right: 1px solid rgba(255,255,255,0.1);
-      border-radius: 0;
-      padding: 10px 4px 12px;
+      flex: 1; border: none;
+      padding: 4px 4px;
       font-family: 'Poppins', sans-serif;
-      font-size: 0.58rem; font-weight: 500;
+      font-size: 0.62rem; font-weight: 500;
       cursor: pointer; transition: all var(--transition);
       background: transparent;
-      color: rgba(242,242,242,0.35);
+      display: flex; flex-direction: column;
+      align-items: center; gap: 5px;
+      color: rgba(242,242,242,0.3);
     }
-    [data-theme="light"] .hl-color-btn { color: rgba(26,26,26,0.4); border-right-color: rgba(0,0,0,0.1); }
-    .hl-color-btn:active { transform: scale(0.93); }
-    .hl-color-btn.yellow:hover { background: rgba(255,215,0,0.08); color: var(--gold); }
-    .hl-color-btn.green:hover  { background: rgba(0,255,136,0.07); color: var(--green); }
-    .hl-color-btn.red:hover    { background: rgba(255,80,80,0.08); color: #ff5050; }
-    .hl-color-btn.blue:hover   { background: rgba(77,171,247,0.08); color: var(--blue); }
+    [data-theme="light"] .hl-color-btn { color: rgba(26,26,26,0.35); }
+    .hl-color-btn:active .hl-color-ico { transform: scale(0.91); }
+    .hl-color-btn.yellow:hover { color: var(--gold); }
+    .hl-color-btn.green:hover  { color: var(--green); }
+    .hl-color-btn.red:hover    { color: #ff5050; }
+    .hl-color-btn.blue:hover   { color: var(--blue); }
 
-    /* Icon SVG — ukuran seragam 20x20 */
     .hl-color-ico {
-      width: 20px; height: 20px;
+      width: 36px; height: 36px; border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      transition: transform var(--transition);
-      background: none; border-radius: 0;
+      font-size: 1rem; transition: all var(--transition);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
     }
-    .hl-color-ico svg { width: 20px; height: 20px; display: block; }
-    .hl-color-btn:hover .hl-color-ico { transform: scale(1.12); }
+    [data-theme="light"] .hl-color-ico { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.06); }
+    .hl-color-btn.yellow:hover .hl-color-ico { background: rgba(255,215,0,0.14); border-color: rgba(255,215,0,0.25); transform: translateY(-3px); box-shadow: 0 6px 14px rgba(255,215,0,0.12); }
+    .hl-color-btn.green:hover  .hl-color-ico { background: rgba(0,255,136,0.12); border-color: rgba(0,255,136,0.22); transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,255,136,0.1); }
+    .hl-color-btn.red:hover    .hl-color-ico { background: rgba(255,80,80,0.14); border-color: rgba(255,80,80,0.25); transform: translateY(-3px); box-shadow: 0 6px 14px rgba(255,80,80,0.1); }
+    .hl-color-btn.blue:hover   .hl-color-ico { background: rgba(77,171,247,0.14); border-color: rgba(77,171,247,0.25); transform: translateY(-3px); box-shadow: 0 6px 14px rgba(77,171,247,0.1); }
 
     .hl-remove-btn {
-      flex: 1;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 3px;
-      background: transparent; border: none;
-      border-right: 1px solid rgba(255,255,255,0.1);
-      border-radius: 0;
-      padding: 10px 4px 12px;
-      font-family: 'Poppins', sans-serif; font-size: 0.58rem; font-weight: 500;
-      color: rgba(242,242,242,0.35); cursor: pointer; transition: all var(--transition);
+      flex: 1; background: transparent; border: none;
+      padding: 4px 4px;
+      font-family: 'Poppins', sans-serif; font-size: 0.62rem; font-weight: 500;
+      color: rgba(242,242,242,0.3); cursor: pointer; transition: all var(--transition);
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
     }
-    [data-theme="light"] .hl-remove-btn { color: rgba(26,26,26,0.4); border-right-color: rgba(0,0,0,0.1); }
-    .hl-remove-btn:hover { background: rgba(255,80,80,0.08); color: #ff5050; }
-    .hl-remove-btn:active { transform: scale(0.93); }
+    [data-theme="light"] .hl-remove-btn { color: rgba(26,26,26,0.35); }
+    .hl-remove-btn:hover { color: #ff5050; }
+    .hl-remove-btn:active .hl-btn-ico { transform: scale(0.91); }
 
     .hl-close-btn {
-      flex: 1;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 3px;
-      background: transparent; border: none;
-      border-radius: 0;
-      padding: 10px 4px 12px;
-      font-size: 0.58rem; font-weight: 500;
-      color: rgba(242,242,242,0.35); cursor: pointer;
+      flex: 1; background: transparent; border: none;
+      padding: 4px 4px;
+      font-size: 0.62rem; font-weight: 500;
+      color: rgba(242,242,242,0.3); cursor: pointer;
       transition: all var(--transition); font-family: 'Poppins', sans-serif;
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
     }
-    [data-theme="light"] .hl-close-btn { color: rgba(26,26,26,0.4); }
-    .hl-close-btn:hover { color: var(--green); background: rgba(0,255,136,0.07); }
-    .hl-close-btn:active { transform: scale(0.93); }
+    [data-theme="light"] .hl-close-btn { color: rgba(26,26,26,0.35); }
+    .hl-close-btn:hover { color: var(--green); }
+    .hl-close-btn:active .hl-btn-ico { transform: scale(0.91); }
 
     .hl-btn-ico {
-      width: 20px; height: 20px;
+      width: 36px; height: 36px; border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      transition: transform var(--transition);
+      font-size: 1rem; line-height: 1;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: all var(--transition);
     }
-    .hl-btn-ico svg { width: 20px; height: 20px; display: block; }
-    .hl-remove-btn:hover .hl-btn-ico,
-    .hl-close-btn:hover .hl-btn-ico { transform: scale(1.12); }
+    [data-theme="light"] .hl-btn-ico { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.06); }
+    .hl-remove-btn:hover .hl-btn-ico { background: rgba(255,80,80,0.12); border-color: rgba(255,80,80,0.22); transform: translateY(-3px); box-shadow: 0 6px 14px rgba(255,80,80,0.1); }
+    .hl-close-btn:hover .hl-btn-ico { background: rgba(0,255,136,0.1); border-color: rgba(0,255,136,0.2); transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,255,136,0.08); }
 
-    /* ── EDIT MODE BAR — juga pill, warna emas ── */
+    /* ── EDIT MODE BAR — card raised, emas ── */
     .edit-mode-bar {
       display: none;
       position: fixed;
       bottom: 0; left: 0; right: 0;
       z-index: 200;
       flex-direction: column;
-      align-items: center;
-      padding-bottom: 18px;
-      pointer-events: none;
-      background: linear-gradient(to top, rgba(11,12,14,0.92) 0%, rgba(11,12,14,0.5) 50%, transparent 100%);
+      background: #14130f;
+      border-radius: 20px 20px 0 0;
+      border-top: 1px solid rgba(255,215,0,0.08);
+      box-shadow: 0 -12px 48px rgba(0,0,0,0.55), 0 -1px 0 rgba(255,215,0,0.05);
+      padding: 6px 0 18px;
     }
     [data-theme="light"] .edit-mode-bar {
-      background: linear-gradient(to top, rgba(244,244,240,0.95) 0%, rgba(244,244,240,0.5) 50%, transparent 100%);
+      background: #fffdf5;
+      border-top-color: rgba(184,134,11,0.15);
     }
     .edit-mode-bar.show { display: flex; }
 
     .edit-mode-label {
-      font-size: 0.55rem;
-      color: rgba(255,215,0,0.3);
+      font-size: 0.58rem;
+      color: rgba(255,215,0,0.25);
       text-transform: uppercase;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.1em;
+      text-align: center;
       font-weight: 500;
-      margin-bottom: 6px;
-      pointer-events: none;
+      padding: 2px 0 10px;
     }
-    .edit-mode-row {
-      pointer-events: all;
-      display: flex;
-      align-items: stretch;
-      gap: 0;
-      background: rgba(18,20,26,0.93);
-      border: 1px solid rgba(255,215,0,0.18);
-      border-radius: 50px;
-      padding: 0;
-      overflow: hidden;
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      box-shadow:
-        0 8px 32px rgba(0,0,0,0.55),
-        0 0 0 1px rgba(255,215,0,0.06) inset;
-      width: 75%;
+    .edit-mode-label::before {
+      content: '';
+      display: block;
+      width: 36px; height: 3px;
+      background: rgba(255,215,0,0.12);
+      border-radius: 2px;
+      margin: 0 auto 8px;
     }
+
+    .edit-mode-row { display: flex; }
+
     .edit-mode-btn {
       flex: 1;
       display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 3px;
-      border: none; border-radius: 0;
-      padding: 10px 8px 12px;
+      align-items: center; gap: 5px;
+      border: none;
+      padding: 4px 4px;
       font-family: 'Poppins', sans-serif;
       font-size: 0.62rem; font-weight: 500;
       cursor: pointer; transition: all var(--transition);
     }
-    .edit-mode-btn-ico { font-size: 1rem; line-height: 1; transition: transform var(--transition); }
-    .edit-mode-btn:hover .edit-mode-btn-ico { transform: scale(1.1) translateY(-1px); }
-
+    .edit-mode-btn-ico {
+      width: 36px; height: 36px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; line-height: 1;
+      transition: all var(--transition);
+      border: 1px solid transparent;
+    }
     .edit-mode-btn.cancel-btn {
       background: transparent;
-      color: rgba(242,242,242,0.55);
-      border-right: 1px solid rgba(255,215,0,0.15);
+      color: rgba(242,242,242,0.28);
     }
-    [data-theme="light"] .edit-mode-btn.cancel-btn { color: rgba(26,26,26,0.55); border-right-color: rgba(184,134,11,0.18); }
-    .edit-mode-btn.cancel-btn:hover { color: #ff5050; background: rgba(255,80,80,0.07); }
+    [data-theme="light"] .edit-mode-btn.cancel-btn { color: rgba(26,26,26,0.3); }
+    .edit-mode-btn.cancel-btn .edit-mode-btn-ico {
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(255,255,255,0.06);
+    }
+    .edit-mode-btn.cancel-btn:hover { color: #ff5050; }
+    .edit-mode-btn.cancel-btn:hover .edit-mode-btn-ico {
+      background: rgba(255,80,80,0.1);
+      border-color: rgba(255,80,80,0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 14px rgba(255,80,80,0.1);
+    }
     .edit-mode-btn.save-btn {
       background: transparent;
-      color: rgba(255,215,0,0.85);
+      color: rgba(255,215,0,0.45);
     }
-    .edit-mode-btn.save-btn:hover { color: var(--gold); background: rgba(255,215,0,0.07); }
-    .edit-mode-btn.save-btn.disabled {
-      color: rgba(242,242,242,0.18);
-      cursor: default;
-      pointer-events: none;
+    .edit-mode-btn.save-btn .edit-mode-btn-ico {
+      background: rgba(255,215,0,0.07);
+      border-color: rgba(255,215,0,0.12);
     }
-    .edit-mode-btn:active { transform: scale(0.93); }
+    .edit-mode-btn.save-btn:hover { color: var(--gold); }
+    .edit-mode-btn.save-btn:hover .edit-mode-btn-ico {
+      background: rgba(255,215,0,0.14);
+      border-color: rgba(255,215,0,0.25);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 14px rgba(255,215,0,0.1);
+    }
+    .edit-mode-btn:active .edit-mode-btn-ico { transform: scale(0.91) !important; }
 
     /* ── SWIPE NAVIGATION ── */
     .swipe-hint {
@@ -724,25 +645,16 @@
   </div>
 
   <div class="save-bar" id="saveBar" style="display:none">
-    <!-- Baris 1: Tombol Simpan -->
     <button class="save-btn" id="saveBtn" onclick="toggleSave()">
       <span id="saveBtnIcon">📥</span>
       <span id="saveBtnText">Simpan ke Ceramahku</span>
     </button>
-    <!-- Baris 2: Batal Simpan + Buka Mode Tersimpan (muncul saat sudah disimpan) -->
-    <div class="save-bar-row2" id="saveBarRow2" style="display:none">
-      <button class="save-btn-batal" onclick="toggleSave()">
-        ✕ Batal Simpan
-      </button>
-      <button class="btn-buka-tersimpan" id="bukaTersimpanBtn" onclick="masukModeTersimpan()">
-        🗂️ Buka Mode Tersimpan
-      </button>
-    </div>
     <button class="unsave-btn" id="unsaveBtn" onclick="toggleSave()" title="Hapus dari simpanan">🗑</button>
   </div>
 
   <!-- Action bar khusus mode TERSIMPAN -->
   <div class="saved-action-bar" id="savedActionBar">
+    <div class="saved-action-label"></div>
     <div class="saved-action-row">
       <button class="sab-btn" id="sabEdit" onclick="toggleEditMode()">
         <span class="sab-ico">✏️</span>
@@ -754,7 +666,7 @@
       </button>
       <button class="sab-btn" id="sabTandai" onclick="toggleHighlightMode()">
         <span class="sab-ico">🖊️</span>
-        <span>Penanda</span>
+        <span>Tandai</span>
       </button>
       <button class="sab-btn" id="sabDefault" onclick="showDefaultDialog()">
         <span class="sab-ico">↺</span>
@@ -763,75 +675,27 @@
     </div>
   </div>
 
-  <!-- Toolbar penanda (menggantikan action bar) -->
+  <!-- Toolbar tandai (menggantikan action bar) -->
   <div class="hl-toolbar" id="hlToolbar">
-    <div class="hl-toolbar-label">pilih warna penanda</div>
+    <div class="hl-toolbar-label">pilih warna tandai</div>
     <div class="hl-toolbar-row">
-      <!-- Hapus di kiri -->
-      <button class="hl-remove-btn" onclick="removeHighlight()">
-        <span class="hl-btn-ico hl-erase-ico">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Penghapus miring: seperti gambar referensi -->
-            <!-- Bagian pink (kiri bawah) -->
-            <path d="M3.5 17.5 L9 8.5 L15 12.5 L9.5 21.5 Z"
-              fill="#f0a0a0" stroke="#2a2a2a" stroke-width="1.4" stroke-linejoin="round"/>
-            <!-- Bagian abu (kanan atas) -->
-            <path d="M9 8.5 L14.5 4.5 Q16 3.5 17 4.5 L20.5 9 Q21.5 10.5 20 11.5 L15 12.5 Z"
-              fill="#d0d0d0" stroke="#2a2a2a" stroke-width="1.4" stroke-linejoin="round"/>
-            <!-- Garis pemisah diagonal -->
-            <line x1="9" y1="8.5" x2="15" y2="12.5" stroke="#2a2a2a" stroke-width="1.2" stroke-linecap="round"/>
-            <!-- Garis bawah (permukaan meja) -->
-            <line x1="1.5" y1="22" x2="22.5" y2="22" stroke="rgba(242,242,242,0.3)" stroke-width="1.4" stroke-linecap="round"/>
-          </svg>
-        </span>
-        <span>Hapus</span>
-      </button>
-      <!-- Kuning: bulatan -->
       <button class="hl-color-btn yellow" onclick="applyHighlight('yellow')">
-        <span class="hl-color-ico yellow">
-          <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="10" cy="10" r="7" fill="#ffd700" opacity="0.9"/>
-          </svg>
-        </span>
-        <span>Mark Kuning</span>
+        <span class="hl-color-ico yellow">⭐</span><span>Kuning</span>
       </button>
-      <!-- Hijau: bulatan -->
       <button class="hl-color-btn green" onclick="applyHighlight('green')">
-        <span class="hl-color-ico green">
-          <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="10" cy="10" r="7" fill="#00ff88" opacity="0.85"/>
-          </svg>
-        </span>
-        <span>Mark Hijau</span>
+        <span class="hl-color-ico green">🟢</span><span>Hijau</span>
       </button>
-      <!-- Merah: huruf A bergaris bawah merah -->
       <button class="hl-color-btn red" onclick="applyHighlight('red')">
-        <span class="hl-color-ico red">
-          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <text x="10" y="13" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-weight="700" fill="#ff5050">A</text>
-            <line x1="3" y1="17" x2="17" y2="17" stroke="#ff5050" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </span>
-        <span>Garis Merah</span>
+        <span class="hl-color-ico red">🔴</span><span>Merah</span>
       </button>
-      <!-- Biru: huruf A bergaris bawah biru -->
       <button class="hl-color-btn blue" onclick="applyHighlight('blue')">
-        <span class="hl-color-ico blue">
-          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <text x="10" y="13" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-weight="700" fill="#4dabf7">A</text>
-            <line x1="3" y1="17" x2="17" y2="17" stroke="#4dabf7" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </span>
-        <span>Garis Biru</span>
+        <span class="hl-color-ico blue">🔵</span><span>Biru</span>
       </button>
-      <!-- Selesai: centang hijau -->
+      <button class="hl-remove-btn" onclick="removeHighlight()">
+        <span class="hl-btn-ico">✕</span><span>Hapus</span>
+      </button>
       <button class="hl-close-btn" onclick="closeHighlightMode()">
-        <span class="hl-btn-ico hl-done-ico">
-          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 10.5L8.5 15L16 6" stroke="#00ff88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </span>
-        <span>Selesai</span>
+        <span class="hl-btn-ico">✓</span><span>Selesai</span>
       </button>
     </div>
   </div>
@@ -888,21 +752,11 @@
   <!-- Dialog konfirmasi reset default -->
   <div class="fw-dialog-overlay" id="defaultDialog">
     <div class="fw-dialog-box">
-      <div class="fw-dialog-title">Kembalikan ke Default?</div>
-      <div class="fw-dialog-desc">Semua editan teks dan penanda (highlight) akan dihapus, ceramah dikembalikan ke versi aslinya.</div>
+      <div class="fw-dialog-title">Kembalikan ke Teks Asli?</div>
+      <div class="fw-dialog-desc">Semua editan teks akan dihapus dan dikembalikan ke versi asli ceramah. Tandai (highlight) tidak terpengaruh.</div>
       <div class="fw-dialog-btns">
         <button class="fw-dialog-btn cancel" onclick="closeDialog('defaultDialog')">Batal</button>
         <button class="fw-dialog-btn danger" onclick="resetToDefault()">Ya, Kembalikan</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="fw-dialog-overlay" id="defaultBersihDialog">
-    <div class="fw-dialog-box">
-      <div class="fw-dialog-title">✨ Masih Bersih</div>
-      <div class="fw-dialog-desc">Ceramah ini belum memiliki perubahan apapun — teks dan penanda masih dalam keadaan aslinya.</div>
-      <div class="fw-dialog-btns">
-        <button class="fw-dialog-btn" style="flex:1" onclick="closeDialog('defaultBersihDialog')">Oke</button>
       </div>
     </div>
   </div>
@@ -953,14 +807,8 @@
           var localEdit = JSON.parse(localStorage.getItem('fw_ceramah_edit_' + ceramahId) || 'null');
           if (localEdit) ceramah.teks = localEdit;
           // Tetap fetch untuk simpan _CERAMAH_DATA (untuk reset default)
-          // Fetch semua ceramah via index
-          fetch('../konten/ceramah-index.json')
+          fetch('../konten/ceramah.json')
             .then(function(r) { return r.json(); })
-            .then(function(idx) {
-              return Promise.all(idx.ids.map(function(id) {
-                return fetch('../konten/ceramah-items/' + id + '.json').then(function(r) { return r.json(); });
-              }));
-            })
             .then(function(data) { window._CERAMAH_DATA = data; })
             .catch(function() {});
           render();
@@ -971,21 +819,15 @@
         document.getElementById('contentWrap').innerHTML = '<div class="loading">Gagal memuat data.</div>';
       }
     } else {
-      // Mode search: fetch ceramah spesifik langsung dari file-nya
-      fetch('../konten/ceramah-items/' + ceramahId + '.json')
+      fetch('../konten/ceramah.json')
         .then(function(r) { return r.json(); })
         .then(function(data) {
-          ceramah = data;
-          // Fetch semua untuk _CERAMAH_DATA (navigasi swipe & reset default)
-          fetch('../konten/ceramah-index.json')
-            .then(function(r) { return r.json(); })
-            .then(function(idx) {
-              return Promise.all(idx.ids.map(function(id) {
-                return fetch('../konten/ceramah-items/' + id + '.json').then(function(r) { return r.json(); });
-              }));
-            })
-            .then(function(allData) { window._CERAMAH_DATA = allData; })
-            .catch(function() {});
+          window._CERAMAH_DATA = data;
+          ceramah = data.find(function(c) { return c.id === ceramahId; });
+          if (!ceramah) {
+            document.getElementById('contentWrap').innerHTML = '<div class="loading">Ceramah tidak ditemukan.</div>';
+            return;
+          }
           render();
         })
         .catch(function() {
@@ -1125,10 +967,6 @@
       if (editMode) return;
       hlMode = !hlMode;
       if (hlMode) {
-        // Wrap semua paragraf sekaligus saat masuk mode penanda
-        document.querySelectorAll('.bagian-isi').forEach(function(el) {
-          if (!el.querySelector('.hl-word')) wrapWords(el);
-        });
         document.getElementById('savedActionBar').classList.remove('show');
         document.getElementById('hlToolbar').classList.add('show');
         showToast('🖊️ Seleksi teks lalu pilih warna');
@@ -1145,6 +983,7 @@
 
     // Pecah teks menjadi span per-kata agar highlight granular
     function wrapWords(el) {
+      // Kumpulkan teks node langsung (bukan dari span highlight)
       var nodes = Array.from(el.childNodes);
       nodes.forEach(function(node) {
         if (node.nodeType === 3) { // text node
@@ -1165,50 +1004,44 @@
       });
     }
 
-    // Cari semua .hl-word dalam range, lintas paragraf
-    function getAffectedWords(range) {
+    function applyHighlight(color) {
+      var sel = window.getSelection();
+      if (!sel || sel.isCollapsed) { showToast('Pilih teks terlebih dulu'); return; }
+      var range = sel.getRangeAt(0);
+      var container = range.commonAncestorContainer;
+      var bagianEl = container.nodeType === 1
+        ? container.closest('.bagian-isi')
+        : container.parentElement.closest('.bagian-isi');
+      if (!bagianEl) { showToast('Pilih teks pada isi ceramah'); sel.removeAllRanges(); return; }
+
+      // Pastikan kata-kata sudah dibungkus .hl-word
+      if (!bagianEl.querySelector('.hl-word')) wrapWords(bagianEl);
+
+      // Cari semua .hl-word yang termasuk dalam seleksi
+      var words = Array.from(bagianEl.querySelectorAll('.hl-word'));
+      var inRange = false;
       var affected = [];
-      var allWords = Array.from(document.querySelectorAll('.bagian-isi .hl-word'));
-      allWords.forEach(function(w) {
+      words.forEach(function(w) {
         var wRange = document.createRange();
         wRange.selectNode(w);
         var cmp_start = range.compareBoundaryPoints(Range.END_TO_START, wRange);
         var cmp_end   = range.compareBoundaryPoints(Range.START_TO_END, wRange);
         if (cmp_start <= 0 && cmp_end >= 0) affected.push(w);
       });
-      return affected;
-    }
 
-    // Simpan highlight untuk semua bagian yang terpengaruh
-    function saveAffectedSections(affected) {
-      var sections = new Set();
-      affected.forEach(function(w) {
-        var bagianEl = w.closest('.bagian-isi');
-        if (bagianEl) sections.add(bagianEl);
-      });
-      var hls = getHighlights();
-      sections.forEach(function(bagianEl) {
-        var idx = parseInt(bagianEl.getAttribute('data-idx'));
-        hls[idx] = bagianEl.innerHTML;
-        if (ceramah.teks[idx]) ceramah.teks[idx].isi = bagianEl.innerHTML;
-      });
-      saveHighlights(hls);
-    }
-
-    function applyHighlight(color) {
-      var sel = window.getSelection();
-      if (!sel || sel.isCollapsed) { showToast('Pilih teks terlebih dulu'); return; }
-      var range = sel.getRangeAt(0);
-
-      var affected = getAffectedWords(range);
-      if (!affected.length) { showToast('Pilih teks pada isi ceramah'); sel.removeAllRanges(); return; }
+      if (!affected.length) { showToast('Pilih teks terlebih dulu'); sel.removeAllRanges(); return; }
 
       affected.forEach(function(w) {
+        // Hapus tanda sebelumnya (tidak bisa tumpuk)
         w.className = 'hl-word hl-' + color;
       });
 
       sel.removeAllRanges();
-      saveAffectedSections(affected);
+      var idx = parseInt(bagianEl.getAttribute('data-idx'));
+      var hls = getHighlights();
+      hls[idx] = bagianEl.innerHTML;
+      saveHighlights(hls);
+      if (ceramah.teks[idx]) ceramah.teks[idx].isi = bagianEl.innerHTML;
       showToast('✓ Ditandai');
     }
 
@@ -1216,98 +1049,54 @@
       var sel = window.getSelection();
       if (!sel || sel.isCollapsed) { showToast('Pilih teks yang ditandai'); return; }
       var range = sel.getRangeAt(0);
+      var container = range.commonAncestorContainer;
+      var bagianEl = container.nodeType === 1
+        ? container.closest('.bagian-isi')
+        : container.parentElement.closest('.bagian-isi');
+      if (!bagianEl) { sel.removeAllRanges(); return; }
 
-      var affected = getAffectedWords(range);
-      if (!affected.length) { sel.removeAllRanges(); return; }
+      var words = Array.from(bagianEl.querySelectorAll('.hl-word'));
+      var affected = [];
+      words.forEach(function(w) {
+        var wRange = document.createRange();
+        wRange.selectNode(w);
+        var cmp_start = range.compareBoundaryPoints(Range.END_TO_START, wRange);
+        var cmp_end   = range.compareBoundaryPoints(Range.START_TO_END, wRange);
+        if (cmp_start <= 0 && cmp_end >= 0) affected.push(w);
+      });
 
       affected.forEach(function(w) {
-        w.className = 'hl-word';
+        w.className = 'hl-word'; // hapus class warna
       });
 
       sel.removeAllRanges();
-      saveAffectedSections(affected);
+      var idx = parseInt(bagianEl.getAttribute('data-idx'));
+      var hls = getHighlights();
+      hls[idx] = bagianEl.innerHTML;
+      saveHighlights(hls);
+      if (ceramah.teks[idx]) ceramah.teks[idx].isi = bagianEl.innerHTML;
       showToast('✓ Tandai dihapus');
     }
 
     // ── EDIT MODE ────────────────────────────────
-    // Strip semua hl-word span → plain text (untuk mode edit)
-    function stripHlSpans(el) {
-      el.querySelectorAll('.hl-word').forEach(function(span) {
-        span.replaceWith(document.createTextNode(span.textContent));
-      });
-      el.normalize();
-    }
-
     function toggleEditMode() {
       if (hlMode) closeHighlightMode();
       editMode = true;
-      document.body.classList.add('edit-active');
       document.getElementById('savedActionBar').classList.remove('show');
       document.getElementById('editModeBar').classList.add('show');
       document.getElementById('editModeBanner').classList.add('show');
-
-      // Simpan teks asli per bagian sebelum edit
-      var originalPlain = {};
       document.querySelectorAll('.bagian-isi').forEach(function(el) {
         var idx = el.getAttribute('data-idx');
         originalTeks[idx] = el.innerHTML;
-        stripHlSpans(el);
-        originalPlain[idx] = (el.innerText || el.textContent).trim();
-
-        // Ganti div dengan wrapper + textarea
-        var wrapper = document.createElement('div');
-        wrapper.className = 'bagian-isi-wrapper';
-
-        var ta = document.createElement('textarea');
-        ta.className = 'bagian-isi-edit';
-        ta.setAttribute('data-idx', idx);
-        ta.value = el.innerText || el.textContent;
-        ta.addEventListener('input', function() {
-          this.style.height = 'auto';
-          this.style.height = this.scrollHeight + 'px';
-          checkEditChanged(originalPlain);
-        });
-
-        wrapper.appendChild(ta);
-        el.parentNode.replaceChild(wrapper, el);
-        ta.style.height = 'auto';
-        ta.style.height = ta.scrollHeight + 'px';
+        el.setAttribute('contenteditable', 'true');
       });
-
-      // Mulai dalam keadaan belum ada perubahan
-      setSaveBtnDisabled(true);
       showToast('✏️ Teks bisa diedit langsung');
-    }
-
-    function checkEditChanged(originalPlain) {
-      var changed = false;
-      document.querySelectorAll('.bagian-isi-edit').forEach(function(ta) {
-        var idx = ta.getAttribute('data-idx');
-        if (ta.value.trim() !== (originalPlain[idx] || '')) changed = true;
-      });
-      setSaveBtnDisabled(!changed);
-    }
-
-    function setSaveBtnDisabled(disabled) {
-      var btn = document.querySelector('.edit-mode-btn.save-btn');
-      if (!btn) return;
-      if (disabled) btn.classList.add('disabled');
-      else btn.classList.remove('disabled');
     }
 
     function exitEditMode() {
       editMode = false;
-      document.body.classList.remove('edit-active');
-      // Kembalikan wrapper+textarea → div
-      document.querySelectorAll('.bagian-isi-wrapper').forEach(function(wrapper) {
-        var ta = wrapper.querySelector('.bagian-isi-edit');
-        if (!ta) return;
-        var idx = ta.getAttribute('data-idx');
-        var div = document.createElement('div');
-        div.className = 'bagian-isi';
-        div.setAttribute('data-idx', idx);
-        div.innerHTML = originalTeks[idx] || ta.value;
-        wrapper.parentNode.replaceChild(div, wrapper);
+      document.querySelectorAll('.bagian-isi').forEach(function(el) {
+        el.removeAttribute('contenteditable');
       });
       document.getElementById('editModeBanner').classList.remove('show');
       document.getElementById('editModeBar').classList.remove('show');
@@ -1315,12 +1104,6 @@
     }
 
     function confirmCancelEdit() {
-      // Jika tombol simpan masih disabled = belum ada perubahan, langsung keluar
-      var saveBtn = document.querySelector('.edit-mode-btn.save-btn');
-      if (saveBtn && saveBtn.classList.contains('disabled')) {
-        exitEditMode();
-        return;
-      }
       document.getElementById('cancelEditDialog').classList.add('show');
     }
     function confirmSaveEdit() {
@@ -1331,32 +1114,12 @@
       closeDialog('saveEditDialog');
       var newTeks = [];
       ceramah.teks.forEach(function(bag, idx) {
-        var ta = document.querySelector('.bagian-isi-edit[data-idx="' + idx + '"]');
-        var isiBaru = ta ? ta.value : bag.isi;
+        var el = document.querySelector('.bagian-isi[data-idx="' + idx + '"]');
+        var isiBaru = el ? el.innerHTML : bag.isi;
         newTeks.push({ bagian: bag.bagian, isi: isiBaru });
       });
-
-      // Cek apakah ada perubahan dari teks original (sebelum masuk edit)
-      var originalData = window._CERAMAH_DATA
-        ? window._CERAMAH_DATA.find(function(c) { return c.id === ceramahId; })
-        : null;
-      var adaPerubahan = false;
-      if (originalData) {
-        adaPerubahan = newTeks.some(function(bag, idx) {
-          var orig = originalData.teks[idx];
-          return !orig || bag.isi.trim() !== orig.isi.trim();
-        });
-      } else {
-        adaPerubahan = true; // tidak bisa bandingkan, anggap berubah
-      }
-
       try {
-        if (adaPerubahan) {
-          localStorage.setItem('fw_ceramah_edit_' + ceramahId, JSON.stringify(newTeks));
-        } else {
-          // Tidak ada perubahan — hapus edit key agar dianggap bersih
-          localStorage.removeItem('fw_ceramah_edit_' + ceramahId);
-        }
+        localStorage.setItem('fw_ceramah_edit_' + ceramahId, JSON.stringify(newTeks));
         var allData = JSON.parse(localStorage.getItem('fw_ceramah_data') || '{}');
         if (allData[ceramahId]) {
           allData[ceramahId].teks = newTeks;
@@ -1364,58 +1127,45 @@
         }
         ceramah.teks = newTeks;
       } catch(e) {}
-
-      // Update originalTeks agar exitEditMode pakai teks baru
-      document.querySelectorAll('.bagian-isi-edit').forEach(function(ta) {
-        var idx = ta.getAttribute('data-idx');
-        originalTeks[idx] = ta.value;
-      });
       exitEditMode();
-      showToast(adaPerubahan ? '✓ Perubahan disimpan' : '✓ Tidak ada perubahan');
+      showToast('✓ Perubahan disimpan');
     }
 
     function cancelEdit() {
       closeDialog('cancelEditDialog');
+      document.querySelectorAll('.bagian-isi').forEach(function(el) {
+        var idx = el.getAttribute('data-idx');
+        if (originalTeks[idx] !== undefined) el.innerHTML = originalTeks[idx];
+      });
       exitEditMode();
       showToast('Perubahan dibatalkan');
     }
 
     // ── RESET DEFAULT ────────────────────────────
     function showDefaultDialog() {
-      var hasEdit = !!localStorage.getItem('fw_ceramah_edit_' + ceramahId);
-      var hlData = getHighlights();
-      var hasHl = Object.keys(hlData).length > 0;
-      if (!hasEdit && !hasHl) {
-        document.getElementById('defaultBersihDialog').classList.add('show');
-      } else {
-        document.getElementById('defaultDialog').classList.add('show');
-      }
+      document.getElementById('defaultDialog').classList.add('show');
     }
 
     function resetToDefault() {
       closeDialog('defaultDialog');
       try {
-        // Hapus editan teks dan penanda
         localStorage.removeItem('fw_ceramah_edit_' + ceramahId);
-        localStorage.removeItem(getHlKey());
-
-        // Ambil teks asli dari _CERAMAH_DATA
+        // Reload dari data asli
         var originalData = window._CERAMAH_DATA
           ? window._CERAMAH_DATA.find(function(c) { return c.id === ceramahId; })
           : null;
         if (originalData) {
           ceramah.teks = JSON.parse(JSON.stringify(originalData.teks));
-          // Update fw_ceramah_data dengan teks asli
+          // Update fw_ceramah_data juga
           var allData = JSON.parse(localStorage.getItem('fw_ceramah_data') || '{}');
           if (allData[ceramahId]) {
             allData[ceramahId].teks = ceramah.teks;
             localStorage.setItem('fw_ceramah_data', JSON.stringify(allData));
           }
+          render();
         }
       } catch(e) {}
-      // Render ulang (highlight sudah dihapus, teks sudah direset)
-      render();
-      showToast('↺ Dikembalikan ke default');
+      showToast('↺ Dikembalikan ke teks asli');
     }
 
     // ── HELPER DIALOG ────────────────────────────
@@ -1451,7 +1201,7 @@
     }
 
     // Tutup semua dialog saat klik overlay
-    ['hapusDialog','cancelEditDialog','saveEditDialog','defaultDialog','defaultBersihDialog'].forEach(function(id) {
+    ['hapusDialog','cancelEditDialog','saveEditDialog','defaultDialog'].forEach(function(id) {
       var el = document.getElementById(id);
       if (el) el.addEventListener('click', function(e) {
         if (e.target === el) el.classList.remove('show');
@@ -1461,30 +1211,16 @@
     // ── SAVE BAR (mode search) ───────────────────
     function updateSaveBtn() {
       var isSaved = savedIds.includes(ceramahId);
-      var btn  = document.getElementById('saveBtn');
+      var btn = document.getElementById('saveBtn');
       var icon = document.getElementById('saveBtnIcon');
       var text = document.getElementById('saveBtnText');
-      var row2 = document.getElementById('saveBarRow2');
       if (isSaved) {
-        btn.style.display = 'none';
-        row2.style.display = 'flex';
+        btn.classList.add('saved'); icon.textContent = '✕';
+        text.textContent = 'Batal Simpan';
       } else {
-        btn.style.display = '';
-        icon.textContent = '📥';
+        btn.classList.remove('saved'); icon.textContent = '📥';
         text.textContent = 'Simpan ke Ceramahku';
-        row2.style.display = 'none';
       }
-    }
-
-    function masukModeTersimpan() {
-      // Pindah ke mode tersimpan tanpa reload halaman
-      sourceMode = 'saved';
-      document.getElementById('saveBar').style.display = 'none';
-      document.getElementById('swipeHint').classList.remove('show');
-      document.getElementById('savedActionBar').classList.add('show');
-      document.getElementById('savedModeBadge').classList.add('show');
-      sessionStorage.setItem('fw_ceramah_source', 'saved');
-      showToast('🗂️ Mode Tersimpan aktif');
     }
 
     function toggleSave() {
