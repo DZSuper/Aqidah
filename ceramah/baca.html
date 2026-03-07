@@ -84,23 +84,6 @@
       width: 100%;
       margin: 0 auto;
     }
-    /* Mode edit: padding kiri-kanan lebih lebar agar teks tidak terpotong border */
-    body.edit-active .content-wrap {
-      padding-left: 20px;
-      padding-right: 20px;
-    }
-    /* Bagian teks saat edit: border lebih lebar dari sebelumnya */
-    body.edit-active .bagian-isi {
-      border: 1.5px solid rgba(255,215,0,0.25);
-      border-radius: 8px;
-      padding: 10px 12px;
-      margin: 0 -2px;
-      outline: none;
-    }
-    body.edit-active .bagian-isi:focus {
-      border-color: rgba(255,215,0,0.5);
-      background: rgba(255,215,0,0.03);
-    }
 
     /* Header info ceramah */
     .ceramah-header {
@@ -193,26 +176,38 @@
       line-height: 1.9;
       color: var(--text);
       white-space: pre-line;
+      padding: 6px 10px;
+      margin: 0 -10px;
+      border: 1.5px solid rgba(255,255,255,0.07);
+      border-radius: 6px;
+    }
+    .bagian-isi-wrapper {
+      border: 1.5px dashed rgba(255,215,0,0.45);
+      border-radius: 6px;
+      padding: 6px 10px;
+      margin: 0 -10px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .bagian-isi-wrapper:focus-within {
+      border-color: rgba(255,215,0,0.75);
+      background: rgba(255,215,0,0.03);
     }
     .bagian-isi-edit {
+      display: block;
       width: 100%;
       box-sizing: border-box;
       font-size: 0.92rem;
       line-height: 1.9;
       color: var(--text);
-      background: rgba(255,215,0,0.04);
-      border: 1.5px solid rgba(255,215,0,0.25);
-      border-radius: 8px;
-      padding: 10px 12px;
+      background: transparent;
+      border: none;
+      padding: 0;
+      margin: 0;
       font-family: inherit;
       resize: none;
       overflow: hidden;
       outline: none;
       white-space: pre-wrap;
-    }
-    .bagian-isi-edit:focus {
-      border-color: rgba(255,215,0,0.5);
-      background: rgba(255,215,0,0.07);
     }
 
     /* ── TOMBOL SIMPAN (sticky bawah) ── */
@@ -1247,6 +1242,10 @@
         stripHlSpans(el);
         originalPlain[idx] = (el.innerText || el.textContent).trim();
 
+        // Ganti div dengan wrapper + textarea
+        var wrapper = document.createElement('div');
+        wrapper.className = 'bagian-isi-wrapper';
+
         var ta = document.createElement('textarea');
         ta.className = 'bagian-isi-edit';
         ta.setAttribute('data-idx', idx);
@@ -1256,7 +1255,9 @@
           this.style.height = this.scrollHeight + 'px';
           checkEditChanged(originalPlain);
         });
-        el.parentNode.replaceChild(ta, el);
+
+        wrapper.appendChild(ta);
+        el.parentNode.replaceChild(wrapper, el);
         ta.style.height = 'auto';
         ta.style.height = ta.scrollHeight + 'px';
       });
@@ -1285,14 +1286,16 @@
     function exitEditMode() {
       editMode = false;
       document.body.classList.remove('edit-active');
-      // Kembalikan textarea → div
-      document.querySelectorAll('.bagian-isi-edit').forEach(function(ta) {
+      // Kembalikan wrapper+textarea → div
+      document.querySelectorAll('.bagian-isi-wrapper').forEach(function(wrapper) {
+        var ta = wrapper.querySelector('.bagian-isi-edit');
+        if (!ta) return;
         var idx = ta.getAttribute('data-idx');
         var div = document.createElement('div');
         div.className = 'bagian-isi';
         div.setAttribute('data-idx', idx);
         div.innerHTML = originalTeks[idx] || ta.value;
-        ta.parentNode.replaceChild(div, ta);
+        wrapper.parentNode.replaceChild(div, wrapper);
       });
       document.getElementById('editModeBanner').classList.remove('show');
       document.getElementById('editModeBar').classList.remove('show');
