@@ -293,3 +293,97 @@ collections:
             label: "Kata Kunci Pencarian"
             widget: "string"
             hint: "Pisahkan dengan koma. Contoh: ilmu agama islam, manhaj salaf, tauhid"
+
+  # ── CERAMAH ─────────────────────────────────────────────────
+  - name: "ceramah-index-mgr"
+    label: "🗂️ Ceramah — Daftar ID"
+    files:
+      - name: "ceramah-index"
+        label: "Daftar ID Ceramah (urutan tampil)"
+        file: "konten/ceramah-index.json"
+        fields:
+          - name: "ids"
+            label: "ID Ceramah"
+            widget: "list"
+            hint: "Tambah ID baru di sini setiap kali menambah ceramah. Urutan di sini = urutan tampil."
+
+  - name: "ceramah"
+    label: "🎙️ Ceramah — Isi"
+    folder: "konten/ceramah-items"
+    create: true
+    delete: true
+    identifier_field: "id"
+    summary: "{{fields.judul}}"
+    extension: "json"
+    format: "json"
+    fields:
+      - name: "id"
+        label: "ID (contoh: c051)"
+        widget: "string"
+        hint: "ID unik, huruf kecil tanpa spasi, contoh: c051"
+
+      - name: "judul"
+        label: "Judul Ceramah"
+        widget: "string"
+
+      - name: "jenis"
+        label: "Jenis"
+        widget: "select"
+        options:
+          - {label: "Khutbah Jum'at", value: "khutbah-jumat"}
+          - {label: "Kultum Subuh", value: "kultum-subuh"}
+          - {label: "Kajian Biasa", value: "kajian-biasa"}
+          - {label: "Ceramah Tarawih", value: "ceramah-tarawih"}
+
+      - name: "jenis_label"
+        label: "Label Jenis (tampil di kartu)"
+        widget: "string"
+        hint: "Contoh: Khutbah Jum'at"
+
+      - name: "pembahasan"
+        label: "Pembahasan"
+        widget: "select"
+        options:
+          - {label: "Aqidah", value: "aqidah"}
+          - {label: "Fiqih", value: "fiqih"}
+          - {label: "Akhlak", value: "akhlak"}
+          - {label: "Sedekah", value: "sedekah"}
+          - {label: "Taubat", value: "taubat"}
+          - {label: "Ramadhan", value: "ramadhan"}
+          - {label: "Lainnya", value: "lainnya"}
+
+      - name: "pembahasan_label"
+        label: "Label Pembahasan (tampil di kartu)"
+        widget: "string"
+        hint: "Contoh: Aqidah"
+
+      - name: "durasi"
+        label: "Durasi"
+        widget: "select"
+        options:
+          - {label: "±5 menit", value: "±5 menit"}
+          - {label: "±7 menit", value: "±7 menit"}
+          - {label: "±10 menit", value: "±10 menit"}
+          - {label: "±15 menit", value: "±15 menit"}
+          - {label: "±20 menit", value: "±20 menit"}
+          - {label: "±25 menit", value: "±25 menit"}
+          - {label: "±30 menit", value: "±30 menit"}
+
+      - name: "ringkasan"
+        label: "Ringkasan"
+        widget: "text"
+        hint: "Deskripsi singkat yang tampil di kartu pencarian"
+
+      - name: "teks"
+        label: "Isi Ceramah"
+        widget: "list"
+        summary: "{{fields.bagian}}"
+        fields:
+          - name: "bagian"
+            label: "Judul Bagian"
+            widget: "string"
+            hint: "Contoh: Muqaddimah, Isi Pertama, Penutup"
+          - name: "isi"
+            label: "Isi Teks"
+            widget: "text"
+            hint: "Pisahkan paragraf dengan baris kosong"

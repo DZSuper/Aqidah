@@ -414,8 +414,13 @@
       q = this.value; saveFilter(); render();
     });
 
-    fetch('../konten/ceramah.json')
+    fetch('../konten/ceramah-index.json')
       .then(function(r) { return r.json(); })
+      .then(function(idx) {
+        return Promise.all(idx.ids.map(function(id) {
+          return fetch('../konten/ceramah-items/' + id + '.json').then(function(r) { return r.json(); });
+        }));
+      })
       .then(function(d) { DATA = d; restoreFilter(); render(); })
       .catch(function() {
         document.getElementById('resultCount').textContent = 'Gagal memuat';

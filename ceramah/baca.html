@@ -953,8 +953,14 @@
           var localEdit = JSON.parse(localStorage.getItem('fw_ceramah_edit_' + ceramahId) || 'null');
           if (localEdit) ceramah.teks = localEdit;
           // Tetap fetch untuk simpan _CERAMAH_DATA (untuk reset default)
-          fetch('../konten/ceramah.json')
+          // Fetch semua ceramah via index
+          fetch('../konten/ceramah-index.json')
             .then(function(r) { return r.json(); })
+            .then(function(idx) {
+              return Promise.all(idx.ids.map(function(id) {
+                return fetch('../konten/ceramah-items/' + id + '.json').then(function(r) { return r.json(); });
+              }));
+            })
             .then(function(data) { window._CERAMAH_DATA = data; })
             .catch(function() {});
           render();
@@ -965,15 +971,21 @@
         document.getElementById('contentWrap').innerHTML = '<div class="loading">Gagal memuat data.</div>';
       }
     } else {
-      fetch('../konten/ceramah.json')
+      // Mode search: fetch ceramah spesifik langsung dari file-nya
+      fetch('../konten/ceramah-items/' + ceramahId + '.json')
         .then(function(r) { return r.json(); })
         .then(function(data) {
-          window._CERAMAH_DATA = data;
-          ceramah = data.find(function(c) { return c.id === ceramahId; });
-          if (!ceramah) {
-            document.getElementById('contentWrap').innerHTML = '<div class="loading">Ceramah tidak ditemukan.</div>';
-            return;
-          }
+          ceramah = data;
+          // Fetch semua untuk _CERAMAH_DATA (navigasi swipe & reset default)
+          fetch('../konten/ceramah-index.json')
+            .then(function(r) { return r.json(); })
+            .then(function(idx) {
+              return Promise.all(idx.ids.map(function(id) {
+                return fetch('../konten/ceramah-items/' + id + '.json').then(function(r) { return r.json(); });
+              }));
+            })
+            .then(function(allData) { window._CERAMAH_DATA = allData; })
+            .catch(function() {});
           render();
         })
         .catch(function() {
