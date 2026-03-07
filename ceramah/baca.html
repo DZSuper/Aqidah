@@ -194,6 +194,26 @@
       color: var(--text);
       white-space: pre-line;
     }
+    .bagian-isi-edit {
+      width: 100%;
+      box-sizing: border-box;
+      font-size: 0.92rem;
+      line-height: 1.9;
+      color: var(--text);
+      background: rgba(255,215,0,0.04);
+      border: 1.5px solid rgba(255,215,0,0.25);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-family: inherit;
+      resize: none;
+      overflow: hidden;
+      outline: none;
+      white-space: pre-wrap;
+    }
+    .bagian-isi-edit:focus {
+      border-color: rgba(255,215,0,0.5);
+      background: rgba(255,215,0,0.07);
+    }
 
     /* ── TOMBOL SIMPAN (sticky bawah) ── */
     .save-bar {
@@ -201,21 +221,23 @@
       bottom: 0;
       left: 50%;
       transform: translateX(-50%);
-      padding: 10px 16px 18px;
+      padding: 10px 0 18px;
       background: none;
       z-index: 200;
       display: flex;
-      gap: 10px;
+      flex-direction: column;
+      gap: 8px;
+      width: 75%;
       max-width: 720px;
-      width: 100%;
     }
+    /* Baris 1 — tombol simpan */
     .save-btn {
-      flex: 1;
+      width: 100%;
       background: rgba(0,255,136,0.09);
       color: var(--green);
       border: 1px solid rgba(0,255,136,0.22);
       border-radius: 14px;
-      padding: 13px;
+      padding: 15px;
       font-family: 'Poppins', sans-serif;
       font-size: 0.88rem;
       font-weight: 600;
@@ -228,25 +250,50 @@
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       box-shadow: 0 2px 16px rgba(0,255,136,0.07), inset 0 1px 0 rgba(0,255,136,0.08);
+      white-space: nowrap;
     }
-    .save-btn:hover { background: rgba(0,255,136,0.15); border-color: rgba(0,255,136,0.4); box-shadow: 0 4px 20px rgba(0,255,136,0.12); }
+    .save-btn:hover { background: rgba(0,255,136,0.15); border-color: rgba(0,255,136,0.4); }
     .save-btn:active { transform: scale(0.97); }
-    .save-btn.saved {
-      background: rgba(255,80,80,0.09);
-      color: #ff5050;
-      border-color: rgba(255,80,80,0.28);
-      box-shadow: 0 2px 16px rgba(255,80,80,0.07);
-    }
-    .save-btn.saved:hover { background: rgba(255,80,80,0.16); border-color: rgba(255,80,80,0.45); box-shadow: 0 4px 20px rgba(255,80,80,0.13); }
     .unsave-btn { display: none !important; }
 
+    /* Baris 2 — batal simpan + buka mode tersimpan */
+    .save-bar-row2 {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+    .save-btn-batal {
+      flex: 0 0 auto;
+      min-width: 140px;
+      background: rgba(255,80,80,0.09);
+      color: #ff5050;
+      border: 1px solid rgba(255,80,80,0.28);
+      border-radius: 14px;
+      padding: 15px 16px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      white-space: nowrap;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 2px 16px rgba(255,80,80,0.07);
+    }
+    .save-btn-batal:hover { background: rgba(255,80,80,0.16); border-color: rgba(255,80,80,0.45); }
+    .save-btn-batal:active { transform: scale(0.97); }
+
     .btn-buka-tersimpan {
-      width: 100%;
+      flex: 1;
       background: rgba(255,215,0,0.08);
       color: var(--gold);
       border: 1px solid rgba(255,215,0,0.25);
       border-radius: 14px;
-      padding: 13px;
+      padding: 15px;
       font-family: 'Poppins', sans-serif;
       font-size: 0.88rem;
       font-weight: 600;
@@ -259,6 +306,7 @@
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       box-shadow: 0 2px 16px rgba(255,215,0,0.06);
+      white-space: nowrap;
     }
     .btn-buka-tersimpan:hover { background: rgba(255,215,0,0.15); border-color: rgba(255,215,0,0.45); }
     .btn-buka-tersimpan:active { transform: scale(0.97); }
@@ -544,16 +592,21 @@
 
     .edit-mode-btn.cancel-btn {
       background: transparent;
-      color: rgba(242,242,242,0.3);
+      color: rgba(242,242,242,0.55);
       border-right: 1px solid rgba(255,215,0,0.15);
     }
-    [data-theme="light"] .edit-mode-btn.cancel-btn { color: rgba(26,26,26,0.35); border-right-color: rgba(184,134,11,0.18); }
+    [data-theme="light"] .edit-mode-btn.cancel-btn { color: rgba(26,26,26,0.55); border-right-color: rgba(184,134,11,0.18); }
     .edit-mode-btn.cancel-btn:hover { color: #ff5050; background: rgba(255,80,80,0.07); }
     .edit-mode-btn.save-btn {
       background: transparent;
-      color: rgba(255,215,0,0.55);
+      color: rgba(255,215,0,0.85);
     }
     .edit-mode-btn.save-btn:hover { color: var(--gold); background: rgba(255,215,0,0.07); }
+    .edit-mode-btn.save-btn.disabled {
+      color: rgba(242,242,242,0.18);
+      cursor: default;
+      pointer-events: none;
+    }
     .edit-mode-btn:active { transform: scale(0.93); }
 
     /* ── SWIPE NAVIGATION ── */
@@ -676,13 +729,20 @@
   </div>
 
   <div class="save-bar" id="saveBar" style="display:none">
+    <!-- Baris 1: Tombol Simpan -->
     <button class="save-btn" id="saveBtn" onclick="toggleSave()">
       <span id="saveBtnIcon">📥</span>
       <span id="saveBtnText">Simpan ke Ceramahku</span>
     </button>
-    <button class="btn-buka-tersimpan" id="bukaTersimpanBtn" onclick="masukModeTersimpan()" style="display:none">
-      🗂️ Buka Mode Tersimpan
-    </button>
+    <!-- Baris 2: Batal Simpan + Buka Mode Tersimpan (muncul saat sudah disimpan) -->
+    <div class="save-bar-row2" id="saveBarRow2" style="display:none">
+      <button class="save-btn-batal" onclick="toggleSave()">
+        ✕ Batal Simpan
+      </button>
+      <button class="btn-buka-tersimpan" id="bukaTersimpanBtn" onclick="masukModeTersimpan()">
+        🗂️ Buka Mode Tersimpan
+      </button>
+    </div>
     <button class="unsave-btn" id="unsaveBtn" onclick="toggleSave()" title="Hapus dari simpanan">🗑</button>
   </div>
 
@@ -833,11 +893,21 @@
   <!-- Dialog konfirmasi reset default -->
   <div class="fw-dialog-overlay" id="defaultDialog">
     <div class="fw-dialog-box">
-      <div class="fw-dialog-title">Kembalikan ke Teks Asli?</div>
-      <div class="fw-dialog-desc">Semua editan teks akan dihapus dan dikembalikan ke versi asli ceramah. Tandai (highlight) tidak terpengaruh.</div>
+      <div class="fw-dialog-title">Kembalikan ke Default?</div>
+      <div class="fw-dialog-desc">Semua editan teks dan penanda (highlight) akan dihapus, ceramah dikembalikan ke versi aslinya.</div>
       <div class="fw-dialog-btns">
         <button class="fw-dialog-btn cancel" onclick="closeDialog('defaultDialog')">Batal</button>
         <button class="fw-dialog-btn danger" onclick="resetToDefault()">Ya, Kembalikan</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="fw-dialog-overlay" id="defaultBersihDialog">
+    <div class="fw-dialog-box">
+      <div class="fw-dialog-title">✨ Masih Bersih</div>
+      <div class="fw-dialog-desc">Ceramah ini belum memiliki perubahan apapun — teks dan penanda masih dalam keadaan aslinya.</div>
+      <div class="fw-dialog-btns">
+        <button class="fw-dialog-btn" style="flex:1" onclick="closeDialog('defaultBersihDialog')">Oke</button>
       </div>
     </div>
   </div>
@@ -1153,6 +1223,14 @@
     }
 
     // ── EDIT MODE ────────────────────────────────
+    // Strip semua hl-word span → plain text (untuk mode edit)
+    function stripHlSpans(el) {
+      el.querySelectorAll('.hl-word').forEach(function(span) {
+        span.replaceWith(document.createTextNode(span.textContent));
+      });
+      el.normalize();
+    }
+
     function toggleEditMode() {
       if (hlMode) closeHighlightMode();
       editMode = true;
@@ -1160,19 +1238,61 @@
       document.getElementById('savedActionBar').classList.remove('show');
       document.getElementById('editModeBar').classList.add('show');
       document.getElementById('editModeBanner').classList.add('show');
+
+      // Simpan teks asli per bagian sebelum edit
+      var originalPlain = {};
       document.querySelectorAll('.bagian-isi').forEach(function(el) {
         var idx = el.getAttribute('data-idx');
         originalTeks[idx] = el.innerHTML;
-        el.setAttribute('contenteditable', 'true');
+        stripHlSpans(el);
+        originalPlain[idx] = (el.innerText || el.textContent).trim();
+
+        var ta = document.createElement('textarea');
+        ta.className = 'bagian-isi-edit';
+        ta.setAttribute('data-idx', idx);
+        ta.value = el.innerText || el.textContent;
+        ta.addEventListener('input', function() {
+          this.style.height = 'auto';
+          this.style.height = this.scrollHeight + 'px';
+          checkEditChanged(originalPlain);
+        });
+        el.parentNode.replaceChild(ta, el);
+        ta.style.height = 'auto';
+        ta.style.height = ta.scrollHeight + 'px';
       });
+
+      // Mulai dalam keadaan belum ada perubahan
+      setSaveBtnDisabled(true);
       showToast('✏️ Teks bisa diedit langsung');
+    }
+
+    function checkEditChanged(originalPlain) {
+      var changed = false;
+      document.querySelectorAll('.bagian-isi-edit').forEach(function(ta) {
+        var idx = ta.getAttribute('data-idx');
+        if (ta.value.trim() !== (originalPlain[idx] || '')) changed = true;
+      });
+      setSaveBtnDisabled(!changed);
+    }
+
+    function setSaveBtnDisabled(disabled) {
+      var btn = document.querySelector('.edit-mode-btn.save-btn');
+      if (!btn) return;
+      if (disabled) btn.classList.add('disabled');
+      else btn.classList.remove('disabled');
     }
 
     function exitEditMode() {
       editMode = false;
       document.body.classList.remove('edit-active');
-      document.querySelectorAll('.bagian-isi').forEach(function(el) {
-        el.removeAttribute('contenteditable');
+      // Kembalikan textarea → div
+      document.querySelectorAll('.bagian-isi-edit').forEach(function(ta) {
+        var idx = ta.getAttribute('data-idx');
+        var div = document.createElement('div');
+        div.className = 'bagian-isi';
+        div.setAttribute('data-idx', idx);
+        div.innerHTML = originalTeks[idx] || ta.value;
+        ta.parentNode.replaceChild(div, ta);
       });
       document.getElementById('editModeBanner').classList.remove('show');
       document.getElementById('editModeBar').classList.remove('show');
@@ -1180,6 +1300,12 @@
     }
 
     function confirmCancelEdit() {
+      // Jika tombol simpan masih disabled = belum ada perubahan, langsung keluar
+      var saveBtn = document.querySelector('.edit-mode-btn.save-btn');
+      if (saveBtn && saveBtn.classList.contains('disabled')) {
+        exitEditMode();
+        return;
+      }
       document.getElementById('cancelEditDialog').classList.add('show');
     }
     function confirmSaveEdit() {
@@ -1190,12 +1316,32 @@
       closeDialog('saveEditDialog');
       var newTeks = [];
       ceramah.teks.forEach(function(bag, idx) {
-        var el = document.querySelector('.bagian-isi[data-idx="' + idx + '"]');
-        var isiBaru = el ? el.innerHTML : bag.isi;
+        var ta = document.querySelector('.bagian-isi-edit[data-idx="' + idx + '"]');
+        var isiBaru = ta ? ta.value : bag.isi;
         newTeks.push({ bagian: bag.bagian, isi: isiBaru });
       });
+
+      // Cek apakah ada perubahan dari teks original (sebelum masuk edit)
+      var originalData = window._CERAMAH_DATA
+        ? window._CERAMAH_DATA.find(function(c) { return c.id === ceramahId; })
+        : null;
+      var adaPerubahan = false;
+      if (originalData) {
+        adaPerubahan = newTeks.some(function(bag, idx) {
+          var orig = originalData.teks[idx];
+          return !orig || bag.isi.trim() !== orig.isi.trim();
+        });
+      } else {
+        adaPerubahan = true; // tidak bisa bandingkan, anggap berubah
+      }
+
       try {
-        localStorage.setItem('fw_ceramah_edit_' + ceramahId, JSON.stringify(newTeks));
+        if (adaPerubahan) {
+          localStorage.setItem('fw_ceramah_edit_' + ceramahId, JSON.stringify(newTeks));
+        } else {
+          // Tidak ada perubahan — hapus edit key agar dianggap bersih
+          localStorage.removeItem('fw_ceramah_edit_' + ceramahId);
+        }
         var allData = JSON.parse(localStorage.getItem('fw_ceramah_data') || '{}');
         if (allData[ceramahId]) {
           allData[ceramahId].teks = newTeks;
@@ -1203,45 +1349,58 @@
         }
         ceramah.teks = newTeks;
       } catch(e) {}
+
+      // Update originalTeks agar exitEditMode pakai teks baru
+      document.querySelectorAll('.bagian-isi-edit').forEach(function(ta) {
+        var idx = ta.getAttribute('data-idx');
+        originalTeks[idx] = ta.value;
+      });
       exitEditMode();
-      showToast('✓ Perubahan disimpan');
+      showToast(adaPerubahan ? '✓ Perubahan disimpan' : '✓ Tidak ada perubahan');
     }
 
     function cancelEdit() {
       closeDialog('cancelEditDialog');
-      document.querySelectorAll('.bagian-isi').forEach(function(el) {
-        var idx = el.getAttribute('data-idx');
-        if (originalTeks[idx] !== undefined) el.innerHTML = originalTeks[idx];
-      });
       exitEditMode();
       showToast('Perubahan dibatalkan');
     }
 
     // ── RESET DEFAULT ────────────────────────────
     function showDefaultDialog() {
-      document.getElementById('defaultDialog').classList.add('show');
+      var hasEdit = !!localStorage.getItem('fw_ceramah_edit_' + ceramahId);
+      var hlData = getHighlights();
+      var hasHl = Object.keys(hlData).length > 0;
+      if (!hasEdit && !hasHl) {
+        document.getElementById('defaultBersihDialog').classList.add('show');
+      } else {
+        document.getElementById('defaultDialog').classList.add('show');
+      }
     }
 
     function resetToDefault() {
       closeDialog('defaultDialog');
       try {
+        // Hapus editan teks dan penanda
         localStorage.removeItem('fw_ceramah_edit_' + ceramahId);
-        // Reload dari data asli
+        localStorage.removeItem(getHlKey());
+
+        // Ambil teks asli dari _CERAMAH_DATA
         var originalData = window._CERAMAH_DATA
           ? window._CERAMAH_DATA.find(function(c) { return c.id === ceramahId; })
           : null;
         if (originalData) {
           ceramah.teks = JSON.parse(JSON.stringify(originalData.teks));
-          // Update fw_ceramah_data juga
+          // Update fw_ceramah_data dengan teks asli
           var allData = JSON.parse(localStorage.getItem('fw_ceramah_data') || '{}');
           if (allData[ceramahId]) {
             allData[ceramahId].teks = ceramah.teks;
             localStorage.setItem('fw_ceramah_data', JSON.stringify(allData));
           }
-          render();
         }
       } catch(e) {}
-      showToast('↺ Dikembalikan ke teks asli');
+      // Render ulang (highlight sudah dihapus, teks sudah direset)
+      render();
+      showToast('↺ Dikembalikan ke default');
     }
 
     // ── HELPER DIALOG ────────────────────────────
@@ -1277,7 +1436,7 @@
     }
 
     // Tutup semua dialog saat klik overlay
-    ['hapusDialog','cancelEditDialog','saveEditDialog','defaultDialog'].forEach(function(id) {
+    ['hapusDialog','cancelEditDialog','saveEditDialog','defaultDialog','defaultBersihDialog'].forEach(function(id) {
       var el = document.getElementById(id);
       if (el) el.addEventListener('click', function(e) {
         if (e.target === el) el.classList.remove('show');
@@ -1290,17 +1449,15 @@
       var btn  = document.getElementById('saveBtn');
       var icon = document.getElementById('saveBtnIcon');
       var text = document.getElementById('saveBtnText');
-      var bukaTersimpanBtn = document.getElementById('bukaTersimpanBtn');
+      var row2 = document.getElementById('saveBarRow2');
       if (isSaved) {
-        btn.classList.add('saved');
-        icon.textContent = '✕';
-        text.textContent = 'Batal Simpan';
-        bukaTersimpanBtn.style.display = '';
+        btn.style.display = 'none';
+        row2.style.display = 'flex';
       } else {
-        btn.classList.remove('saved');
+        btn.style.display = '';
         icon.textContent = '📥';
         text.textContent = 'Simpan ke Ceramahku';
-        bukaTersimpanBtn.style.display = 'none';
+        row2.style.display = 'none';
       }
     }
 
